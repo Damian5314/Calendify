@@ -5,13 +5,7 @@ namespace StarterKit.Models
 {
     public class DatabaseContext : DbContext
     {
-        // The admin table will be used in both cases
         public DbSet<Admin> Admin { get; set; }
-
-        // You can comment out or remove the case you are not going to use.
-
-        // Tables for the Theatre ticket case
-
 
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Reservation> Reservation { get; set; }
