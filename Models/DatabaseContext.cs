@@ -7,11 +7,10 @@ namespace StarterKit.Models
     {
         public DbSet<Admin> Admin { get; set; }
 
-        public DbSet<Customer> Customer { get; set; }
-        public DbSet<Reservation> Reservation { get; set; }
-        public DbSet<TheatreShowDate> TheatreShowDate { get; set; }
-        public DbSet<TheatreShow> TheatreShow { get; set; }
-        public DbSet<Venue> Venue { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Attendance> Attendance { get; set; }
+        public DbSet<Event_Attendance> Event_Attendance { get; set; }
+        public DbSet<Event> Event { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
