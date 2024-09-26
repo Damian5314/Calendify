@@ -12,7 +12,7 @@ namespace StarterKit.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     [Migration("20240926205424_calender")]
-    partial class calender
+    partial class Calender
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
