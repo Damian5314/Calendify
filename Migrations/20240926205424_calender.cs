@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StarterKit.Migrations
 {
     /// <inheritdoc />
-    public partial class calender : Migration
+    public partial class Calender : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
