@@ -17,6 +17,10 @@ namespace StarterKit.Models
 
         }
 
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Attendee> Attendees { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Admin>()
