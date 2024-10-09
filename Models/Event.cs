@@ -1,14 +1,34 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 public class Event
 {
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public DateTime Date { get; set; }
-    public TimeSpan StartTime { get; set; }
-    public TimeSpan EndTime { get; set; }
-    public string Location { get; set; }
 
-    // Relationships
-    public List<Review> Reviews { get; set; } = new List<Review>();
-    public List<Attendee> Attendees { get; set; } = new List<Attendee>();
+    [Required]
+    [StringLength(100)]
+    public required string Title { get; set; }
+
+    [Required]
+    [StringLength(500)]
+    public required string Description { get; set; }
+
+    [Required]
+    public required DateTime Date { get; set; }
+
+    [Required]
+    public TimeSpan StartTime { get; set; }
+
+    [Required]
+    public TimeSpan EndTime { get; set; }
+
+    [Required]
+    [StringLength(200)]
+    public required string Location { get; set; }
+
+    public bool AdminApproval { get; set; }
+
+    public required ICollection<Review> Reviews { get; set; }
+    public required ICollection<EventAttendance> Attendees { get; set; }
 }

@@ -1,35 +1,88 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StarterKit.Models;
+using StarterKit.Services;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EventController : Controller
+public class EventController : ControllerBase
 {
-    private readonly IEventService _eventService;
+    private readonly DatabaseContext _context;
+    private readonly ILoginService _loginService;
 
-    public EventController(IEventService eventService)
+    public EventController(DatabaseContext context, ILoginService loginService)
     {
-        _eventService = eventService;
+        _context = context;
+        _loginService = loginService;
     }
 
-    // GET: api/event
+    // GET: api/Event
     [HttpGet]
-    [AllowAnonymous] // Public access for viewing events
-    public async Task<ActionResult<IEnumerable<Event>>> GetAllEvents()
+    [AllowAnonymous]
+    public IActionResult GetEvents()
     {
-        var events = await _eventService.GetAllEventsAsync();
+        var events = _context.Events
+            .ToList();
         return Ok(events);
     }
 
-    // POST: api/event
+    // POST: api/Event
     [HttpPost]
-    [Authorize(Roles = "Admin")] // Restricted to admin users
-    public async Task<ActionResult<Event>> CreateEvent([FromBody] EventCreateDto eventDto)
+    [Authorize(Roles = "Admin")]
+    public IActionResult CreateEvent([FromBody] Event eventModel)
     {
-        var createdEvent = await _eventService.CreateEventAsync(eventDto);
-        return CreatedAtAction(nameof(GetAllEvents), new { id = createdEvent.Id }, createdEvent);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        //_context.Events.Add(eventModel);
+        _context.SaveChanges();
+        return CreatedAtAction(nameof(GetEvents), new { id = eventModel.Id }, eventModel);
     }
 
-    // PUT, DELETE methods (as shown earlier) would also go here.
+    // PUT: api/Event/{id}
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
+    public IActionResult UpdateEvent(int id, [FromBody] Event eventModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var existingEvent = _context.Events.Find(id);
+        if (existingEvent == null)
+        {
+            return NotFound();
+        }
+
+        existingEvent.Title = eventModel.Title;
+        existingEvent.Description = eventModel.Description;
+        //existingEvent.Date = eventModel.Date;
+        existingEvent.StartTime = eventModel.StartTime;
+        existingEvent.EndTime = eventModel.EndTime;
+        existingEvent.Location = eventModel.Location;
+        existingEvent.AdminApproval = eventModel.AdminApproval;
+
+        _context.SaveChanges();
+        return NoContent();
+    }
+
+    // DELETE: api/Event/{id}
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public IActionResult DeleteEvent(int id)
+    {
+        var existingEvent = _context.Events.Find(id);
+        if (existingEvent == null)
+        {
+            return NotFound();
+        }
+
+        _context.Events.Remove(existingEvent);
+        _context.SaveChanges();
+        return NoContent();
+    }
 }
