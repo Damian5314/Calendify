@@ -17,7 +17,6 @@ public class EventController : ControllerBase
         _loginService = loginService;
     }
 
-    // GET: api/Event
     [HttpGet]
     [AllowAnonymous]
     public IActionResult GetEvents()
@@ -27,7 +26,6 @@ public class EventController : ControllerBase
         return Ok(events);
     }
 
-    // POST: api/Event
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public IActionResult CreateEvent([FromBody] Event eventModel)
@@ -42,7 +40,6 @@ public class EventController : ControllerBase
         return CreatedAtAction(nameof(GetEvents), new { id = eventModel.Id }, eventModel);
     }
 
-    // PUT: api/Event/{id}
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
     public IActionResult UpdateEvent(int id, [FromBody] Event eventModel)
@@ -70,7 +67,6 @@ public class EventController : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/Event/{id}
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public IActionResult DeleteEvent(int id)

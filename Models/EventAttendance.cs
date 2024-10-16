@@ -17,7 +17,6 @@ public class EventAttendance
 
     public string? Feedback { get; set; }
 
-    // Navigation properties
     public required User User { get; set; }
     public required Event Event { get; set; }
 }
