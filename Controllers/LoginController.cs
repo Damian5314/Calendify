@@ -19,40 +19,21 @@ public class LoginController : Controller
     [HttpPost("Login")]
     public IActionResult Login([FromBody] LoginBody loginBody)
     {
-        var LoginState = _loginService.CheckPassword(loginBody.Username!, loginBody.Password!);
-        if (LoginState == LoginStatus.Success)
-        {
-            HttpContext.Session.SetString("AdminSession", "LoggedIn");
-            HttpContext.Session.SetString("LoggedInAdmin", $"{loginBody.Username}");
-            return Ok("Admin login success");
-        }
-        else if (LoginState == LoginStatus.IncorrectPassword) return Unauthorized("Incorrect password");
-        else if (LoginState == LoginStatus.IncorrectUsername) return Unauthorized("Incorrect username");
-        return BadRequest();
+        // TODO: Impelement login method
+        return Unauthorized("Incorrect password");
     }
 
     [HttpGet("IsAdminLoggedIn")]
     public IActionResult IsAdminLoggedIn()
     {
-        if (IsSessionRegisterd()) return Ok($"Logged in as {HttpContext.Session.GetString("LoggedInAdmin")}");
-        return Unauthorized("You are not logged in As Admin");
-    }
-
-    [HttpGet("IsSessionRegisterd")]
-    public bool IsSessionRegisterd()
-    {
-        return HttpContext.Session.GetString("AdminSession") == "LoggedIn";
+        // TODO: This method should return a status 200 OK when logged in, else 403, unauthorized
+        return Unauthorized("You are not logged in");
     }
 
     [HttpGet("Logout")]
     public IActionResult Logout()
     {
-        if (IsSessionRegisterd())
-        {
-        HttpContext.Session.SetString("AdminSession", "LoggedOut");
         return Ok("Logged out");
-        }
-        return BadRequest("You are not logged in");
     }
 
 }
