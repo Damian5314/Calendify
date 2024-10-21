@@ -1,4 +1,5 @@
 using StarterKit.Models;
+
 public interface IAdminStorage
 {
     Task<bool> Create(Admin admin);

@@ -2,27 +2,27 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using StarterKit.Models;
 
-namespace StarterKit.Controllers;
-
-public class HomeController : Controller
+namespace StarterKit.Controllers
 {
-    private readonly ILogger<LoginController> _logger;
-
-
-    public HomeController(ILogger<LoginController> logger)
+    public class HomeController : Controller
     {
-        _logger = logger;
-    }
+        private readonly ILogger<HomeController> _logger;
 
-    [HttpGet("{**slug}")]
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public HomeController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        [HttpGet("{**slug}")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }
