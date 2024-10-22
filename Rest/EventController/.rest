@@ -1,0 +1,11 @@
+GET http://localhost:5000/api/v1/event
+####
+DELETE http://localhost:5000/api/v1/event/9903ED01-A73C-4874-8ABF-D2678E3AE23D
+####
+POST http://localhost:5000/api/v1/event HTTP/1.1 content-type: application/json
+
+{ "title": "borrel", "description": "borrel in office", "date": "08-10-2024", "start_time": "19:00", "end_time": "21:00", "location": "office" } 
+##### 
+PUT http://localhost:5000/events/9903ED01-A73C-4874-8ABF-D2678E3AE23D HTTP/1.1 content-type: application/json
+{ "title": "office borrel", "description": "borrel in office", "date": "08-10-2024", "start_time": "19:00", "end_time": "21:00", "location": "office" }
+#####
