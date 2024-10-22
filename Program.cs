@@ -26,6 +26,8 @@ namespace StarterKit
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
 
+            builder.Services.AddScoped<IEventStorage, JsonEventStorage>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -41,6 +43,7 @@ namespace StarterKit
 
             app.UseRouting();
 
+            app.UseAuthorization();
             app.UseAuthorization();
 
             app.UseSession();
