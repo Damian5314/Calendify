@@ -32,9 +32,17 @@ namespace StarterKit.Services
 
         public async Task CreateEvent(Event e)
         {
-            var events = await ReadEvents(); // Re-use ReadEvents to simplify code
+            // Read the current list of events from the file
+            var events = await ReadEvents();
+
+            // You can generate a unique EventId here, or let the client provide it.
+            e.EventId = events.Any() ? events.Max(ev => ev.EventId) + 1 : 1;
+
+            // Add the new event
             events.Add(e);
-            await File.WriteAllTextAsync(path, JsonSerializer.Serialize(events));
+
+            // Serialize and write the updated list back to the file
+            await File.WriteAllTextAsync(path, JsonSerializer.Serialize(events, new JsonSerializerOptions { WriteIndented = true }));
         }
 
         public async Task<bool> DeleteEvent(int eventId)

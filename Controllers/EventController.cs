@@ -25,7 +25,7 @@ namespace StarterKit.Controllers
         }
 
         // Only Admins can create/delete/update events
-        [HttpPost]
+        [HttpPost("List")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateEvent([FromBody] Event e)
         {
@@ -51,7 +51,4 @@ namespace StarterKit.Controllers
                 : NotFound("Event with that Id doesn't exist.");
         }
     }
-
-
-    //Deze komt uit Models.Calender.cs maar moet hier plakken want anders die het niet vinden.
 }
