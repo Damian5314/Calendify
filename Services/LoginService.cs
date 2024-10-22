@@ -12,17 +12,40 @@ namespace StarterKit.Services
             _context = context;
         }
 
-        public LoginStatus CheckPassword(string username, string inputPassword)
+        public LoginStatus CheckPassword(string email, string inputPassword)
         {
-            var admin = _context.Admin.FirstOrDefault(x => x.UserName == username);
+            var admin = _context.Admin.FirstOrDefault(x => x.Email == email);
             if (admin == null)
             {
-                return LoginStatus.IncorrectUsername;
+                return LoginStatus.IncorrectEmail;
             }
 
             return admin.Password == inputPassword
                 ? LoginStatus.Success
                 : LoginStatus.IncorrectPassword;
+        }
+
+        public bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays)
+        {
+            if (_context.User.Any(u => u.Email == email))
+            {
+                return false;
+            }
+
+            var newUser = new User
+            {   
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Password = password,
+                RecuringDays = recuringDays,
+                Attendances = new List<Attendance>(),
+                Event_Attendances = new List<Event_Attendance>(),
+            };
+
+            _context.User.Add(newUser);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

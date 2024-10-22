@@ -1,20 +1,22 @@
-###Attend an Event
+//Attend an Event
 POST http://localhost:5097/api/v1/attendance
 Content-Type: application/json
 
 {
-  "userId": 1,
-  "eventId": 1
+    "userId" : 1,
+    "eventId" : 1
 }
+###
 
-###Get Attendees for an Event
+//Get Attendees for an Event
 GET http://localhost:5097/api/v1/attendance/event/1
+###
 
-###Remove Attendance for an Event
+//Remove Attendance for an Event
 DELETE http://localhost:5097/api/v1/attendance
 Content-Type: application/json
 
 {
-  "userId": 1,
-  "eventId": 1
+    "userId": 1,
+    "eventId": 1
 }
