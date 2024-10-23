@@ -3,9 +3,9 @@ POST http://localhost:5097/api/v1/login/register
 Content-Type: application/json
 
 {
-  "firstName": "Damian",
-  "lastName": "Willemse",
-  "email": "user@example.com",
+  "firstName": "Wishant",
+  "lastName": "Bhajan",
+  "email": "user2@example.com",
   "password": "123456",
   "recuringDays": "mo,tu,we"
 }
