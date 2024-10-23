@@ -3,7 +3,7 @@ POST http://localhost:5097/api/v1/Login/Login
 Content-Type: application/json
 
 {
-    "Username" : "admin1",
+    "Email" : "admin1@example.com",
     "Password" : "password"
 }
 #####
@@ -13,7 +13,7 @@ POST http://localhost:5097/api/v1/Login/Login
 Content-Type: application/json
 
 {
-    "Username" : "admin2",
+    "Email" : "admin2@example.com",
     "Password" : "tooeasytooguess"
 }
 ####
@@ -24,21 +24,3 @@ GET  http://localhost:5097/api/v1/Login/IsAdminLoggedIn
 
 // logout admin
 GET  http://localhost:5097/api/v1/Login/Logout
-####
-GET http://localhost:5097/api/v1/attendance/event/1
-####
-POST http://localhost:5097/api/v1/attendance
-Content-Type: application/json
-
-{
-    "userId" : 1,
-    "eventId" : 1
-}
-####
-DELETE http://localhost:5097/api/v1/attendance
-Content-Type: application/json
-
-{
-    "userId" : 1,
-    "eventId" : 1
-}
