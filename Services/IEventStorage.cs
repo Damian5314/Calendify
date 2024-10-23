@@ -88,22 +88,22 @@ namespace StarterKit.Services
 
         public async Task<List<Event>> ReadEvents()
         {
-            return await _context.Events.Include(e => e.Event_Attendances).ToListAsync(); // Include related data if needed
+            return await _context.Event.Include(e => e.Event_Attendances).ToListAsync(); // Include related data if needed
         }
 
         public async Task CreateEvent(Event e)
         {
-            _context.Events.Add(e);
+            _context.Event.Add(e);
             await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteEvent(int eventId)
         {
-            var eventToRemove = await _context.Events.FirstOrDefaultAsync(e => e.EventId == eventId);
+            var eventToRemove = await _context.Event.FirstOrDefaultAsync(e => e.EventId == eventId);
 
             if (eventToRemove != null)
             {
-                _context.Events.Remove(eventToRemove);
+                _context.Event.Remove(eventToRemove);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -113,7 +113,7 @@ namespace StarterKit.Services
 
         public async Task<bool> Put(int eventId, Event updatedEvent)
         {
-            var existingEvent = await _context.Events.FirstOrDefaultAsync(e => e.EventId == eventId);
+            var existingEvent = await _context.Event.FirstOrDefaultAsync(e => e.EventId == eventId);
 
             if (existingEvent != null)
             {

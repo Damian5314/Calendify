@@ -10,7 +10,7 @@ namespace StarterKit.Models
         public DbSet<User> User { get; set; }
         public DbSet<Attendance> Attendance { get; set; }
         public DbSet<Event_Attendance> Event_Attendance { get; set; }
-        public DbSet<Event> Events { get; set; }
+        public DbSet<Event> Event { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
