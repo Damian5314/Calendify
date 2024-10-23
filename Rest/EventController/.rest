@@ -1,31 +1,32 @@
-GET http://localhost:5097/api/v1/events/List
+GET http://localhost:5097/api/v1/events
 ####
 POST http://localhost:5097/api/v1/events HTTP/1.1
 content-type: application/json
 
-{   
+{
     "title": "vergadering",
     "description": "vergadering over jaarinkomen",
-    "eventDate": "2024-10-22",  // Date should be in "yyyy-MM-dd" format
-    "startTime": "11:00:00",  // Time should be in "HH:mm:ss" format
-    "endTime": "12:00:00",    // Time should be in "HH:mm:ss" format
+    "eventDate": "2024-10-22",
+    "startTime": "11:00:00",
+    "endTime": "12:00:00",
     "location": "kantoor",
     "adminApproval": true,
-    "event_Attendances": [] 
-} 
+    "event_Attendances": []
+}
 ##### 
-PUT http://localhost:5097/events/1 HTTP/1.1
-content-type: application/json
+PUT http://localhost:5097/api/v1/events/0
+Content-Type: application/json
+
 {   
     "title": "vergadering",
     "description": "vergadering over jaarinkomen",
-    "eventDate": "2024-10-22",  // Date should be in "yyyy-MM-dd" format
-    "startTime": "11:00:00",  // Time should be in "HH:mm:ss" format
-    "endTime": "13:00:00",    // Time should be in "HH:mm:ss" format
+    "eventDate": "2024-10-22",
+    "startTime": "11:00:00",
+    "endTime": "13:00:00",
     "location": "kantoor",
     "adminApproval": true,
     "event_Attendances": []
 }
 #####
-DELETE http://localhost:5097/api/v1/events/{eventId:int}
+DELETE http://localhost:5097/api/v1/events/0
 ####
