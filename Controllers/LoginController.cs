@@ -24,7 +24,8 @@ namespace StarterKit.Controllers
                 case LoginStatus.Success:
                     HttpContext.Session.SetString("AdminSession", "LoggedIn");
                     HttpContext.Session.SetString("LoggedInAdmin", $"{loginBody.Email}");
-                    return Ok("Admin login success");
+                    HttpContext.Session.SetString("LoggedInUser", $"{loginBody.Email}");
+                    return Ok($"Hello {loginBody.Email}, login success");
 
                 case LoginStatus.IncorrectPassword:
                     return Unauthorized("Incorrect password");

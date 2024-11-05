@@ -3,3 +3,4 @@ bin
 obj
 wwwroot/js
 webdev.sqlite-shm
+webdev.sqlite-wal
