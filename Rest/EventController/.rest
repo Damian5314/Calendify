@@ -14,7 +14,7 @@ content-type: application/json
     "event_Attendances": []
 }
 ##### 
-PUT http://localhost:5097/api/v1/events/0
+PUT http://localhost:5097/api/v1/events/1
 Content-Type: application/json
 
 {   
@@ -28,5 +28,5 @@ Content-Type: application/json
     "event_Attendances": []
 }
 #####
-DELETE http://localhost:5097/api/v1/events/0
+DELETE http://localhost:5097/api/v1/events/6
 ####

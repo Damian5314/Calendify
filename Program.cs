@@ -26,7 +26,7 @@ namespace StarterKit
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
 
-            builder.Services.AddScoped<IEventStorage, JsonEventStorage>();
+            builder.Services.AddScoped<IEventStorage, DbEventStorage>();
 
             var app = builder.Build();
 
