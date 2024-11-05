@@ -28,5 +28,5 @@ Content-Type: application/json
     "event_Attendances": []
 }
 #####
-DELETE http://localhost:5097/api/v1/events/6
+DELETE http://localhost:5097/api/v1/events/1
 ####
