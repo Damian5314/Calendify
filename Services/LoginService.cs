@@ -17,9 +17,16 @@ namespace StarterKit.Services
             var admin = _context.Admin.FirstOrDefault(x => x.Email == email);
             if (admin == null)
             {
-                return LoginStatus.IncorrectEmail;
-            }
+                var user = _context.User.FirstOrDefault(x => x.Email == email);
+                if (user == null)
+                {
+                    return LoginStatus.IncorrectEmail;
+                }
 
+                return user.Password == inputPassword
+                    ? LoginStatus.Success
+                    : LoginStatus.IncorrectPassword;
+            }
             return admin.Password == inputPassword
                 ? LoginStatus.Success
                 : LoginStatus.IncorrectPassword;
