@@ -20,14 +20,17 @@ namespace StarterKit.Models
         public required List<Event_Attendance> Event_Attendances { get; set; }
     }
 
-    public class Attendance
+        public class Attendance
     {
         public int AttendanceId { get; set; }
-
         public DateTime AttendanceDate { get; set; }
 
-        public required User User { get; set; }
+        // Voeg deze eigenschap toe
+        public int UserId { get; set; }  // Dit maakt directe toegang tot UserId mogelijk
+
+        public User User { get; set; }
     }
+
 
     public class Event_Attendance
     {
