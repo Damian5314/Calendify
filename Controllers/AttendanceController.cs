@@ -26,7 +26,7 @@ namespace StarterKit.Controllers
                 return BadRequest("Invalid user or event.");
             }
 
-            // Check if the event is still available based on date and time
+            // kijkt of de event beschikbaar is
             var now = DateTime.Now;
 
             // Convert TimeSpan to TimeOnly
@@ -37,13 +37,13 @@ namespace StarterKit.Controllers
                 return BadRequest("Event has already started or passed.");
             }
 
-            // Add user to the event attendance
+            // voegt de attendance toe
             var eventAttendance = new Event_Attendance
             {
                 User = user,
                 Event = eventItem,
                 Feedback = "",
-                Rating = 0 // Initialize with no feedback or rating yet
+                Rating = 0 
             };
 
             _context.Event_Attendance.Add(eventAttendance);

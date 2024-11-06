@@ -22,8 +22,8 @@ namespace StarterKit.Controllers
             switch (loginState)
             {
                 case LoginStatus.Success:
-                    var userId = _loginService.GetUserIdByEmail(loginBody.Email); // Ensure this method exists to get user ID
-                    HttpContext.Session.SetInt32("UserId", userId); // Store UserId in session
+                    var userId = _loginService.GetUserIdByEmail(loginBody.Email); //kijkt of method bestaat voor userid
+                    HttpContext.Session.SetInt32("UserId", userId); // 
                     HttpContext.Session.SetString("AdminSession", "LoggedIn");
                     HttpContext.Session.SetString("LoggedInAdmin", $"{loginBody.Email}");
                     HttpContext.Session.SetString("LoggedInUser", $"{loginBody.Email}");

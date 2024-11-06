@@ -9,8 +9,8 @@ namespace StarterKit.Services
     {
         Task<List<Event>> ReadEvents();
         Task CreateEvent(Event e);
-        Task<bool> DeleteEvent(int eventId);  // Changed from Guid to int
-        Task<bool> Put(int eventId, Event e); // Changed from Guid to int
+        Task<bool> DeleteEvent(int eventId);  // guid naa rint
+        Task<bool> Put(int eventId, Event e); // guid naar int
     }
 
     public class DbEventStorage : IEventStorage
@@ -24,7 +24,7 @@ namespace StarterKit.Services
 
         public async Task<List<Event>> ReadEvents()
         {
-            return await _context.Event.Include(e => e.Event_Attendances).ToListAsync(); // Include related data if needed
+            return await _context.Event.Include(e => e.Event_Attendances).ToListAsync();
         }
 
         public async Task CreateEvent(Event e)
@@ -53,7 +53,7 @@ namespace StarterKit.Services
 
             if (existingEvent != null)
             {
-                _context.Entry(existingEvent).CurrentValues.SetValues(updatedEvent); // Update existing entity
+                _context.Entry(existingEvent).CurrentValues.SetValues(updatedEvent); 
                 await _context.SaveChangesAsync();
                 return true;
             }

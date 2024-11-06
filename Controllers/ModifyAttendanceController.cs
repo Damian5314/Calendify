@@ -20,21 +20,21 @@ namespace StarterKit.Controllers
         [HttpGet("booked")]
         public IActionResult GetBookedAttendance([FromQuery] int userId)
         {
-            // 1. Check if the user is logged in (optional, since you're using the userId directly)
+            
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
             if (loggedInUserId == null)
                 return Unauthorized("You need to be logged in to view your attendance.");
 
-            // 2. Verify that the provided userId matches the logged-in user (optional, you may want this)
+            // 2. kijkt of userid gelijk aan loguserid
             if (loggedInUserId != userId)
                 return Forbid("You can only view your own attendance.");
 
-            // 3. Fetch the attendance data for the given userId
+        
             var userAttendance = _context.Attendance
                 .Where(a => a.UserId == userId)
                 .ToList();
 
-            // 4. Return the attendance data as a response
+            // 4. geef attendacne terug als json
             if (userAttendance.Count == 0)
                 return NotFound("No attendance found for this user.");
 
@@ -46,16 +46,16 @@ namespace StarterKit.Controllers
         [HttpPost("book")]
         public IActionResult BookAttendance([FromBody] BookAttendanceRequest request)
         {
-            // 1. Check if the user is logged in
+            // 1. kijkt of
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
             if (loggedInUserId == null)
                 return Unauthorized("You need to be logged in to book attendance.");
 
-            // 2. Check if the user is trying to book their own attendance
+            // 2. kijkt of de gebruiker zichzelf boekt
             if (loggedInUserId != request.UserId)
                 return Forbid("You can only book your own attendance.");
 
-            // 3. Check if there's already a booking on the specific date and time
+            // 3. checkt tijd en datum
             var existingAttendance = _context.Attendance
                 .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.AttendanceDate);
 
@@ -79,30 +79,30 @@ namespace StarterKit.Controllers
         [HttpPut("update")]
         public IActionResult UpdateAttendance([FromBody] UpdateAttendanceRequest request)
         {
-            // 1. Check if the user is logged in
+        
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
             if (loggedInUserId == null)
                 return Unauthorized("You need to be logged in to update attendance.");
 
-            // 2. Check if the user is trying to update their own attendance
+            // 2. kijkt of de gebruiker zichzelf update
             if (loggedInUserId != request.UserId)
                 return Forbid("You can only update your own attendance.");
 
-            // 3. Find the existing attendance record by OldAttendanceDate
+            // 3. verifieert tijd en datum
             var existingAttendance = _context.Attendance
                 .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.OldAttendanceDate);
 
             if (existingAttendance == null)
                 return NotFound("No existing booking found for the old date and time.");
 
-            // 4. Check if the new date already has a booking
+            // 4. kijkt of de tijd en datum niet overlappen
             var conflictAttendance = _context.Attendance
                 .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.NewAttendanceDate);
 
             if (conflictAttendance != null)
                 return Conflict("You already have a booking for the new date and time.");
 
-            // 5. Update the attendance date and save changes
+            // 5. doet de nieuwe attendacne updaten
             existingAttendance.AttendanceDate = request.NewAttendanceDate;
             _context.SaveChanges();
 
@@ -113,16 +113,16 @@ namespace StarterKit.Controllers
         [HttpDelete("delete")]
         public IActionResult DeleteAttendance([FromBody] DeleteAttendanceRequest request)
         {
-            // 1. Check if the user is logged in
+            
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
             if (loggedInUserId == null)
                 return Unauthorized("You need to be logged in to delete attendance.");
 
-            // 2. Check if the user is trying to delete their own attendance
+          
             if (loggedInUserId != request.UserId)
                 return Forbid("You can only delete your own attendance.");
 
-            // 3. Find and delete the attendance by date and time
+         
             var attendance = _context.Attendance
                 .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.AttendanceDate);
 
@@ -136,7 +136,7 @@ namespace StarterKit.Controllers
         }
     }
 
-    // Request models for data validation
+
     public class BookAttendanceRequest
     {
         public int UserId { get; set; }

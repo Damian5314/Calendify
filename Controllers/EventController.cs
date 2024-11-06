@@ -16,22 +16,22 @@ namespace StarterKit.Controllers
             _eventStorage = eventStorage;
         }
 
-        // Users can access this
+       
         [HttpGet]
-        //[Authorize] // Allow any authenticated user (both admins and regular users)
+       
         public async Task<IActionResult> GetEvents()
         {
             return Ok(await _eventStorage.ReadEvents());
         }
 
-        // Only Admins can create/delete/update events
+        // alleenn admins kan create/delete/update events
         [HttpPost]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateEvent([FromBody] Event e)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);  // This will trigger a 400 if the JSON is invalid or fields are missing
+                return BadRequest(ModelState);  // dit geeft foutmelding 400
             }
             await _eventStorage.CreateEvent(e);
             return Ok("Event has been created");
