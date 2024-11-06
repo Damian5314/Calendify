@@ -51,14 +51,14 @@ namespace StarterKit.Services
 
         public async Task<Admin?> Find(int adminId)
         {
-            // First check in-memory list
+           
             var admin = _admins.FirstOrDefault(a => a.AdminId == adminId);
             if (admin != null)
             {
                 return admin;
             }
 
-            // If not found in-memory, check the database
+           
             return await _db.Set<Admin>().FindAsync(adminId);
         }
 
