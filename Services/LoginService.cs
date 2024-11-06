@@ -31,6 +31,12 @@ namespace StarterKit.Services
                 ? LoginStatus.Success
                 : LoginStatus.IncorrectPassword;
         }
+    public int GetUserIdByEmail(string email)
+    {
+
+        var user = _context.User.FirstOrDefault(u => u.Email == email);
+        return user != null ? user.UserId : 0;
+    }
 
         public bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays)
         {

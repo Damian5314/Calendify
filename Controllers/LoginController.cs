@@ -22,6 +22,8 @@ namespace StarterKit.Controllers
             switch (loginState)
             {
                 case LoginStatus.Success:
+                    var userId = _loginService.GetUserIdByEmail(loginBody.Email); // Ensure this method exists to get user ID
+                    HttpContext.Session.SetInt32("UserId", userId); // Store UserId in session
                     HttpContext.Session.SetString("AdminSession", "LoggedIn");
                     HttpContext.Session.SetString("LoggedInAdmin", $"{loginBody.Email}");
                     return Ok("Admin login success");
@@ -36,6 +38,8 @@ namespace StarterKit.Controllers
                     return BadRequest();
             }
         }
+
+
 
         [HttpPost("Register")]
         public IActionResult Register([FromBody] RegisterBody registerBody)

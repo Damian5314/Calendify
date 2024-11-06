@@ -3,8 +3,8 @@ POST http://localhost:5097/api/v1/Login/Login
 Content-Type: application/json
 
 {
-  "email": "admin1@example.com",
-  "password": "password"
+  "email": "user2@example.com",
+  "password": "123456"
 }
 
 ###
