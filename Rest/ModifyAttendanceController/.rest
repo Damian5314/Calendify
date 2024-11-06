@@ -35,10 +35,11 @@ PUT http://localhost:5097/api/v1/modify-attendance/update
 Content-Type: application/json
 
 {
-  "UserId": 1,  // Gebruik het juiste UserId
-  "OldAttendanceDate": "2023-11-10T00:00:00", // De oude datum
-  "NewAttendanceDate": "2023-11-11T00:00:00"  // De nieuwe datum
+  "UserId": 1,
+  "OldAttendanceDate": "2023-11-10T00:00:00",
+  "NewAttendanceDate": "2023-11-10T01:00:00"
 }
+
 
 ###
 # 5. Verwijder de aanwezigheid van de ingelogde gebruiker
@@ -46,9 +47,10 @@ DELETE http://localhost:5097/api/v1/modify-attendance/delete
 Content-Type: application/json
 
 {
-  "UserId": 1,  // Gebruik het juiste UserId
-  "AttendanceDate": "2023-11-10T00:00:00" // Datum van de aanwezigheid die je wilt verwijderen
+  "UserId": 1,
+  "AttendanceDate": "2023-11-10T01:00:00"
 }
+
 
 ###
 # 6. Probeer een datum te boeken die al bezet is

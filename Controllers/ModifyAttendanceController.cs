@@ -22,24 +22,23 @@ namespace StarterKit.Controllers
         [HttpPost("book")]
         public IActionResult BookAttendance([FromBody] BookAttendanceRequest request)
         {
-            // 1. Controleer of gebruiker is ingelogd
+            // 1. Check if the user is logged in
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
             if (loggedInUserId == null)
-                return Unauthorized("Je moet ingelogd zijn om aanwezigheid te boeken.");
+                return Unauthorized("You need to be logged in to book attendance.");
 
-            // 2. Controleer of de gebruiker zijn eigen boeking probeert te maken
+            // 2. Check if the user is trying to book their own attendance
             if (loggedInUserId != request.UserId)
-                return Forbid("Je kunt alleen je eigen aanwezigheid boeken.");
+                return Forbid("You can only book your own attendance.");
 
-            // 3. Controleer of er al een boeking is op de datum
+            // 3. Check if there's already a booking on the specific date and time
             var existingAttendance = _context.Attendance
                 .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.AttendanceDate);
 
-
             if (existingAttendance != null)
-                return Conflict("Je hebt al een boeking voor deze datum.");
+                return Conflict("You already have a booking for this date and time.");
 
-            // 4. Maak een nieuwe aanwezigheid (attendance) aan
+            // 4. Create a new attendance record
             var attendance = new Attendance
             {
                 UserId = request.UserId,
@@ -49,71 +48,71 @@ namespace StarterKit.Controllers
             _context.Attendance.Add(attendance);
             _context.SaveChanges();
 
-            return Ok("Aanwezigheid succesvol geboekt.");
+            return Ok("Attendance successfully booked.");
         }
 
         // PUT: api/v1/modify-attendance/update
         [HttpPut("update")]
         public IActionResult UpdateAttendance([FromBody] UpdateAttendanceRequest request)
         {
-            // 1. Controleer of gebruiker is ingelogd
+            // 1. Check if the user is logged in
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
             if (loggedInUserId == null)
-                return Unauthorized("Je moet ingelogd zijn om aanwezigheid te wijzigen.");
+                return Unauthorized("You need to be logged in to update attendance.");
 
-            // 2. Controleer of de gebruiker zijn eigen boeking probeert te updaten
+            // 2. Check if the user is trying to update their own attendance
             if (loggedInUserId != request.UserId)
-                return Forbid("Je kunt alleen je eigen aanwezigheid wijzigen.");
+                return Forbid("You can only update your own attendance.");
 
-            // 3. Vind de bestaande aanwezigheid
+            // 3. Find the existing attendance record by OldAttendanceDate
             var existingAttendance = _context.Attendance
-                .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate.Date == request.OldAttendanceDate.Date);
+                .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.OldAttendanceDate);
 
             if (existingAttendance == null)
-                return NotFound("Geen bestaande boeking gevonden op deze datum.");
+                return NotFound("No existing booking found for the old date and time.");
 
-            // 4. Controleer of de nieuwe datum al geboekt is
+            // 4. Check if the new date already has a booking
             var conflictAttendance = _context.Attendance
-                .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate.Date == request.NewAttendanceDate.Date);
+                .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.NewAttendanceDate);
 
             if (conflictAttendance != null)
-                return Conflict("Je hebt al een boeking voor de nieuwe datum.");
+                return Conflict("You already have a booking for the new date and time.");
 
-            // 5. Wijzig de datum en sla op
+            // 5. Update the attendance date and save changes
             existingAttendance.AttendanceDate = request.NewAttendanceDate;
             _context.SaveChanges();
 
-            return Ok("Aanwezigheid succesvol gewijzigd.");
+            return Ok("Attendance successfully updated.");
         }
 
         // DELETE: api/v1/modify-attendance/delete
         [HttpDelete("delete")]
         public IActionResult DeleteAttendance([FromBody] DeleteAttendanceRequest request)
         {
-            // 1. Controleer of gebruiker is ingelogd
+            // 1. Check if the user is logged in
             var loggedInUserId = HttpContext.Session.GetInt32("UserId");
             if (loggedInUserId == null)
-                return Unauthorized("Je moet ingelogd zijn om aanwezigheid te verwijderen.");
+                return Unauthorized("You need to be logged in to delete attendance.");
 
-            // 2. Controleer of de gebruiker zijn eigen boeking probeert te verwijderen
+            // 2. Check if the user is trying to delete their own attendance
             if (loggedInUserId != request.UserId)
-                return Forbid("Je kunt alleen je eigen aanwezigheid verwijderen.");
+                return Forbid("You can only delete your own attendance.");
 
-            // 3. Zoek de aanwezigheid en verwijder deze
+            // 3. Find and delete the attendance by date and time
             var attendance = _context.Attendance
-                .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate.Date == request.AttendanceDate.Date);
+                .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.AttendanceDate);
 
             if (attendance == null)
-                return NotFound("Geen boeking gevonden op deze datum.");
+                return NotFound("No booking found on this date and time.");
 
             _context.Attendance.Remove(attendance);
             _context.SaveChanges();
 
-            return Ok("Aanwezigheid succesvol verwijderd.");
+            return Ok("Attendance successfully deleted.");
         }
     }
 
-    // Request modellen voor data validatie
+    // Request models for data validation
     public class BookAttendanceRequest
     {
         public int UserId { get; set; }
@@ -132,6 +131,7 @@ namespace StarterKit.Controllers
         public int UserId { get; set; }
         public DateTime AttendanceDate { get; set; }
     }
+
     namespace StarterKit.Models
 {
     public class User
