@@ -63,7 +63,7 @@ namespace StarterKit.Controllers
             _context.SaveChanges();
 
             // Stuur een succesbericht terug met de details van het evenement
-            return Ok(eventItem);
+            return Ok("User added to Event.");
         }
 
         // GET: api/v1/attendance/event/{eventId}
