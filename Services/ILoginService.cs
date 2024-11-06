@@ -7,6 +7,9 @@ namespace StarterKit.Services
     public interface ILoginService
     {
         LoginStatus CheckPassword(string email, string inputPassword);
+        int GetUserIdByEmail(string? email);
         bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays);
+
+        
     }
 }
