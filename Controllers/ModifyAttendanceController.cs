@@ -33,7 +33,8 @@ namespace StarterKit.Controllers
 
             // 3. Controleer of er al een boeking is op de datum
             var existingAttendance = _context.Attendance
-                .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate.Date == request.AttendanceDate.Date);
+                .FirstOrDefault(a => a.UserId == request.UserId && a.AttendanceDate == request.AttendanceDate);
+
 
             if (existingAttendance != null)
                 return Conflict("Je hebt al een boeking voor deze datum.");
