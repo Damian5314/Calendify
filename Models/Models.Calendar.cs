@@ -12,7 +12,7 @@ namespace StarterKit.Models
 
         public required string Password { get; set; }
 
-        // A comma sepparated string that could look like this: "mo,tu,we,th,fr"
+    
         public required string RecuringDays { get; set; }
 
         public required List<Attendance> Attendances { get; set; }
