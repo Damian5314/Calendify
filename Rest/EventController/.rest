@@ -14,7 +14,7 @@ content-type: application/json
     "event_Attendances": []
 }
 ##### 
-PUT http://localhost:5097/api/v1/events/1
+PUT http://localhost:5097/api/v1/events/9
 Content-Type: application/json
 
 {   
