@@ -17,6 +17,30 @@ namespace StarterKit.Controllers
             _context = context;
             _loginService = loginService;
         }
+        [HttpGet("booked")]
+        public IActionResult GetBookedAttendance([FromQuery] int userId)
+        {
+            // 1. Check if the user is logged in (optional, since you're using the userId directly)
+            var loggedInUserId = HttpContext.Session.GetInt32("UserId");
+            if (loggedInUserId == null)
+                return Unauthorized("You need to be logged in to view your attendance.");
+
+            // 2. Verify that the provided userId matches the logged-in user (optional, you may want this)
+            if (loggedInUserId != userId)
+                return Forbid("You can only view your own attendance.");
+
+            // 3. Fetch the attendance data for the given userId
+            var userAttendance = _context.Attendance
+                .Where(a => a.UserId == userId)
+                .ToList();
+
+            // 4. Return the attendance data as a response
+            if (userAttendance.Count == 0)
+                return NotFound("No attendance found for this user.");
+
+            return Ok(userAttendance);
+        }
+
 
         // POST: api/v1/modify-attendance/book
         [HttpPost("book")]

@@ -13,8 +13,8 @@ POST http://localhost:5097/api/v1/modify-attendance/book
 Content-Type: application/json
 
 {
-  "UserId": 1,
-  "AttendanceDate": "2023-11-10T00:00:00"
+  "UserId": 2,
+  "AttendanceDate": "2023-11-10T01:00:00"
 }
 
 
@@ -22,12 +22,8 @@ Content-Type: application/json
 # 3. Haal de aanwezigheid op van de ingelogde gebruiker
 # Dit endpoint bestaat mogelijk niet in je huidige code. Voeg het toe als je het nodig hebt.
 
-GET http://localhost:5097/api/v1/modify-attendance/booked
-Content-Type: application/json
+GET http://localhost:5097/api/v1/modify-attendance/booked?userId=2
 
-{
-  "UserId": 1 // Pas het UserId aan indien nodig
-}
 
 ###
 # 4. Bewerk de aanwezigheid van de ingelogde gebruiker
@@ -35,9 +31,9 @@ PUT http://localhost:5097/api/v1/modify-attendance/update
 Content-Type: application/json
 
 {
-  "UserId": 1,
-  "OldAttendanceDate": "2023-11-10T00:00:00",
-  "NewAttendanceDate": "2023-11-10T01:00:01"
+  "UserId": 2,
+  "OldAttendanceDate": "2023-11-10T01:00:00",
+  "NewAttendanceDate": "2023-11-10T04:00:00"
 }
 
 
@@ -47,8 +43,8 @@ DELETE http://localhost:5097/api/v1/modify-attendance/delete
 Content-Type: application/json
 
 {
-  "UserId": 1,
-  "AttendanceDate": "2023-11-10T01:00:00"
+  "UserId": 2,
+  "AttendanceDate": "2023-11-10T04:00:00"
 }
 
 
@@ -58,6 +54,6 @@ POST http://localhost:5097/api/v1/modify-attendance/book
 Content-Type: application/json
 
 {
-  "UserId": 1,
+  "UserId": 2,
   "AttendanceDate": "2023-11-10T00:00:00"
 }
