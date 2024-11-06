@@ -14,7 +14,7 @@ content-type: application/json
     "event_Attendances": []
 }
 ##### 
-PUT http://localhost:5097/api/v1/events/9
+PUT http://localhost:5097/api/v1/events/11
 Content-Type: application/json
 
 {   
@@ -22,11 +22,11 @@ Content-Type: application/json
     "description": "vergadering over jaarinkomen",
     "eventDate": "2024-10-22",
     "startTime": "11:00:00",
-    "endTime": "13:00:00",
+    "endTime": "14:00:00",
     "location": "kantoor",
     "adminApproval": true,
     "event_Attendances": []
 }
 #####
-DELETE http://localhost:5097/api/v1/events/1
+DELETE http://localhost:5097/api/v1/events/12
 ####

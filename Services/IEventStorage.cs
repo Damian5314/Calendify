@@ -53,7 +53,13 @@ namespace StarterKit.Services
 
             if (existingEvent != null)
             {
-                _context.Entry(existingEvent).CurrentValues.SetValues(updatedEvent); 
+                existingEvent.Title = updatedEvent.Title;
+                existingEvent.Description = updatedEvent.Description;
+                existingEvent.EventDate = updatedEvent.EventDate;
+                existingEvent.StartTime = updatedEvent.StartTime;
+                existingEvent.EndTime = updatedEvent.EndTime;
+                existingEvent.Location = updatedEvent.Location;
+                existingEvent.AdminApproval = updatedEvent.AdminApproval;
                 await _context.SaveChangesAsync();
                 return true;
             }
