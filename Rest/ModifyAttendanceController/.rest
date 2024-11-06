@@ -37,7 +37,7 @@ Content-Type: application/json
 {
   "UserId": 1,
   "OldAttendanceDate": "2023-11-10T00:00:00",
-  "NewAttendanceDate": "2023-11-10T01:00:00"
+  "NewAttendanceDate": "2023-11-10T01:00:01"
 }
 
 
@@ -58,6 +58,6 @@ POST http://localhost:5097/api/v1/modify-attendance/book
 Content-Type: application/json
 
 {
-  "UserId": 1,  // Gebruik het juiste UserId
-  "AttendanceDate": "2023-11-10T00:00:00" // Dezelfde datum om een conflict te simuleren
+  "UserId": 1,
+  "AttendanceDate": "2023-11-10T00:00:00"
 }
