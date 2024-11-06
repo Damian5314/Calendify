@@ -20,7 +20,6 @@ Content-Type: application/json
 
 ###
 # 3. Haal de aanwezigheid op van de ingelogde gebruiker
-# Dit endpoint bestaat mogelijk niet in je huidige code. Voeg het toe als je het nodig hebt.
 
 GET http://localhost:5097/api/v1/modify-attendance/booked?userId=2
 
