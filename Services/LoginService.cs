@@ -31,34 +31,37 @@ namespace StarterKit.Services
                 ? LoginStatus.Success
                 : LoginStatus.IncorrectPassword;
         }
-    public int GetUserIdByEmail(string email)
-    {
+        public int GetUserIdByEmail(string email)
+        {
 
-        var user = _context.User.FirstOrDefault(u => u.Email == email);
-        return user != null ? user.UserId : 0;
-    }
+            var user = _context.User.FirstOrDefault(u => u.Email == email);
+            return user != null ? user.UserId : 0;
+        }
 
-        public bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays)
+        public bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays, string role)
         {
             if (_context.User.Any(u => u.Email == email))
             {
-                return false;
+                return false; // Email already exists
             }
 
             var newUser = new User
-            {   
+            {
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
                 Password = password,
                 RecuringDays = recuringDays,
+                Role = role ?? "User", // Default to "User" if no role is provided
                 Attendances = new List<Attendance>(),
-                Event_Attendances = new List<Event_Attendance>(),
+                Event_Attendances = new List<Event_Attendance>()
             };
 
             _context.User.Add(newUser);
             _context.SaveChanges();
             return true;
         }
+
+
     }
 }

@@ -8,8 +8,7 @@ namespace StarterKit.Services
     {
         LoginStatus CheckPassword(string email, string inputPassword);
         int GetUserIdByEmail(string? email);
-        bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays);
-
-        
+        bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays, string role);
     }
+
 }

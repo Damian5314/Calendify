@@ -2,58 +2,42 @@ using Microsoft.EntityFrameworkCore;
 using StarterKit.Models;
 using StarterKit.Services;
 
-namespace StarterKit
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddSession(options =>
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
 
-            builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
-            builder.Services.AddDistributedMemoryCache();
+var app = builder.Build();
 
-            builder.Services.AddSession(options => 
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true; 
-                options.Cookie.IsEssential = true; 
-            });
-
-            builder.Services.AddScoped<ILoginService, LoginService>();
-
-            builder.Services.AddDbContext<DatabaseContext>(
-                options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
-
-            builder.Services.AddScoped<IEventStorage, DbEventStorage>();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-            app.UseAuthorization();
-
-            app.UseSession();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            app.Run();
-
-        }
-    }
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseSession();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
