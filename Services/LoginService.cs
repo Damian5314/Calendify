@@ -37,6 +37,13 @@ namespace StarterKit.Services
             var user = _context.User.FirstOrDefault(u => u.Email == email);
             return user != null ? user.UserId : 0;
         }
+        public string GetUserRoleByEmail(string email)
+        {
+            var user = _context.User.FirstOrDefault(u => u.Email == email);
+            return user?.Role ?? "User"; // Default role if not found
+        }
+
+        
 
         public bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays, string role)
         {

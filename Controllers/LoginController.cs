@@ -16,50 +16,98 @@ namespace StarterKit.Controllers
         }
 
         /// <summary>
-        /// Handles user registration
+        /// Logs in a user with email and password.
         /// </summary>
-        /// <param name="user">User details for registration</param>
-        /// <returns>Status of registration</returns>
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequest loginRequest)
+        {
+            if (string.IsNullOrWhiteSpace(loginRequest.Email) || string.IsNullOrWhiteSpace(loginRequest.Password))
+                return BadRequest("Email and password are required.");
+
+            var loginStatus = _loginService.CheckPassword(loginRequest.Email, loginRequest.Password);
+
+            if (loginStatus == LoginStatus.IncorrectEmail)
+                return Unauthorized("Invalid email.");
+
+            if (loginStatus == LoginStatus.IncorrectPassword)
+                return Unauthorized("Invalid password.");
+
+            var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
+            var role = _loginService.GetUserRoleByEmail(loginRequest.Email);
+
+            // Set session values
+            HttpContext.Session.SetInt32("UserId", userId);
+            HttpContext.Session.SetString("Role", role); // "Admin" or "User"
+
+            return Ok(new { message = $"Logged in as {role}.", userId });
+        }
+
+        /// <summary>
+        /// Logs out the current user.
+        /// </summary>
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return Ok("Logged out successfully.");
+        }
+
+        /// <summary>
+        /// Check if a user is logged in and their role.
+        /// </summary>
+        [HttpGet("is-logged-in")]
+        public IActionResult IsLoggedIn()
+        {
+            if (!CheckSessionLoggedIn())
+                return Unauthorized("You are not logged in.");
+
+            var role = HttpContext.Session.GetString("Role");
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            return Ok(new { loggedIn = true, role, userId });
+        }
+
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
         [HttpPost("register")]
         public IActionResult RegisterUser([FromBody] User user)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Set default values for missing properties
-            user.Role ??= "User";
-            user.Attendances ??= new List<Attendance>();
-            user.Event_Attendances ??= new List<Event_Attendance>();
-
-            // Call the service to register the user
             var success = _loginService.RegisterUser(
                 user.FirstName,
                 user.LastName,
                 user.Email,
                 user.Password,
                 user.RecuringDays,
-                user.Role);
+                user.Role // "Admin" or "User"
+            );
 
             if (!success)
-                return Conflict("A user with this email already exists.");
+                return Conflict("Email is already in use.");
 
             return Ok("User registered successfully.");
         }
 
-
-
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest loginRequest)
+        [HttpGet("debug-session")]
+        public IActionResult DebugSessionCookies()
         {
-            var status = _loginService.CheckPassword(loginRequest.Email, loginRequest.Password);
+            var sessionId = HttpContext.Request.Cookies[".AspNetCore.Session"];
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var role = HttpContext.Session.GetString("Role");
 
-            return status switch
+            return Ok(new
             {
-                LoginStatus.IncorrectEmail => Unauthorized("Email does not exist."),
-                LoginStatus.IncorrectPassword => Unauthorized("Incorrect password."),
-                LoginStatus.Success => Ok("Login successful."),
-                _ => StatusCode(500, "An unknown error occurred."),
-            };
+                SessionId = sessionId ?? "Session cookie not found",
+                UserId = userId?.ToString() ?? "UserId not set",
+                Role = role ?? "Role not set"
+            });
         }
+
+
+        // Helper method to check session login
+        private bool CheckSessionLoggedIn() => HttpContext.Session.GetInt32("UserId") != null;
     }
 }
