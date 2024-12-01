@@ -4,6 +4,7 @@
   "description": "This is a basic react toolchain for a React app with Typescript",
   "main": "index.js",
   "scripts": {
+    "start": "react-scripts start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack -w --mode development",
     "build": "webpack --mode production"
