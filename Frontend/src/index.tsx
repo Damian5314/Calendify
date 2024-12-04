@@ -1,26 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Home from './pages/Home';
-import Header from './shared/Header';
+import * as React from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
-const App: React.FC = () => {
-  const role = sessionStorage.getItem('role');
-
-  return (
+createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
     <Router>
-      <Header />
       <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={role === 'Admin' ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/home" element={role === 'User' ? <Home /> : <Navigate to="/login" />} />
-        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
+  </React.StrictMode>
   );
-};
-
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-root.render(<App />);
