@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 // Helper function to get the start of the week (Monday)
 const getStartOfWeek = (date: Date): Date => {
@@ -32,7 +33,7 @@ const Home: React.FC = () => {
           alignItems: "center",
         }}
       >
-        <div style={{ fontWeight: "bold", fontSize: "24px" }}>LOGO</div>
+        <div style={{ fontWeight: "bold", fontSize: "24px" }}>Calendify</div>
         <button
           style={{
             background: "none",
@@ -55,7 +56,7 @@ const Home: React.FC = () => {
           alignItems: "center",
         }}
       >
-        <div style={{ fontSize: "20px" }}>Hallo Gebruiker 3</div>
+        <div style={{ fontSize: "20px" }}>Hallo Admin</div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <button style={{ fontSize: "20px" }}>&lt;</button>
           <div style={{ fontSize: "16px" }}>Vandaag</div>
@@ -67,7 +68,7 @@ const Home: React.FC = () => {
           <button>Maand</button>
           <button>Jaar</button>
         </div>
-        <button style={{ fontSize: "20px", padding: "5px" }}>+</button>
+        <Link to="/CreateEvent"><button style={{ fontSize: "20px", padding: "5px" }}>+</button></Link>
       </div>
 
       {/* Calendar Table */}
