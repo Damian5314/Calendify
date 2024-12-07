@@ -1,4 +1,8 @@
-# User Endpoints
+# REST API Endpoints for Calendify
+
+---
+
+# Authentication Endpoints
 
 ### Register User
 POST http://localhost:5097/api/v1/auth/register
@@ -13,68 +17,15 @@ Content-Type: application/json
     "role": "User" 
 }
 
-### Get All Users (Admin Only)
-GET http://localhost:5097/api/v1/accounts
-Cookie: .AspNetCore.Session=<>
-
-### Get User by ID
-GET http://localhost:5097/api/v1/accounts/1
-Cookie: .AspNetCore.Session=<>
-
-### Update User
-PUT http://localhost:5097/api/v1/accounts/1
+### Register Admin
+POST http://localhost:5097/api/v1/auth/register-admin
 Content-Type: application/json
-Cookie: .AspNetCore.Session=<>
-
-{
-  "email": "john.doe.updated@example.com",
-  "password": "newpassword123"
-}
-
-### Delete User
-DELETE http://localhost:5097/api/v1/accounts/1
-Cookie: .AspNetCore.Session=<>
-
----
-
-# Admin Endpoints
-
-### Create Admin
-POST http://localhost:5097/api/v1/admins
-Content-Type: application/json
-Cookie: .AspNetCore.Session=<>
 
 {
   "userName": "admin1",
   "email": "admin1@example.com",
   "password": "adminpassword123"
 }
-
-### Get All Admins
-GET http://localhost:5097/api/v1/admins
-Cookie: .AspNetCore.Session=<>
-
-### Get Admin by ID
-GET http://localhost:5097/api/v1/admins/1
-Cookie: .AspNetCore.Session=<>
-
-### Update Admin
-PUT http://localhost:5097/api/v1/admins/1
-Content-Type: application/json
-Cookie: .AspNetCore.Session=<>
-
-{
-  "email": "admin1.updated@example.com",
-  "password": "newadminpassword123"
-}
-
-### Delete Admin
-DELETE http://localhost:5097/api/v1/admins/1
-Cookie: .AspNetCore.Session=<>
-
----
-
-# Authentication Endpoints
 
 ### Login
 POST http://localhost:5097/api/v1/auth/login
@@ -85,11 +36,66 @@ Content-Type: application/json
   "password": "password123"
 }
 
-### Check if You Are Logged In
+### Check If Logged In
 GET http://localhost:5097/api/v1/auth/is-logged-in
-Cookie: .AspNetCore.Session=<CfDJ8JOzqj0WnvdCgGzEioXVxnvNXw6vV4b11x7DT9qBccyv1cfwlEY67iupie82pnZrvBLcDCbvUpWlo7dk8Y9WbDHj4ILTgfVmAUB4UMaBP/OQvEaH1+tnICV/TDE32+taUJcCa+JUziLiEgIvyO75/dzaGlUSvCj+Kkmp6CdpY7hc>
+Cookie: .AspNetCore.Session:"CfDJ8JOzqj0WnvdCgGzEioXVxnsXMXMni63OGUXNwsfJcaEJb3wB%2FMLQYPr4bUrkZzQPRg7nYccWVAMsGLxzYErK8SZndFsrzYags3OGVh8cc3SF0%2FJi9qVjLJYYs%2FU%2BUGOhbvY9YxMtSWq8eHznF8IZRjhDUhyQEXZbhOrzR8cHdd30"
+
 ### Logout
 POST http://localhost:5097/api/v1/auth/logout
-Cookie: .AspNetCore.Session=<>
-####
+Cookie: .AspNetCore.Session=<YOUR_SESSION_COOKIE>
+
+### Debug Session (Optional - For Debugging Purposes)
 GET http://localhost:5097/api/v1/auth/debug-session
+Cookie: .AspNetCore.Session=<YOUR_SESSION_COOKIE>
+
+---
+
+# User Endpoints (Requires Authentication)
+
+### Get All Users (Admin Only)
+GET http://localhost:5097/api/v1/accounts
+Cookie: .AspNetCore.Session:"CfDJ8JOzqj0WnvdCgGzEioXVxnsXMXMni63OGUXNwsfJcaEJb3wB%2FMLQYPr4bUrkZzQPRg7nYccWVAMsGLxzYErK8SZndFsrzYags3OGVh8cc3SF0%2FJi9qVjLJYYs%2FU%2BUGOhbvY9YxMtSWq8eHznF8IZRjhDUhyQEXZbhOrzR8cHdd30"
+
+### Get User by ID
+GET http://localhost:5097/api/v1/accounts/1
+Cookie: .AspNetCore.Session:"CfDJ8JOzqj0WnvdCgGzEioXVxnsXMXMni63OGUXNwsfJcaEJb3wB%2FMLQYPr4bUrkZzQPRg7nYccWVAMsGLxzYErK8SZndFsrzYags3OGVh8cc3SF0%2FJi9qVjLJYYs%2FU%2BUGOhbvY9YxMtSWq8eHznF8IZRjhDUhyQEXZbhOrzR8cHdd30"
+
+### Update User
+PUT http://localhost:5097/api/v1/accounts/1
+Content-Type: application/json
+Cookie: .AspNetCore.Session=<YOUR_SESSION_COOKIE>
+
+{
+  "email": "john.doe.updated@example.com",
+  "password": "newpassword123"
+}
+
+### Delete User
+DELETE http://localhost:5097/api/v1/accounts/1
+Cookie: .AspNetCore.Session=<YOUR_SESSION_COOKIE>
+
+---
+
+# Admin Endpoints (Requires Admin Privileges)
+
+### Get All Admins
+GET http://localhost:5097/api/v1/admins
+Cookie: .AspNetCore.Session=<YOUR_SESSION_COOKIE>
+
+### Get Admin by ID
+GET http://localhost:5097/api/v1/admins/1
+Cookie: .AspNetCore.Session=<YOUR_SESSION_COOKIE>
+
+### Update Admin
+PUT http://localhost:5097/api/v1/admins/1
+Content-Type: application/json
+Cookie: .AspNetCore.Session=<YOUR_SESSION_COOKIE>
+
+{
+  "email": "admin1.updated@example.com",
+  "password": "newadminpassword123"
+}
+
+### Delete Admin
+DELETE http://localhost:5097/api/v1/admins/1
+Cookie: .AspNetCore.Session=<YOUR_SESSION_COOKIE>
