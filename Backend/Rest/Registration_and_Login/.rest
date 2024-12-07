@@ -1,0 +1,95 @@
+# User Endpoints
+
+### Register User
+POST http://localhost:5097/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "johndoe@example.com",
+    "password": "password123",
+    "recuringDays": "Monday,Wednesday,Friday",
+    "role": "User" 
+}
+
+### Get All Users (Admin Only)
+GET http://localhost:5097/api/v1/accounts
+Cookie: .AspNetCore.Session=<>
+
+### Get User by ID
+GET http://localhost:5097/api/v1/accounts/1
+Cookie: .AspNetCore.Session=<>
+
+### Update User
+PUT http://localhost:5097/api/v1/accounts/1
+Content-Type: application/json
+Cookie: .AspNetCore.Session=<>
+
+{
+  "email": "john.doe.updated@example.com",
+  "password": "newpassword123"
+}
+
+### Delete User
+DELETE http://localhost:5097/api/v1/accounts/1
+Cookie: .AspNetCore.Session=<>
+
+---
+
+# Admin Endpoints
+
+### Create Admin
+POST http://localhost:5097/api/v1/admins
+Content-Type: application/json
+Cookie: .AspNetCore.Session=<>
+
+{
+  "userName": "admin1",
+  "email": "admin1@example.com",
+  "password": "adminpassword123"
+}
+
+### Get All Admins
+GET http://localhost:5097/api/v1/admins
+Cookie: .AspNetCore.Session=<>
+
+### Get Admin by ID
+GET http://localhost:5097/api/v1/admins/1
+Cookie: .AspNetCore.Session=<>
+
+### Update Admin
+PUT http://localhost:5097/api/v1/admins/1
+Content-Type: application/json
+Cookie: .AspNetCore.Session=<>
+
+{
+  "email": "admin1.updated@example.com",
+  "password": "newadminpassword123"
+}
+
+### Delete Admin
+DELETE http://localhost:5097/api/v1/admins/1
+Cookie: .AspNetCore.Session=<>
+
+---
+
+# Authentication Endpoints
+
+### Login
+POST http://localhost:5097/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+
+### Check if You Are Logged In
+GET http://localhost:5097/api/v1/auth/is-logged-in
+Cookie: .AspNetCore.Session=<CfDJ8JOzqj0WnvdCgGzEioXVxnvNXw6vV4b11x7DT9qBccyv1cfwlEY67iupie82pnZrvBLcDCbvUpWlo7dk8Y9WbDHj4ILTgfVmAUB4UMaBP/OQvEaH1+tnICV/TDE32+taUJcCa+JUziLiEgIvyO75/dzaGlUSvCj+Kkmp6CdpY7hc>
+### Logout
+POST http://localhost:5097/api/v1/auth/logout
+Cookie: .AspNetCore.Session=<>
+####
+GET http://localhost:5097/api/v1/auth/debug-session

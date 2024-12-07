@@ -1,0 +1,26 @@
+// login as admin1
+POST http://localhost:5097/api/v1/Login/Login
+Content-Type: application/json
+
+{
+    "Email" : "admin1@example.com",
+    "Password" : "password"
+}
+#####
+
+// login as admin2
+POST http://localhost:5097/api/v1/Login/Login
+Content-Type: application/json
+
+{
+    "Email" : "admin2@example.com",
+    "Password" : "tooeasytooguess"
+}
+####
+
+// check if admin is logged in
+GET  http://localhost:5097/api/v1/Login/IsAdminLoggedIn
+####
+
+// logout admin
+GET  http://localhost:5097/api/v1/Login/Logout

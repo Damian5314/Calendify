@@ -4483,11 +4483,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mootj\\Documents\\School\\jaar2\\WebDevelopment\\Calendify\\Backend\\StarterKit.csproj",
-      "projectName": "StarterKit",
-      "projectPath": "C:\\Users\\mootj\\Documents\\School\\jaar2\\WebDevelopment\\Calendify\\Backend\\StarterKit.csproj",
+      "projectUniqueName": "C:\\Users\\mootj\\Documents\\School\\jaar2\\WebDevelopment\\Calender\\Backend\\Backend.csproj",
+      "projectName": "Backend",
+      "projectPath": "C:\\Users\\mootj\\Documents\\School\\jaar2\\WebDevelopment\\Calender\\Backend\\Backend.csproj",
       "packagesPath": "C:\\Users\\mootj\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mootj\\Documents\\School\\jaar2\\WebDevelopment\\Calendify\\Backend\\obj\\",
+      "outputPath": "C:\\Users\\mootj\\Documents\\School\\jaar2\\WebDevelopment\\Calender\\Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mootj\\AppData\\Roaming\\NuGet\\NuGet.Config"

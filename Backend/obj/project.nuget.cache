@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jR1tbdh2iaE=",
+  "dgSpecHash": "C0XExzwF6Dg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\mootj\\Documents\\School\\jaar2\\WebDevelopment\\Calendify\\Backend\\StarterKit.csproj",
+  "projectFilePath": "C:\\Users\\mootj\\Documents\\School\\jaar2\\WebDevelopment\\Calender\\Backend\\Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mootj\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\mootj\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
