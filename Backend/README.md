@@ -1,3 +1,15 @@
+# New startup
+- open terminal
+- cd backend
+- dotnet watch run
+- (http://localhost:5097)
+
+- open terminal
+- cd frontend
+- npm run dev
+- (http://localhost:5173/)
+
+
 # Webdevelopment Starter Kit
 This project contains a template to get started with.
 The technical setup includes: 
