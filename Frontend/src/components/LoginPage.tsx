@@ -46,6 +46,10 @@ const LoginPage: React.FC = () => {
     window.location.href = "/register"; // Redirect to the Register page
   };
 
+  const handleForgotPassword = () => {
+    window.location.href = "/forgot-password"; // Redirect to Forgot Password page
+  };
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-blue-100">
@@ -71,6 +75,16 @@ const LoginPage: React.FC = () => {
           placeholder="Enter your password"
           className="mb-4 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
         />
+
+        {/* Forgot Password Link */}
+        <div className="text-left mb-4">
+          <button
+            onClick={handleForgotPassword}
+            className="text-blue-500 text-sm hover:underline"
+          >
+            Forgot Password?
+          </button>
+        </div>
 
         {errorMessage && (
           <p className="text-red-500 text-center mb-4">{errorMessage}</p>
