@@ -9,6 +9,10 @@
 - npm run dev
 - (http://localhost:5173/)
 
+Extra plugins:
+- npm install react-big-calendar
+- npm install moment
+
 
 # Webdevelopment Starter Kit
 This project contains a template to get started with.
