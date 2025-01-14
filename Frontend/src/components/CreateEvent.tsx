@@ -7,6 +7,8 @@ const CreateEvent: React.FC = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [location, setLocation] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,14 +36,18 @@ const CreateEvent: React.FC = () => {
         body: JSON.stringify(eventData),
       });
       if (response.ok) {
-        alert("Event created successfully!");
+        setSuccessMessage("Event created succesfully.");
+        setErrorMessage(""); // Clear any previous errors
+        setTimeout(() => {
+          window.location.href = "/user-dashboard";
+        }, 2000);
       } else {
         const error = await response.text();
         alert(`Error: ${error}`);
       }
     } catch (err) {
       console.error("Error creating event:", err);
-      alert("An error occurred while creating the event.");
+      setErrorMessage("An error occurred while creating the event.");
     }
   };
 
@@ -128,6 +134,15 @@ const CreateEvent: React.FC = () => {
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
             />
           </div>
+
+          {errorMessage && (
+          <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+          )}
+
+          {successMessage && (
+            <p className="text-green-500 text-center mb-4">{successMessage}</p>
+          )}
+
           <button
             type="submit"
             className="bg-blue-500 text-white w-full py-2 rounded font-semibold hover:bg-blue-600 transition duration-200"
