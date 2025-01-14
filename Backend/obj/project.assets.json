@@ -4483,26 +4483,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\yordi\\.nuget\\packages\\": {}
+    "C:\\Users\\damia\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\yordi\\Desktop\\Calendify\\Backend\\Backend.csproj",
+      "projectUniqueName": "C:\\Users\\damia\\OneDrive\\Documenten\\school\\HBO\\web\\Calendify\\backend\\Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "C:\\Users\\yordi\\Desktop\\Calendify\\Backend\\Backend.csproj",
-      "packagesPath": "C:\\Users\\yordi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\yordi\\Desktop\\Calendify\\Backend\\obj\\",
+      "projectPath": "C:\\Users\\damia\\OneDrive\\Documenten\\school\\HBO\\web\\Calendify\\backend\\Backend.csproj",
+      "packagesPath": "C:\\Users\\damia\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\damia\\OneDrive\\Documenten\\school\\HBO\\web\\Calendify\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\yordi\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\damia\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4580,7 +4578,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

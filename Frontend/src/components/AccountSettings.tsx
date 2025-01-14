@@ -85,12 +85,25 @@ const AccountSettings: React.FC = () => {
     }
   };
 
+  // Handle Back button click
+  const handleBack = () => {
+    window.location.href = "/user-dashboard"; // Redirect to user dashboard
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-8">
-        <h1 className="text-2xl font-semibold mb-6 text-gray-800">
-          Account Settings
-        </h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-semibold text-gray-800">
+            Account Settings
+          </h1>
+          <button
+            onClick={handleBack}
+            className="bg-gray-200 text-blue-500 px-4 py-2 rounded-md hover:bg-gray-300 transition"
+          >
+            Back
+          </button>
+        </div>
 
         {/* Display User Information */}
         <div className="grid grid-cols-2 gap-6 mb-8">
