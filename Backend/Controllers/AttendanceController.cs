@@ -116,6 +116,47 @@ namespace StarterKit.Controllers
             // Stuur een succesbericht terug om te bevestigen dat de aanwezigheid is verwijderd
             return Ok("Attendance deleted.");
         }
+
+        [HttpPost("feedback")]
+        public IActionResult SubmitFeedback([FromBody] FeedbackRequest feedbackRequest)
+        {
+            // Find the attendance record
+            var attendance = _context.Event_Attendance
+                .FirstOrDefault(ea => ea.EventId == feedbackRequest.EventId && ea.UserId == feedbackRequest.UserId);
+
+            if (attendance == null)
+            {
+                return NotFound("Attendance record not found.");
+            }
+
+            // Update feedback and rating
+            attendance.Feedback = feedbackRequest.Feedback;
+            attendance.Rating = feedbackRequest.Rating;
+
+            _context.SaveChanges();
+
+            return Ok("Feedback submitted successfully.");
+        }
+
+        [HttpGet("event/{eventId}/average-rating")]
+        public IActionResult GetAverageRating(int eventId)
+        {
+            // Calculate average rating for the event
+            var averageRating = _context.Event_Attendance
+                .Where(ea => ea.EventId == eventId && ea.Rating > 0)
+                .Average(ea => (double?)ea.Rating) ?? 0.0;
+
+            return Ok(new { EventId = eventId, AverageRating = averageRating });
+        }
+
+        // Define the request model for feedback
+        public class FeedbackRequest
+        {
+            public int UserId { get; set; }
+            public int EventId { get; set; }
+            public string Feedback { get; set; } = string.Empty;
+            public int Rating { get; set; } // e.g., 1 to 5
+        }
     }
 
     // Definieer de klasse AttendEventBody, die de gegevensstructuur voor het verzoek beschrijft
