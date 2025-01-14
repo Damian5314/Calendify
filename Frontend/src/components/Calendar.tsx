@@ -15,7 +15,6 @@ const CalendarPage: React.FC = () => {
 
   useEffect(() => {
 
-
     const fetchEvents = async () => {
       try {
         const response = await fetch("http://localhost:5097/api/v1/events");
@@ -23,8 +22,8 @@ const CalendarPage: React.FC = () => {
         setEvents(
           data.map((event: any) => ({
             title: event.title,
-            start: new Date(event.startTime),
-            end: new Date(event.endTime),
+            start: new Date(event.eventDate + "T" + event.startTime), // Combine DateOnly and TimeSpan
+            end: new Date(event.eventDate + "T" + event.endTime),     // Combine DateOnly and TimeSpan
           }))
         );
       } catch (err) {

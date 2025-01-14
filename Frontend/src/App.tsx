@@ -7,7 +7,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import UserDashboard from "./components/UserDashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import CreateEvent from "./components/CreateEvent";
-import CalenderPage from "./components/Calender";
+import CalenderPage from "./components/Calendar";
 import AccountSettings from "./components/AccountSettings";
 import UserData from "./components/UserData";
 
