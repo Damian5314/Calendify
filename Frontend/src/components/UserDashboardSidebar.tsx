@@ -39,6 +39,15 @@ const UserDashboardSidebar: React.FC<{ userName: string; role: string }> = ({
 
       <ul className="space-y-4">
         <li className="flex items-center space-x-2">
+          <FaCalendarAlt className="text-blue-600" />
+          <a
+            href="/user-dashboard"
+            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
+          >
+            User Dashboard
+          </a>
+        </li>
+        <li className="flex items-center space-x-2">
           <FaUserCog className="text-blue-600" />
           <a
             href="/account-settings"
@@ -50,7 +59,7 @@ const UserDashboardSidebar: React.FC<{ userName: string; role: string }> = ({
         <li className="flex items-center space-x-2">
           <FaCalendarAlt className="text-blue-600" />
           <a
-            href="/event-calendar"
+            href="/calendar"
             className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
           >
             Event Calendar

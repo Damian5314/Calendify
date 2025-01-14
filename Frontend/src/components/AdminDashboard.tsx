@@ -8,7 +8,7 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleViewUsers = () => {
-    window.location.href = "/user-management";
+    window.location.href = "/UserData";
   };
 
   return (
