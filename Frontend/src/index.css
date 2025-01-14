@@ -2,10 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-.input-field {
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
+body {
+  font-family: "Inter", sans-serif;
+}
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f8f9fa; /* Light gray background */
+}
+
+h1 {
+  animation: fadeIn 1s ease-in-out;
+}
+
+button {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
