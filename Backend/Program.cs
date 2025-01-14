@@ -12,6 +12,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 // Register LoginService
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IEventStorage, DbEventStorage>();
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();

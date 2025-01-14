@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import UserDashboardSidebar from "./UserDashboardSidebar";
-import CalendarPage from "./Calender";
+import CalendarPage from "./Calendar";
 
 const UserDashboard: React.FC = () => {
   const [userName, setUserName] = useState<string>("");

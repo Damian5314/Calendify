@@ -3,8 +3,8 @@ POST http://localhost:5097/api/v1/attendance
 Content-Type: application/json
 
 {
-    "userId" : 1,
-    "eventId" : 1
+    "userId" : 6,
+    "eventId" : 3
 }
 ###
 

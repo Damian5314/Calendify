@@ -36,6 +36,9 @@ const RegisterPage: React.FC = () => {
       );
       setSuccessMessage("Registration successful! You can now log in.");
       setErrorMessage(""); // Clear any previous errors
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage(
