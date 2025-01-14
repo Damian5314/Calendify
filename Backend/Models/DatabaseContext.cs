@@ -54,11 +54,5 @@ namespace StarterKit.Models
                 .HasForeignKey(ea => ea.EventId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
-
-        // Add _context accessor for dependency injection
-        public static DatabaseContext Create(DbContextOptions<DatabaseContext> options)
-        {
-            return new DatabaseContext(options);
-        }
     }
 }

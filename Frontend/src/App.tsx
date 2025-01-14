@@ -8,7 +8,6 @@ import UserDashboard from "./components/UserDashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import CreateEvent from "./components/CreateEvent";
 import CalenderPage from "./components/Calender";
-import NewPassword from "./components/NewPassword"; 
 
 const App: React.FC = () => {
   return (
@@ -22,7 +21,6 @@ const App: React.FC = () => {
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
         <Route path="/Calender" element={<CalenderPage />} />
-        <Route path="/reset-password" element={<NewPassword />} />
       </Routes>
     </Router>
   );

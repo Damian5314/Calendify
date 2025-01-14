@@ -47,9 +47,8 @@ const LoginPage: React.FC = () => {
   };
 
   const handleForgotPassword = () => {
-    window.location.href = "/reset-password"; // Navigeren naar de Reset Password-pagina
+    window.location.href = "/forgot-password"; // Redirect to Forgot Password page
   };
-  
 
 
   return (
