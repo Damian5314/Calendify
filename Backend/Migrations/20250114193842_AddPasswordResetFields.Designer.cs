@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StarterKit.Models;
 
@@ -10,9 +11,11 @@ using StarterKit.Models;
 namespace StarterKit.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250114193842_AddPasswordResetFields")]
+    partial class AddPasswordResetFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -47,35 +50,35 @@ namespace StarterKit.Migrations
                         {
                             AdminId = 1,
                             Email = "admin1@example.com",
-                            Password = "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=",
+                            Password = "^�H��(qQ��o��)'s`=\rj���*�rB�",
                             UserName = "admin1"
                         },
                         new
                         {
                             AdminId = 2,
                             Email = "admin2@example.com",
-                            Password = "XE4WQDYBE/idR9XKQWU9BQ5qX47mYSUwo1EGf1Wqnlw=",
+                            Password = "\\N@6��G��Ae=j_��a%0�QU��\\",
                             UserName = "admin2"
                         },
                         new
                         {
                             AdminId = 3,
                             Email = "admin3@example.com",
-                            Password = "k2oYXKqiZrucvpgengXLeM1zKwsygOuURBK7b4+PB68=",
+                            Password = "�j\\��f������x�s+2��D�o���",
                             UserName = "admin3"
                         },
                         new
                         {
                             AdminId = 4,
                             Email = "admin4@example.com",
-                            Password = "kl0um7NnnBud1YqyC7l0/cYfP/TbXhK7VPqwYAJhx7M=",
+                            Password = "�].��g��Պ��t��?��^�T��`aǳ",
                             UserName = "admin4"
                         },
                         new
                         {
                             AdminId = 5,
                             Email = "admin5@example.com",
-                            Password = "RaA9gen2Oq4tkMjcHplnZAMb9omCqGJG8BGbODBd55E=",
+                            Password = "E�=���:�-����gd����bF��80]�",
                             UserName = "admin5"
                         });
                 });
@@ -200,9 +203,6 @@ namespace StarterKit.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.ToTable("User");
                 });

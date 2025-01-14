@@ -3,8 +3,8 @@ import axios from "axios";
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState(""); // State for email input
-  const [message, setMessage] = useState(""); // State for success/error messages
-  const [errorMessage, setErrorMessage] = useState(""); // State for error messages
+  const [message, setMessage] = useState(""); // Success message
+  const [errorMessage, setErrorMessage] = useState(""); // Error message
 
   const handlePasswordReset = async () => {
     if (!email) {
@@ -13,20 +13,20 @@ const ForgotPassword: React.FC = () => {
     }
 
     try {
-      // Make API request to trigger password reset
       const response = await axios.post(
         "http://localhost:5097/api/v1/auth/forgot-password",
         { email }
       );
 
-      // Display success message if request was successful
-      setMessage(
-        "If the email exists in our system, you will receive a password reset link."
-      );
-      setErrorMessage("");
+      if (response.status === 200) {
+        setMessage(
+          "If the email exists, a reset link has been sent to your email address."
+        );
+        setErrorMessage("");
+      }
     } catch (error) {
-      console.error("Error sending password reset email:", error);
-      setErrorMessage("An error occurred. Please try again.");
+      console.error("Error sending reset email:", error);
+      setErrorMessage("An error occurred. Please try again later.");
     }
   };
 
@@ -38,8 +38,7 @@ const ForgotPassword: React.FC = () => {
 
       <div className="bg-white shadow-lg rounded-lg p-8 w-96">
         <p className="text-gray-600 mb-4 text-center">
-          Enter your email address, and we'll send you a link to reset your
-          password.
+          Enter your email to reset your password.
         </p>
 
         <input

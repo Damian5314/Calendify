@@ -7,8 +7,9 @@ import AdminDashboard from "./components/AdminDashboard";
 import UserDashboard from "./components/UserDashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import CreateEvent from "./components/CreateEvent";
-import CalenderPage from "./components/Calendar";
+import CalendarPage from "./components/Calendar";
 import AccountSettings from "./components/AccountSettings";
+import NewPassword from "./components/NewPassword"; // Import new password component
 
 const App: React.FC = () => {
   return (
@@ -17,12 +18,14 @@ const App: React.FC = () => {
         <Route path="/account-settings" element={<AccountSettings />} />
         <Route path="/" element={<MainDashboard />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<NewPassword />} /> {/* New route */}
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
-        <Route path="/Calender" element={<CalenderPage />} />
+        <Route path="/Calender" element={<CalendarPage />} />
+        <Route path="/account-settings" element={<AccountSettings />} />
       </Routes>
     </Router>
   );
