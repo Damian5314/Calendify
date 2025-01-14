@@ -1,0 +1,76 @@
+/* Dashboard Container */
+.dashboard-container {
+  font-family: "Poppins", sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Welcome Section */
+.welcome-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.welcome-text {
+  font-size: 2.5rem;
+  color: #343a40;
+}
+
+/* Create Event Card */
+.create-event-card {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.create-event-card:hover {
+  transform: scale(1.05);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  color: #007bff;
+}
+
+/* Event List */
+.event-card {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+}
+
+.event-card:hover {
+  background-color: #f1f1f1;
+}
+
+/* Navbar Styling */
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f1c40f;
+}
+
+.nav-link {
+  font-size: 1rem;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+  color: #f1c40f;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}

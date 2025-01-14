@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream
+=======
 # New startup
 - open terminal
 - cd backend
@@ -12,8 +14,11 @@
 Extra plugins:
 - npm install react-big-calendar
 - npm install moment
+- npm install react-icons
+- npm install bootstrap
 
 
+>>>>>>> Stashed changes
 # Webdevelopment Starter Kit
 This project contains a template to get started with.
 The technical setup includes: 
