@@ -19,6 +19,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 // Add custom services
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IEventStorage, DbEventStorage>();
 
 // Add CORS support
 builder.Services.AddCors(options =>
