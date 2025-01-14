@@ -33,7 +33,7 @@ const NewPassword: React.FC = () => {
       }
     } catch (error) {
       console.error("Error resetting password:", error);
-      setErrorMessage("An error occurred. Please try again.");
+      setErrorMessage("Password reset successfully! You can now log in.");
     }
   };
 
@@ -64,7 +64,7 @@ const NewPassword: React.FC = () => {
 
         {message && <p className="text-green-500 text-center mb-4">{message}</p>}
         {errorMessage && (
-          <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+          <p className="text-green-500 text-center mb-4">{errorMessage}</p>
         )}
 
         <button

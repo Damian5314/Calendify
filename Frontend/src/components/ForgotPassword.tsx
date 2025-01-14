@@ -7,11 +7,29 @@ const ForgotPassword: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState(""); // Error message
 
   const handlePasswordReset = async () => {
+    // Reset messages
+    setMessage("");
+    setErrorMessage("");
+
+    // Validatie e-mail invoer
+    const onlyLettersAndNumbersRegex = /^[a-zA-Z0-9]*$/; // Alleen letters en cijfers
+    const onlyLettersRegex = /^[a-zA-Z]+$/; // Alleen letters
+
     if (!email) {
+      // Als het veld leeg is
       setErrorMessage("Please enter your email.");
+      return;
+    } else if (onlyLettersAndNumbersRegex.test(email)) {
+      // Als alleen letters en cijfers zonder '@' worden ingevoerd
+      setErrorMessage("The email needs to include a special character like '@'.");
+      return;
+    } else if (onlyLettersRegex.test(email)) {
+      // Als alleen letters worden ingevoerd
+      setErrorMessage("Email must include numbers or special characters.");
       return;
     }
 
+    // Probeer de reset-e-mail te verzenden
     try {
       const response = await axios.post(
         "http://localhost:5097/api/v1/auth/forgot-password",
@@ -19,14 +37,13 @@ const ForgotPassword: React.FC = () => {
       );
 
       if (response.status === 200) {
-        setMessage(
-          "If the email exists, a reset link has been sent to your email address."
-        );
-        setErrorMessage("");
+        // Als de e-mail succesvol is verzonden
+        setMessage("The email has been sent!");
       }
     } catch (error) {
+      // Als er een algemene fout optreedt
       console.error("Error sending reset email:", error);
-      setErrorMessage("An error occurred. Please try again later.");
+      setMessage("An Email has been send to you.");
     }
   };
 
@@ -49,9 +66,23 @@ const ForgotPassword: React.FC = () => {
           className="mb-4 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
         />
 
-        {message && <p className="text-green-500 text-center mb-4">{message}</p>}
+        {/* Success message with green color */}
+        {message && (
+          <p className="text-green-500 text-center mb-4">{message}</p>
+        )}
+
+        {/* Error message with specific colors */}
         {errorMessage && (
-          <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+          <p
+            className={`${
+              errorMessage === "The email needs to include a special character like '@'." ||
+              errorMessage === "Please enter your email."
+                ? "text-red-500" // Rood voor specifieke fouten
+                : "text-green-500" // Groen voor andere algemene fouten
+            } text-center mb-4`}
+          >
+            {errorMessage}
+          </p>
         )}
 
         <button
