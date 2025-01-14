@@ -9,6 +9,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import CreateEvent from "./components/CreateEvent";
 import CalenderPage from "./components/Calender";
 import AccountSettings from "./components/AccountSettings";
+import UserData from "./components/UserData";
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
         <Route path="/Calender" element={<CalenderPage />} />
+        <Route path="/UserData" element={<UserData />} />
       </Routes>
     </Router>
   );
