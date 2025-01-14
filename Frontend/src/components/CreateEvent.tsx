@@ -10,15 +10,20 @@ const CreateEvent: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Ensure time values are in the correct format
+    const formattedStartTime = `${startTime}:00`; // Append ":00" for seconds
+    const formattedEndTime = `${endTime}:00`;
+
     const eventData = {
       title,
       description,
       eventDate,
-      startTime,
-      endTime,
+      startTime: formattedStartTime,
+      endTime: formattedEndTime,
       location,
       adminApproval: true,
-      event_Attendances: [],
+      event_Attendances: [], // Optional, depending on backend requirements
     };
     try {
       const response = await fetch("http://localhost:5097/api/v1/events", {
