@@ -3,7 +3,7 @@ import UserDashboardSidebar from "./UserDashboardSidebar";
 import CalendarPage from "./Calender"; // Assuming this is your calendar component
 
 const UserDashboard: React.FC = () => {
-  const userName = "John"; // Replace with dynamic data from backend
+  const userName = ""; // Replace with dynamic data from backend
   const role = "User"; // Replace with dynamic data from backend
 
   return (

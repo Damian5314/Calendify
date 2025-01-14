@@ -13,7 +13,6 @@ const CreateEvent: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Ensure time values are in the correct format
     const formattedStartTime = `${startTime}:00`; // Append ":00" for seconds
     const formattedEndTime = `${endTime}:00`;
 
