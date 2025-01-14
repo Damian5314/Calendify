@@ -22,8 +22,8 @@ const CalendarPage: React.FC = () => {
         setEvents(
           data.map((event: any) => ({
             title: event.title,
-            start: new Date(event.startTime),
-            end: new Date(event.endTime),
+            start: new Date(event.eventDate + "T" + event.startTime), // Combine DateOnly and TimeSpan
+            end: new Date(event.eventDate + "T" + event.endTime),     // Combine DateOnly and TimeSpan
           }))
         );
       } catch (err) {

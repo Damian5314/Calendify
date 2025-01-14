@@ -1,6 +1,6 @@
 import React from "react";
 import UserDashboardSidebar from "./UserDashboardSidebar";
-import CalendarPage from "./Calender"; // Assuming this is your calendar component
+import CalendarPage from "./Calendar";
 
 const UserDashboard: React.FC = () => {
   const userName = ""; // Replace with dynamic data from backend
