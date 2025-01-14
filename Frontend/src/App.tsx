@@ -8,11 +8,13 @@ import UserDashboard from "./components/UserDashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import CreateEvent from "./components/CreateEvent";
 import CalenderPage from "./components/Calender";
+import AccountSettings from "./components/AccountSettings";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/account-settings" element={<AccountSettings />} />
         <Route path="/" element={<MainDashboard />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
