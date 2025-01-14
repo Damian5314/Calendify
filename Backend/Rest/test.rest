@@ -1,0 +1,77 @@
+### Get User Profile by ID
+GET http://localhost:5097/api/v1/user/profile/1
+Authorization: CfDJ8JOzqj0WnvdCgGzEioXVxnszNVKHXw1bycsjj86HIJXdjwaRPXhIoV%2F1j%2FNY7Ocq4uoBuZQxGDkZdhND20YsfegJz3qB%2FA2EJiObw04C5MdC5aEIPoYrh7%2F%2F7WPbhd6uO3d0ZflsUtp2rZnjhriVT7gEWJFoK1DbhmwPS5Wz8nZc
+
+Content-Type: application/json
+
+###
+
+### Get All Users (Admin Only)
+GET http://localhost:5097/api/v1/admin/users
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+Content-Type: application/json
+
+###
+
+### Create a New User
+POST http://localhost:5097/api/v1/admin/users
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com",
+  "password": "Password123",
+  "recuringDays": "Monday, Wednesday"
+}
+
+###
+
+### Update User by ID
+PUT http://localhost:5097/api/v1/admin/users/1
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.updated@example.com",
+  "password": "NewPassword123",
+  "recuringDays": "Tuesday, Thursday"
+}
+
+###
+
+### Delete User by ID
+DELETE http://localhost:5097/api/v1/admin/users/1
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+
+###
+
+### Get All Events
+GET http://localhost:5097/api/v1/events
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+### Create a New Event
+POST http://localhost:5097/api/v1/events
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "title": "Team Meeting",
+  "description": "Monthly team sync-up",
+  "eventDate": "2025-01-20",
+  "startTime": "10:00:00",
+  "endTime": "11:30:00",
+  "location": "Conference Room 1",
+  "adminApproval": true
+}
+
+###
+
+### Delete Event by ID
+DELETE http://localhost:5097/api/v1/events/1
+Authorization: Bearer YOUR_ADMIN_TOKEN_HERE

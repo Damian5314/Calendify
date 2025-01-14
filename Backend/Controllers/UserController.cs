@@ -49,5 +49,36 @@ namespace StarterKit.Controllers
             _context.SaveChanges();
             return Ok("Profile updated successfully.");
         }
+
+        [HttpGet("current-user")]
+        public IActionResult GetCurrentUser()
+        {
+            // Retrieve the user ID from the session
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return Unauthorized("User is not logged in.");
+            }
+
+            // Fetch the user details from the database
+            var user = _context.User.FirstOrDefault(u => u.UserId == userId.Value);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Return the user's first name and other necessary data
+            return Ok(new
+            {
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                user.RecuringDays
+            });
+        }
+
+
+
+
     }
 }

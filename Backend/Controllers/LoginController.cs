@@ -9,10 +9,12 @@ namespace StarterKit.Controllers
     public class LoginController : ControllerBase
     {
         private readonly ILoginService _loginService;
+        private readonly DatabaseContext _context;
 
-        public LoginController(ILoginService loginService)
+        public LoginController(ILoginService loginService, DatabaseContext context)
         {
             _loginService = loginService;
+            _context = context;
         }
 
         // User Registration
@@ -40,22 +42,37 @@ namespace StarterKit.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
-            var (isAdmin, role) = _loginService.AdminLogin(loginRequest.Email, loginRequest.Password);
-
-            if (isAdmin)
-            {
-                HttpContext.Session.SetString("Role", role);
-                return Ok(new { Role = role });
-            }
-
             var status = _loginService.CheckPassword(loginRequest.Email, loginRequest.Password);
+
             if (status == LoginStatus.Success)
             {
-                HttpContext.Session.SetString("Role", "User");
-                return Ok(new { Role = "User" });
+                var user = _context.User.FirstOrDefault(u => u.Email == loginRequest.Email);
+                if (user != null)
+                {
+                    HttpContext.Session.SetString("Role", "User");
+                    HttpContext.Session.SetString("FirstName", user.FirstName);
+                    HttpContext.Session.SetInt32("UserId", user.UserId); // Store UserId for other queries
+
+                    return Ok(new { Role = "User", FirstName = user.FirstName });
+                }
             }
 
             return Unauthorized("Invalid email or password.");
+        }
+
+        // Get User Info
+        [HttpGet("user-info")]
+        public IActionResult GetUserInfo()
+        {
+            var firstName = HttpContext.Session.GetString("FirstName");
+            var role = HttpContext.Session.GetString("Role");
+
+            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(role))
+            {
+                return Unauthorized("Session has expired or user is not logged in.");
+            }
+
+            return Ok(new { FirstName = firstName, Role = role });
         }
 
         // Admin Registration
@@ -72,7 +89,6 @@ namespace StarterKit.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
 
         // Check if Logged In
         [HttpGet("is-logged-in")]
