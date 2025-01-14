@@ -15,7 +15,6 @@ const CalendarPage: React.FC = () => {
 
   useEffect(() => {
 
-
     const fetchEvents = async () => {
       try {
         const response = await fetch("http://localhost:5097/api/v1/events");
