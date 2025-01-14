@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 # New startup
 - open terminal
 - cd backend
@@ -18,7 +16,6 @@ Extra plugins:
 - npm install bootstrap
 
 
->>>>>>> Stashed changes
 # Webdevelopment Starter Kit
 This project contains a template to get started with.
 The technical setup includes: 
