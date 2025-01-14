@@ -24,7 +24,7 @@ const CreateEvent: React.FC = () => {
       endTime: formattedEndTime,
       location,
       adminApproval: true,
-      event_Attendances: [],
+      event_Attendances: [], // Optional, depending on backend requirements
     };
     try {
       const response = await fetch("http://localhost:5097/api/v1/events", {
@@ -46,7 +46,7 @@ const CreateEvent: React.FC = () => {
       }
     } catch (err) {
       console.error("Error creating event:", err);
-      alert("An error occurred while creating the event.");
+      setErrorMessage("An error occurred while creating the event.");
     }
   };
 
