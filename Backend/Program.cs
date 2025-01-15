@@ -21,6 +21,14 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEventStorage, DbEventStorage>();
 
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
+
+
 // Add CORS support
 builder.Services.AddCors(options =>
 {
