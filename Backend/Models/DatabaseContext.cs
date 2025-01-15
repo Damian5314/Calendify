@@ -12,19 +12,30 @@ namespace StarterKit.Models
         public DbSet<Event_Attendance> Event_Attendance { get; set; }
         public DbSet<Event> Event { get; set; }
 
-        // Constructor that takes DbContextOptions
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
         }
 
-        // Fluent API and seed data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Ensure Admin's UserName is unique
             modelBuilder.Entity<Admin>()
                 .HasIndex(a => a.UserName)
                 .IsUnique();
+
+            // Ensure User's Email is unique
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // Configurations for the new fields
+            modelBuilder.Entity<User>()
+                .Property(u => u.PasswordResetToken)
+                .HasMaxLength(256);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.TokenExpiry);
 
             // Seed Admin data
             modelBuilder.Entity<Admin>().HasData(

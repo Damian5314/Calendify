@@ -1,5 +1,5 @@
 using StarterKit.Models;
-using StarterKit.Utils;
+using System;
 
 namespace StarterKit.Services
 {
@@ -15,6 +15,8 @@ namespace StarterKit.Services
         // Check Password for both User and Admin
         public LoginStatus CheckPassword(string email, string password)
         {
+            Console.WriteLine($"[CheckPassword] Validating user with email: {email}");
+
             var admin = _context.Admin.FirstOrDefault(a => a.Email == email);
             if (admin != null)
             {
@@ -27,74 +29,169 @@ namespace StarterKit.Services
                 return user.Password == password ? LoginStatus.Success : LoginStatus.IncorrectPassword;
             }
 
+            Console.WriteLine($"[CheckPassword] Email '{email}' not found.");
             return LoginStatus.IncorrectEmail;
         }
 
         // Register User
         public bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays)
         {
-            if (_context.User.Any(u => u.Email == email))
-                return false;
-
-            var user = new User
+            try
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                Password = password,
-                Role = "User",
-                RecuringDays = recuringDays
-            };
+                Console.WriteLine($"[RegisterUser] Attempting to register user: {email}");
 
-            _context.User.Add(user);
-            _context.SaveChanges();
-            return true;
+                if (_context.User.Any(u => u.Email == email))
+                {
+                    Console.WriteLine($"[RegisterUser] Email '{email}' already exists.");
+                    return false;
+                }
+
+                var user = new User
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    Password = password, // Store plain-text password
+                    Role = "User",
+                    RecuringDays = recuringDays
+                };
+
+                _context.User.Add(user);
+                _context.SaveChanges();
+
+                Console.WriteLine($"[RegisterUser] User '{email}' registered successfully.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[RegisterUser] Error: {ex.Message}");
+                return false;
+            }
         }
 
         // Register Admin
         public bool RegisterAdmin(string userName, string email, string password)
         {
-            // Check if the username already exists
-            if (_context.Admin.Any(a => a.UserName == userName))
+            try
             {
-                throw new InvalidOperationException("Admin username already exists.");
+                Console.WriteLine($"[RegisterAdmin] Attempting to register admin: {email}");
+
+                if (_context.Admin.Any(a => a.UserName == userName))
+                {
+                    throw new InvalidOperationException("Admin username already exists.");
+                }
+
+                if (_context.Admin.Any(a => a.Email == email))
+                {
+                    throw new InvalidOperationException("Admin email already exists.");
+                }
+
+                var newAdmin = new Admin
+                {
+                    UserName = userName,
+                    Email = email,
+                    Password = password // Store plain-text password
+                };
+
+                _context.Admin.Add(newAdmin);
+                _context.SaveChanges();
+
+                Console.WriteLine($"[RegisterAdmin] Admin '{email}' registered successfully.");
+                return true;
             }
-
-            // Check if the email already exists
-            if (_context.Admin.Any(a => a.Email == email))
+            catch (Exception ex)
             {
-                throw new InvalidOperationException("Admin email already exists.");
+                Console.WriteLine($"[RegisterAdmin] Error: {ex.Message}");
+                return false;
             }
-
-            var newAdmin = new Admin
-            {
-                UserName = userName,
-                Email = email,
-                Password = password
-            };
-
-            _context.Admin.Add(newAdmin);
-            _context.SaveChanges();
-            return true;
         }
-
 
         // Admin Login
         public (bool isValid, string role) AdminLogin(string email, string password)
         {
+            Console.WriteLine($"[AdminLogin] Checking login for admin: {email}");
+
             var admin = _context.Admin.FirstOrDefault(a => a.Email == email && a.Password == password);
             if (admin != null)
             {
+                Console.WriteLine($"[AdminLogin] Admin '{email}' logged in successfully.");
                 return (true, "Admin");
             }
+
+            Console.WriteLine($"[AdminLogin] Invalid credentials for admin: {email}");
             return (false, string.Empty);
         }
 
         // Get User ID by Email
         public int GetUserIdByEmail(string email)
         {
+            Console.WriteLine($"[GetUserIdByEmail] Fetching user ID for email: {email}");
             var user = _context.User.FirstOrDefault(u => u.Email == email);
             return user?.UserId ?? 0;
+        }
+
+        // Generate Password Reset Token
+        public bool GeneratePasswordResetToken(string email)
+        {
+            try
+            {
+                Console.WriteLine($"[GeneratePasswordResetToken] Generating reset token for email: {email}");
+
+                var user = _context.User.FirstOrDefault(u => u.Email == email);
+                if (user == null)
+                {
+                    Console.WriteLine($"[GeneratePasswordResetToken] Email '{email}' not found.");
+                    return false;
+                }
+
+                user.PasswordResetToken = Guid.NewGuid().ToString();
+                user.TokenExpiry = DateTime.UtcNow.AddMinutes(30);
+
+                _context.SaveChanges();
+                Console.WriteLine($"[GeneratePasswordResetToken] Token generated and saved for '{email}'.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[GeneratePasswordResetToken] Error: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Reset Password
+        public bool ResetPassword(string token, string newPassword)
+        {
+            try
+            {
+                Console.WriteLine($"[ResetPassword] Resetting password for token: {token}");
+
+                var user = _context.User.FirstOrDefault(u => u.PasswordResetToken == token && u.TokenExpiry > DateTime.UtcNow);
+                if (user == null)
+                {
+                    Console.WriteLine($"[ResetPassword] Invalid or expired token.");
+                    return false;
+                }
+
+                user.Password = newPassword; // Store plain-text password
+                user.PasswordResetToken = null;
+                user.TokenExpiry = null;
+
+                _context.SaveChanges();
+                Console.WriteLine($"[ResetPassword] Password reset successfully for user: {user.Email}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ResetPassword] Error: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Validate Reset Token
+        public bool ValidateResetToken(string token)
+        {
+            Console.WriteLine($"[ValidateResetToken] Validating token: {token}");
+            return _context.User.Any(u => u.PasswordResetToken == token && u.TokenExpiry > DateTime.UtcNow);
         }
     }
 }
