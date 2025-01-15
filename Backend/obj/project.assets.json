@@ -5195,19 +5195,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Wisha\\.nuget\\packages\\": {}
+    "C:\\Users\\Lenovo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Wisha\\OneDrive\\School\\School,(●'◡'●)\\jaar 2\\Calendify\\backend\\Backend.csproj",
+      "projectUniqueName": "C:\\Users\\Lenovo\\Documents\\School\\Jaar 2\\Web App Development\\Calendify\\Calendify\\Backend\\Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "C:\\Users\\Wisha\\OneDrive\\School\\School,(●'◡'●)\\jaar 2\\Calendify\\backend\\Backend.csproj",
-      "packagesPath": "C:\\Users\\Wisha\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Wisha\\OneDrive\\School\\School,(●'◡'●)\\jaar 2\\Calendify\\backend\\obj\\",
+      "projectPath": "C:\\Users\\Lenovo\\Documents\\School\\Jaar 2\\Web App Development\\Calendify\\Calendify\\Backend\\Backend.csproj",
+      "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Lenovo\\Documents\\School\\Jaar 2\\Web App Development\\Calendify\\Calendify\\Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Wisha\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -5296,7 +5296,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.201/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
