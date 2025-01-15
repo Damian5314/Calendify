@@ -49,6 +49,7 @@ namespace StarterKit.Controllers
                 var user = _context.User.FirstOrDefault(u => u.Email == loginRequest.Email);
                 if (user != null)
                 {
+                    // Set all required session values
                     HttpContext.Session.SetString("Role", "User");
                     HttpContext.Session.SetString("FirstName", user.FirstName);
                     HttpContext.Session.SetString("LastName", user.LastName);
@@ -71,13 +72,62 @@ namespace StarterKit.Controllers
             var lastName = HttpContext.Session.GetString("LastName");
             var email = HttpContext.Session.GetString("Email");
 
-
             if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(role))
             {
                 return Unauthorized("Session has expired or user is not logged in.");
             }
 
             return Ok(new { FirstName = firstName, Role = role, LastName = lastName, Email = email });
+        }
+
+        // Update Email
+        [HttpPut("update-email")]
+        public IActionResult UpdateEmail([FromBody] UpdateEmailRequest request)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return Unauthorized("User is not logged in.");
+            }
+
+            var user = _context.User.Find(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            user.Email = request.Email;
+            _context.SaveChanges();
+
+            HttpContext.Session.SetString("Email", request.Email); // Update session
+            return Ok("Email updated successfully.");
+        }
+
+        // Update Password
+        [HttpPut("update-password")]
+        public IActionResult UpdatePassword([FromBody] UpdatePasswordRequest request)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return Unauthorized("User is not logged in.");
+            }
+
+            var user = _context.User.Find(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (user.Password != request.CurrentPassword) // Adjust for hashing logic if applicable
+            {
+                return BadRequest("Current password is incorrect.");
+            }
+
+            user.Password = request.NewPassword; // Hash the password before saving if needed
+            _context.SaveChanges();
+
+            return Ok("Password updated successfully.");
         }
 
         // Admin Registration
@@ -113,5 +163,17 @@ namespace StarterKit.Controllers
             HttpContext.Session.Clear();
             return Ok("Logged out successfully.");
         }
+    }
+
+    // Request Models for Updates
+    public class UpdateEmailRequest
+    {
+        public string Email { get; set; } = string.Empty;
+    }
+
+    public class UpdatePasswordRequest
+    {
+        public string CurrentPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
     }
 }
