@@ -1,6 +1,6 @@
 import React from "react";
 import AdminDashboardSidebar from "./AdminDashboardSidebar"; // Import the sidebar
-import CalendarPage from "./Calendar"; // Import the calendar component
+import AdminCalendarPage from "./AdminCalendar"; // Import the calendar component
 
 const AdminDashboard: React.FC = () => {
   const handleCreateAdmin = () => {
@@ -42,7 +42,7 @@ const AdminDashboard: React.FC = () => {
         {/* Calendar */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Calendar</h2>
-          <CalendarPage /> {/* Render the calendar here */}
+          <AdminCalendarPage /> {/* Render the calendar here */}
         </div>
       </div>
     </div>

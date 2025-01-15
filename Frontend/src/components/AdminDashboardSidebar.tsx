@@ -48,7 +48,7 @@ const AdminDashboardSidebar: React.FC = () => {
         <li className="flex items-center space-x-2">
           <FaCalendarAlt className="text-blue-600" />
           <a
-            href="/calendar"
+            href="/AdminCalendar"
             className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
           >
             Calendar
