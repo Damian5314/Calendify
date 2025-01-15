@@ -1,5 +1,5 @@
 //Register a New User (Admin)
-POST http://localhost:5097/api/v1/login/register
+POST http://localhost:5097/api/v1/auth/register
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 ####
 //Login as User
-POST http://localhost:5097/api/v1/login/login
+POST http://localhost:5097/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 ####
 // check if user is logged in
-GET  http://localhost:5097/api/v1/Login/IsUserLoggedIn
+GET  http://localhost:5097/api/v1/auth/is-logged-in
 ####
 
 ####

@@ -1,5 +1,5 @@
 // login as admin1
-POST http://localhost:5097/api/v1/Login/Login
+POST http://localhost:5097/api/v1/auth/Login
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 #####
 
 // login as admin2
-POST http://localhost:5097/api/v1/Login/Login
+POST http://localhost:5097/api/v1/auth/Login
 Content-Type: application/json
 
 {
@@ -19,8 +19,8 @@ Content-Type: application/json
 ####
 
 // check if admin is logged in
-GET  http://localhost:5097/api/v1/Login/IsAdminLoggedIn
+GET  http://localhost:5097/api/v1/auth/is-logged-in
 ####
 
 // logout admin
-GET  http://localhost:5097/api/v1/Login/Logout
+GET  http://localhost:5097/api/v1/auth/logout
