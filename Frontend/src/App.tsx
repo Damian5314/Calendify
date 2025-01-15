@@ -8,11 +8,13 @@ import UserDashboard from "./components/UserDashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import CreateEvent from "./components/CreateEvent";
 import CalendarPage from "./components/Calendar";
+import AdminCalendarPage from "./components/AdminCalendar";
 import AccountSettings from "./components/AccountSettings";
 import NewPassword from "./components/NewPassword";
 import UserData from "./components/UserData";
 import EditEvent from "./components/EditEvent";
 import CreateAdmin from "./components/CreateAdmin";
+import EventInfo from "./components/EventInfo";
 
 const App: React.FC = () => {
   return (
@@ -28,9 +30,11 @@ const App: React.FC = () => {
         <Route path="/CreateEvent" element={<CreateEvent />} />
         <Route path="/account-settings" element={<AccountSettings />} />
         <Route path="/Calendar" element={<CalendarPage />} />
+        <Route path="/AdminCalendar" element={<AdminCalendarPage />} />
         <Route path="/UserData" element={<UserData />} />
         <Route path="/edit-event/:eventId" element={<EditEvent />} />
         <Route path="/CreateAdmin" element={<CreateAdmin />} />
+        <Route path="/EventInfo/:eventId" element={<EventInfo />} />
       </Routes>
     </Router>
   );
