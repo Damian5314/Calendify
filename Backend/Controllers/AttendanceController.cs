@@ -141,11 +141,17 @@ namespace StarterKit.Controllers
         [HttpGet("event/{eventId}/average-rating")]
         public IActionResult GetAverageRating(int eventId)
         {
-            // Calculate average rating for the event
-            var averageRating = _context.Event_Attendance
+            var ratings = _context.Event_Attendance
                 .Where(ea => ea.EventId == eventId && ea.Rating > 0)
-                .Average(ea => (double?)ea.Rating) ?? 0.0;
+                .Select(ea => ea.Rating)
+                .ToList();
 
+            if (!ratings.Any())
+            {
+                return Ok(new { EventId = eventId, AverageRating = 0.0 });
+            }
+
+            var averageRating = ratings.Average();
             return Ok(new { EventId = eventId, AverageRating = averageRating });
         }
 
