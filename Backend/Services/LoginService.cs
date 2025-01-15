@@ -104,17 +104,6 @@ namespace StarterKit.Services
                 Console.WriteLine($"[RegisterAdmin] Error: {ex.Message}");
                 return false;
             }
-
-            var newAdmin = new Admin
-            {
-                UserName = userName,
-                Email = email,
-                Password = password
-            };
-
-            _context.Admin.Add(newAdmin);
-            _context.SaveChanges();
-            return true;
         }
 
         // Admin Login
