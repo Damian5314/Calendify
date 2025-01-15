@@ -70,7 +70,7 @@ namespace StarterKit.Services
             {
                 UserName = userName,
                 Email = email,
-                Password = EncryptionHelper.EncryptPassword(password) // Always hash passwords
+                Password = password
             };
 
             _context.Admin.Add(newAdmin);

@@ -55,7 +55,7 @@ const CreateEvent: React.FC = () => {
   };
 
   const handleCancel = () => {
-    navigate(-1); // Navigate back to the calendar on cancel
+    navigate(-1); 
   };
 
   return (

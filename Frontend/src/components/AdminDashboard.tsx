@@ -4,7 +4,7 @@ import CalendarPage from "./Calendar"; // Import the calendar component
 
 const AdminDashboard: React.FC = () => {
   const handleCreateAdmin = () => {
-    alert("Redirect to create admin functionality");
+    window.location.href = "/CreateAdmin";
   };
 
   const handleViewUsers = () => {

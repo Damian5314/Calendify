@@ -11,6 +11,7 @@ import CalendarPage from "./components/Calendar";
 import AccountSettings from "./components/AccountSettings";
 import UserData from "./components/UserData";
 import EditEvent from "./components/EditEvent";
+import CreateAdmin from "./components/CreateAdmin";
 
 const App: React.FC = () => {
   return (
@@ -27,6 +28,7 @@ const App: React.FC = () => {
         <Route path="/Calendar" element={<CalendarPage />} />
         <Route path="/UserData" element={<UserData />} />
         <Route path="/edit-event/:eventId" element={<EditEvent />} />
+        <Route path="/CreateAdmin" element={<CreateAdmin />} />
       </Routes>
     </Router>
   );
