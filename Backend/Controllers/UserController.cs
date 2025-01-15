@@ -17,6 +17,26 @@ namespace StarterKit.Controllers
             _context = context;
         }
 
+        // Get logged-in user's profile
+        [HttpGet("profile")]
+        public IActionResult GetProfile()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return Unauthorized("You are not logged in.");
+
+            var user = _context.User
+                .Include(u => u.Attendances)
+                .Include(u => u.Event_Attendances)
+                .ThenInclude(ea => ea.Event)
+                .FirstOrDefault(u => u.UserId == userId);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            return Ok(user);
+        }
+
         // Get user's profile
         [HttpGet("profile/{id}")]
         public IActionResult GetProfile(int id)

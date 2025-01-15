@@ -11,6 +11,7 @@ namespace StarterKit.Services
         Task CreateEvent(Event e);
         Task<bool> DeleteEvent(int eventId);  // guid naa rint
         Task<bool> Put(int eventId, Event e); // guid naar int
+        Task<Event?> GetEventById(int eventId);
     }
 
     public class DbEventStorage : IEventStorage
@@ -27,6 +28,12 @@ namespace StarterKit.Services
             return await _context.Event.Include(e => e.Event_Attendances).ToListAsync();
         }
 
+        public async Task<Event?> GetEventById(int eventId)
+        {
+            return await _context.Event
+                .Include(e => e.Event_Attendances)
+                .FirstOrDefaultAsync(e => e.EventId == eventId);
+        }
         public async Task CreateEvent(Event e)
         {
             _context.Event.Add(e);

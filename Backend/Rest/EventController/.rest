@@ -1,4 +1,7 @@
-GET http://localhost:5097/api/v1/events
+GET http://localhost:5097/api/v1/events/
+####
+
+GET http://localhost:5097/api/v1/events/2
 ####
 POST http://localhost:5097/api/v1/events HTTP/1.1
 content-type: application/json
