@@ -10,12 +10,16 @@ namespace StarterKit.Models
         public string Role { get; set; } = "User";
         public string RecuringDays { get; set; } = string.Empty;
 
+        // Nieuwe eigenschappen voor wachtwoordherstel
+        public string? PasswordResetToken { get; set; } // Token voor wachtwoord reset
+        public DateTime? TokenExpiry { get; set; }      // Vervaldatum van de token
+
         // Default these to empty lists to avoid null references
         public List<Attendance> Attendances { get; set; } = new();
         public List<Event_Attendance> Event_Attendances { get; set; } = new();
     }
 
-        public class Attendance
+    public class Attendance
     {
         public int AttendanceId { get; set; }
         public DateTime AttendanceDate { get; set; }
@@ -25,7 +29,6 @@ namespace StarterKit.Models
 
         public User User { get; set; }
     }
-
 
     public class Event_Attendance
     {

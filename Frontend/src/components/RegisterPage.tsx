@@ -39,19 +39,21 @@ const RegisterPage: React.FC = () => {
       setTimeout(() => {
         window.location.href = "/login";
       }, 2000);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration error:", error);
-      setErrorMessage(
-        "Registration failed. Please check your input and try again."
-      );
+
+      // Check if backend sent a specific error message
+      if (error.response && error.response.data && typeof error.response.data === "string") {
+        setErrorMessage(error.response.data);
+      } else {
+        setErrorMessage("Registration failed. Please check your input and try again.");
+      }
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-blue-100">
-      <h1 className="text-3xl font-bold mb-6 text-blue-700">
-        Create an Account
-      </h1>
+      <h1 className="text-3xl font-bold mb-6 text-blue-700">Create an Account</h1>
 
       <div className="bg-white shadow-lg rounded-lg p-8 w-96">
         <h2 className="text-2xl font-semibold text-center mb-4">Register</h2>
@@ -95,19 +97,14 @@ const RegisterPage: React.FC = () => {
         <input
           type="text"
           name="recuringDays"
-          placeholder="Recuring Days (e.g., Monday, Wednesday)"
+          placeholder="Recurring Days (e.g., Monday, Wednesday)"
           value={formData.recuringDays}
           onChange={handleInputChange}
           className="mb-4 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
         />
 
-        {errorMessage && (
-          <p className="text-red-500 text-center mb-4">{errorMessage}</p>
-        )}
-
-        {successMessage && (
-          <p className="text-green-500 text-center mb-4">{successMessage}</p>
-        )}
+        {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+        {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
 
         <button
           onClick={handleRegister}

@@ -1,0 +1,84 @@
+### 1. Log in as a User
+POST http://localhost:5097/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "Email" : "yordivdijk@gmail.com",
+    "Password" : "yordi1602"
+}
+
+###
+
+### 2. Submit Feedback for an Event
+POST http://localhost:5097/api/v1/attendance/feedback
+Content-Type: application/json
+
+{
+  "userId": 6,
+  "eventId": 3,
+  "feedback": "Great event! Learned a lot.",
+  "rating": 5
+}
+
+###
+
+### 3. Get Average Rating for an Event
+GET http://localhost:5097/api/v1/attendance/event/3/average-rating
+
+###
+
+### 4. Get Attendees for an Event
+GET http://localhost:5097/api/v1/attendance/event/3
+
+###
+
+### 5. Delete Attendance
+DELETE http://localhost:5097/api/v1/attendance
+Content-Type: application/json
+
+{
+  "userId": 6,
+  "eventId": 3
+}
+
+###
+
+### 6. Fetch All Events
+GET http://localhost:5097/api/v1/events
+
+###
+
+### 7. Create a New Event
+POST http://localhost:5097/api/v1/events
+Content-Type: application/json
+
+{
+  "title": "React Workshop",
+  "description": "A hands-on workshop on React.js",
+  "eventDate": "2025-02-15",
+  "startTime": "10:00:00",
+  "endTime": "16:00:00",
+  "location": "Main Hall",
+  "adminApproval": true
+}
+
+###
+
+### 8. Update an Event
+PUT http://localhost:5097/api/v1/events/2
+Content-Type: application/json
+
+{
+  "title": "Updated React Workshop",
+  "description": "An updated hands-on workshop on React.js",
+  "eventDate": "2025-02-16",
+  "startTime": "09:00:00",
+  "endTime": "15:00:00",
+  "location": "Main Hall",
+  "adminApproval": true
+}
+
+###
+
+### 9. Delete an Event
+DELETE http://localhost:5097/api/v1/events/2
