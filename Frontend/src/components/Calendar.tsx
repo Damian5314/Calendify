@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css"; // Import the styles
+import { useNavigate } from "react-router-dom";
 
 moment.updateLocale("en", {
   week: {
@@ -12,6 +13,7 @@ moment.updateLocale("en", {
 const CalendarPage: React.FC = () => {
   const localizer = momentLocalizer(moment); // Setup moment.js as the localizer
   const [events, setEvents] = useState<any[]>([]); // Store events for the calendar
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -22,6 +24,7 @@ const CalendarPage: React.FC = () => {
         setEvents(
           data.map((event: any) => ({
             title: event.title,
+            eventId: event.eventId,
             start: new Date(event.eventDate + "T" + event.startTime), // Combine DateOnly and TimeSpan
             end: new Date(event.eventDate + "T" + event.endTime),     // Combine DateOnly and TimeSpan
           }))
@@ -37,6 +40,12 @@ const CalendarPage: React.FC = () => {
   // Handle navigation to the CreateEvent page
   const handleCreateEvent = () => {
     window.location.href = "/CreateEvent";
+  };
+
+  // Handle event click
+  const handleEventClick = (event: any) => {
+    // Navigate to the edit screen with the selected event's ID   
+    navigate(`/edit-event/${event.eventId}`);
   };
 
   return (
@@ -58,6 +67,7 @@ const CalendarPage: React.FC = () => {
           startAccessor="start"
           endAccessor="end"
           style={{ height: 500 }}
+          onSelectEvent={handleEventClick} // Handle event click
           defaultView="month"
         />
       </div>

@@ -30,6 +30,23 @@ namespace StarterKit.Controllers
             return Ok(await _eventStorage.ReadEvents()); // Geeft de lijst van evenementen terug met een 200 OK-status
         }
 
+        // Methode om een specifiek evenement op te halen op basis van zijn ID
+        [HttpGet("{eventId:int}")] // Dit is een GET-verzoek dat een specifieke ID accepteert in de URL
+        public async Task<IActionResult> GetEventById(int eventId)
+        {
+            // Roep de methode aan uit _eventStorage service om het evenement met de opgegeven ID op te halen
+            var eventDetails = await _eventStorage.GetEventById(eventId);
+
+            if (eventDetails == null)
+            {
+                // Retourneer een 404 Not Found als het evenement niet bestaat
+                return NotFound(new { message = "Event not found" });
+            }
+
+            // Retourneer het evenement met een 200 OK-status
+            return Ok(eventDetails);
+        }
+
         // Methode om een nieuw evenement aan te maken
         [HttpPost] // Dit is een POST-verzoek, wat betekent dat de methode gegevens zal verzenden (om een evenement aan te maken)
         //[Authorize(Roles = "Admin")] // Als dit was ingeschakeld, zouden alleen gebruikers met de rol "Admin" deze methode kunnen aanroepen
