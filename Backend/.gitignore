@@ -1,6 +1,7 @@
 *.db
 bin/
-obj/*
+obj/project.assets.json
+obj/project.nuget.cache
 wwwroot/js
 webdev.sqlite-shm
 webdev.sqlite-wal

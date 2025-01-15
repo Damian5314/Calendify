@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import AdminDashboardSidebar from "./AdminDashboardSidebar"; // Or UserDashboardSidebar if universal
+import AdminDashboardSidebar from "./AdminDashboardSidebar";
+import EventFeedback from "./EventFeedback";
 
 const EditEvent: React.FC = () => {
-  const { eventId } = useParams(); // Get event ID from the URL
+  const { eventId } = useParams();
   const navigate = useNavigate();
   const [eventData, setEventData] = useState({
     title: "",
@@ -13,8 +14,10 @@ const EditEvent: React.FC = () => {
     endTime: "",
     location: "",
   });
+  const [averageRating, setAverageRating] = useState<number | null>(null);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
 
-  // Fetch the event details
+  // Fetch the event details and average rating
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -26,7 +29,20 @@ const EditEvent: React.FC = () => {
       }
     };
 
+    const fetchAverageRating = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5097/api/v1/attendance/event/${eventId}/average-rating`
+        );
+        const data = await response.json();
+        setAverageRating(data.averageRating);
+      } catch (err) {
+        console.error("Error fetching average rating:", err);
+      }
+    };
+
     fetchEvent();
+    fetchAverageRating();
   }, [eventId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,10 +69,8 @@ const EditEvent: React.FC = () => {
 
   const handleDelete = async () => {
     const confirmation = window.confirm("Are you sure you want to delete this event?");
-  
-    if (!confirmation) {
-      return; // Exit if the user cancels the deletion
-    }
+    if (!confirmation) return;
+
     try {
       const response = await fetch(`http://localhost:5097/api/v1/events/${eventId}`, {
         method: "DELETE",
@@ -74,18 +88,63 @@ const EditEvent: React.FC = () => {
   };
 
   const handleCancel = () => {
-    navigate(-1); // Go back to the previous page
+    navigate(-1);
+  };
+
+  const handleFeedbackSubmit = async (rating: number, feedback: string) => {
+    try {
+      const response = await fetch("http://localhost:5097/api/v1/attendance/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, userId: 1, feedback, rating }), // Replace `userId: 1` with dynamic value
+      });
+
+      if (response.ok) {
+        alert("Feedback submitted successfully!");
+        setShowFeedbackForm(false);
+        const updatedRating = await fetchAverageRating(); // Refresh average rating
+        setAverageRating(updatedRating);
+      } else {
+        alert("Failed to submit feedback.");
+      }
+    } catch (err) {
+      console.error("Error submitting feedback:", err);
+    }
+  };
+
+  const fetchAverageRating = async (): Promise<number> => {
+    try {
+      const response = await fetch(
+        `http://localhost:5097/api/v1/attendance/event/${eventId}/average-rating`
+      );
+      const data = await response.json();
+      return data.averageRating;
+    } catch (err) {
+      console.error("Error fetching average rating:", err);
+      return 0;
+    }
   };
 
   return (
     <div className="flex">
-      {/* Include Admin Sidebar */}
       <AdminDashboardSidebar />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center bg-blue-100 p-6">
         <div className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-6">
-          <h2 className="text-3xl font-bold mb-6 text-blue-700">Edit Event</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold text-blue-700">Edit Event</h2>
+            <div>
+              <span className="text-gray-600">
+                Average Rating: {averageRating !== null ? averageRating.toFixed(1) : "Loading..."}
+              </span>
+              <button
+                onClick={() => setShowFeedbackForm(true)}
+                className="ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              >
+                Rate Event
+              </button>
+            </div>
+          </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-gray-700 font-medium">Title</label>
@@ -167,6 +226,15 @@ const EditEvent: React.FC = () => {
           </form>
         </div>
       </div>
+
+      {showFeedbackForm && (
+        <EventFeedback
+          eventId={Number(eventId)}
+          userId={1} // Replace with dynamic userId
+          onSubmit={handleFeedbackSubmit}
+          onClose={() => setShowFeedbackForm(false)}
+        />
+      )}
     </div>
   );
 };
