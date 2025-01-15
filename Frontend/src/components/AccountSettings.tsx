@@ -16,12 +16,13 @@ const AccountSettings: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:5097/api/v1/users/me", {
+        const response = await fetch("http://localhost:5097/api/v1/user/profile", {
           method: "GET",
           credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
+          console.log("User Data:", data);
           setUser(data);
         } else {
           console.error("Failed to fetch user data");
