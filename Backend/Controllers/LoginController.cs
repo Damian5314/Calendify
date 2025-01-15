@@ -51,6 +51,8 @@ namespace StarterKit.Controllers
                 {
                     HttpContext.Session.SetString("Role", "User");
                     HttpContext.Session.SetString("FirstName", user.FirstName);
+                    HttpContext.Session.SetString("LastName", user.LastName);
+                    HttpContext.Session.SetString("Email", user.Email);
                     HttpContext.Session.SetInt32("UserId", user.UserId); // Store UserId for other queries
 
                     return Ok(new { Role = "User", FirstName = user.FirstName });
@@ -66,13 +68,16 @@ namespace StarterKit.Controllers
         {
             var firstName = HttpContext.Session.GetString("FirstName");
             var role = HttpContext.Session.GetString("Role");
+            var lastName = HttpContext.Session.GetString("LastName");
+            var email = HttpContext.Session.GetString("Email");
+
 
             if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(role))
             {
                 return Unauthorized("Session has expired or user is not logged in.");
             }
 
-            return Ok(new { FirstName = firstName, Role = role });
+            return Ok(new { FirstName = firstName, Role = role, LastName = lastName, Email = email });
         }
 
         // Admin Registration

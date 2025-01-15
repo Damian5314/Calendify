@@ -1,77 +1,166 @@
-### Get User Profile by ID
-GET http://localhost:5097/api/v1/user/profile/1
-Authorization: CfDJ8JOzqj0WnvdCgGzEioXVxnszNVKHXw1bycsjj86HIJXdjwaRPXhIoV%2F1j%2FNY7Ocq4uoBuZQxGDkZdhND20YsfegJz3qB%2FA2EJiObw04C5MdC5aEIPoYrh7%2F%2F7WPbhd6uO3d0ZflsUtp2rZnjhriVT7gEWJFoK1DbhmwPS5Wz8nZc
+### User Authentication Endpoints
 
-Content-Type: application/json
-
-###
-
-### Get All Users (Admin Only)
-GET http://localhost:5097/api/v1/admin/users
-Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
-Content-Type: application/json
-
-###
-
-### Create a New User
-POST http://localhost:5097/api/v1/admin/users
-Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+# Login
+POST http://localhost:5097/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "firstName": "Jane",
+  "email": "user2@example.com",
+  "password": "123456"
+}
+##########
+# Register User
+POST http://localhost:5097/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "Joohn",
   "lastName": "Doe",
-  "email": "jane.doe@example.com",
-  "password": "Password123",
+  "email": "joohndoe@example.com",
+  "password": "paassword123",
   "recuringDays": "Monday, Wednesday"
 }
-
-###
-
-### Update User by ID
-PUT http://localhost:5097/api/v1/admin/users/1
-Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+##############
+# Register Admin
+POST http://localhost:5097/api/v1/auth/register-admin
 Content-Type: application/json
+
+{
+  "userName": "admin123",
+  "email": "admin@example.com",
+  "password": "securepassword"
+}
+#############
+# Get Logged-In User Info
+GET http://localhost:5097/api/v1/auth/user-info
+Cookie: sessionid=your_session_cookie_here
+#########
+# Check if User is Logged In
+GET http://localhost:5097/api/v1/auth/is-logged-in
+Cookie: sessionid=your_session_cookie_here
+##########
+# Logout
+POST http://localhost:5097/api/v1/auth/logout
+Cookie: sessionid=your_session_cookie_here
+
+---###########
+
+### Admin Management Endpoints
+
+# Get All Users
+GET http://localhost:5097/api/v1/admin/users
+Cookie: sessionid=your_session_cookie_here
+#############
+# Get User by ID
+GET http://localhost:5097/api/v1/admin/users/1
+Cookie: sessionid=your_session_cookie_here
+###########
+# Create a New User
+POST http://localhost:5097/api/v1/admin/users
+Content-Type: application/json
+Cookie: sessionid=your_session_cookie_here
 
 {
   "firstName": "Jane",
   "lastName": "Doe",
-  "email": "jane.updated@example.com",
-  "password": "NewPassword123",
+  "email": "janedoe@example.com",
+  "password": "password456",
+  "role": "User",
   "recuringDays": "Tuesday, Thursday"
 }
+#########
+# Update User#
+PUT http://localhost:5097/api/v1/admin/users/1
+Content-Type: application/json
+Cookie: sessionid=your_session_cookie_here
 
-###
-
-### Delete User by ID
+{
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "email": "janesmith@example.com",
+  "password": "newpassword456",
+  "role": "Admin",
+  "recuringDays": "Friday"
+}
+###########
+# Delete User
 DELETE http://localhost:5097/api/v1/admin/users/1
-Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+Cookie: sessionid=your_session_cookie_here
 
-###
+---
 
-### Get All Events
-GET http://localhost:5097/api/v1/events
-Authorization: Bearer YOUR_TOKEN_HERE
-
-###
-
-### Create a New Event
-POST http://localhost:5097/api/v1/events
-Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
+### Attendance Management Endpoints
+###########
+# Attend an Event
+POST http://localhost:5097/api/v1/attendance
 Content-Type: application/json
 
 {
-  "title": "Team Meeting",
-  "description": "Monthly team sync-up",
-  "eventDate": "2025-01-20",
-  "startTime": "10:00:00",
-  "endTime": "11:30:00",
-  "location": "Conference Room 1",
-  "adminApproval": true
+  "userId": 1,
+  "eventId": 1
 }
+###############
+# Get Attendees for an Event
+GET http://localhost:5097/api/v1/attendance/event/1
+############
+# Delete Attendance for an Event
+DELETE http://localhost:5097/api/v1/attendance
+Content-Type: application/json
 
-###
+{
+  "userId": 1,
+  "eventId": 1
+}
+############
+# Submit Feedback for an Event
+POST http://localhost:5097/api/v1/attendance/feedback
+Content-Type: application/json
 
-### Delete Event by ID
+{
+  "userId": 1,
+  "eventId": 1,
+  "feedback": "Great event!",
+  "rating": 5
+}
+################
+# Get Average Rating for an Event
+GET http://localhost:5097/api/v1/attendance/event/1/average-rating
+
+---
+
+### Event Management Endpoints
+##############
+# Get All Events
+GET http://localhost:5097/api/v1/events
+##########
+# Create a New Event
+POST http://localhost:5097/api/v1/events
+Content-Type: application/json
+
+{
+  "title": "Sample Event",
+  "description": "This is a sample event.",
+  "eventDate": "2024-12-25",
+  "startTime": "10:00:00",
+  "endTime": "12:00:00",
+  "location": "Main Hall",
+  "adminApproval": true,
+  "event_Attendances": []
+}
+###########
+# Update Event
+PUT http://localhost:5097/api/v1/events/1
+Content-Type: application/json
+
+{
+  "title": "Updated Event Title",
+  "description": "Updated description for the event.",
+  "eventDate": "2024-12-31",
+  "startTime": "14:00:00",
+  "endTime": "16:00:00",
+  "location": "Conference Room",
+  "adminApproval": false
+}
+###########
+# Delete Event
 DELETE http://localhost:5097/api/v1/events/1
-Authorization: Bearer YOUR_ADMIN_TOKEN_HERE
