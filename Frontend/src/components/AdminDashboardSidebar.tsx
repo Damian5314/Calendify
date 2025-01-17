@@ -1,5 +1,5 @@
 import React from "react";
-import { FaUserCog, FaUsers, FaCalendarAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaUserCog, FaUsers, FaSignOutAlt } from "react-icons/fa";
 
 const AdminDashboardSidebar: React.FC = () => {
   const handleLogout = async () => {
@@ -43,15 +43,6 @@ const AdminDashboardSidebar: React.FC = () => {
             className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
           >
             Create admin
-          </a>
-        </li>
-        <li className="flex items-center space-x-2">
-          <FaCalendarAlt className="text-blue-600" />
-          <a
-            href="/AdminCalendar"
-            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
-          >
-            Calendar
           </a>
         </li>
       </ul>
