@@ -48,13 +48,6 @@ const UserDashboardSidebar: React.FC<{ userName: string; role: string }> = ({
           </a>
         </li>
         <li className="flex items-center space-x-2">
-          <FaUserCog className="text-blue-600" />
-          <a
-            href="/account-settings"
-            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
-          >
-            Account Settings
-          </a>
         </li>
         <li className="flex items-center space-x-2">
           <FaCalendarAlt className="text-blue-600" />
@@ -66,13 +59,6 @@ const UserDashboardSidebar: React.FC<{ userName: string; role: string }> = ({
           </a>
         </li>
         <li className="flex items-center space-x-2">
-          <FaBell className="text-blue-600" />
-          <a
-            href="/notifications"
-            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
-          >
-            Notifications
-          </a>
         </li>
       </ul>
 

@@ -9,7 +9,6 @@ import ForgotPassword from "./components/ForgotPassword";
 import CreateEvent from "./components/CreateEvent";
 import CalendarPage from "./components/Calendar";
 import AdminCalendarPage from "./components/AdminCalendar";
-import AccountSettings from "./components/AccountSettings";
 import NewPassword from "./components/NewPassword";
 import UserData from "./components/UserData";
 import EditEvent from "./components/EditEvent";
@@ -28,7 +27,6 @@ const App: React.FC = () => {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
-        <Route path="/account-settings" element={<AccountSettings />} />
         <Route path="/Calendar" element={<CalendarPage />} />
         <Route path="/AdminCalendar" element={<AdminCalendarPage />} />
         <Route path="/UserData" element={<UserData />} />
