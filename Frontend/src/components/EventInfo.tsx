@@ -55,7 +55,7 @@ const EventInfo: React.FC = () => {
       const response = await fetch("http://localhost:5097/api/v1/attendance/feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, userId: 1, feedback, rating }), // fix dynamic userId
+        body: JSON.stringify({ eventId, userId , feedback, rating }),
       });
 
       if (response.ok) {
