@@ -398,7 +398,7 @@ FodyWeavers.xsd
 *.csproj
 bin/
 obj/*
-Backend/obj/*
+*/Backend.csproj
 .vscode/
 .venv/
 .pytest_cache/
