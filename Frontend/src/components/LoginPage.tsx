@@ -3,7 +3,8 @@ import axios from "axios";
 import { useUser } from "../components/UserContext";
 
 const LoginPage: React.FC = () => {
-  const { setUserId } = useUser(); // Access setUserId from context
+  const { setUserId } = useUser();
+  const { setUserName } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,8 +21,9 @@ const LoginPage: React.FC = () => {
         password,
       });
   
-      const { role, userId } = response.data; // Assuming backend sends userId
-      setUserId(userId); // Save userId in context and localStorage
+      const { role, userId, userName } = response.data;
+      setUserId(userId);
+      setUserName(userName);
   
       if (role === "Admin") {
         window.location.href = "/admin-dashboard";

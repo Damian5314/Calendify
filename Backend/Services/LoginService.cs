@@ -130,6 +130,14 @@ namespace StarterKit.Services
             return user?.UserId ?? 0;
         }
 
+        // Get User Name by ID
+        public string GetUserNameByEmail(string email)
+        {
+            Console.WriteLine($"[GetUserIdByEmail] Fetching user name for Email: {email}");
+            var user = _context.User.FirstOrDefault(u => u.Email == email);
+            return user?.FirstName ?? "null";
+        }
+
         // Generate Password Reset Token
         public bool GeneratePasswordResetToken(string email)
         {

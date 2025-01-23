@@ -65,20 +65,22 @@ namespace StarterKit.Controllers
 
             if (isAdmin)
             {
-                var userId = _loginService.GetUserIdByEmail(loginRequest.Email); // Assuming this method exists
+                var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
+                var userName = _loginService.GetUserNameByEmail(loginRequest.Email);
                 HttpContext.Session.SetString("Role", role);
                 Console.WriteLine($"[Login] Admin '{loginRequest.Email}' logged in successfully.");
-                return Ok(new { Message = "Login successful.", Role = role, UserId = userId });
+                return Ok(new { Message = "Login successful.", Role = role, UserId = userId, FirstName = userName });
             }
 
             // Check for User login
             var status = _loginService.CheckPassword(loginRequest.Email, loginRequest.Password);
             if (status == LoginStatus.Success)
             {
-                var userId = _loginService.GetUserIdByEmail(loginRequest.Email); // Assuming this method exists
+                var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
+                var userName = _loginService.GetUserNameByEmail(loginRequest.Email);
                 HttpContext.Session.SetString("Role", "User");
                 Console.WriteLine($"[Login] User '{loginRequest.Email}' logged in successfully.");
-                return Ok(new { Message = "Login successful.", Role = "User", UserId = userId });
+                return Ok(new { Message = "Login successful.", Role = "User", UserId = userId, FirstName = userName });
             }
 
             Console.WriteLine("[Login] Login failed: Invalid email or password.");

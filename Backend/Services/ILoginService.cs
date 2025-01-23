@@ -10,6 +10,8 @@ namespace StarterKit.Services
         // Methode om de gebruikers-ID op te halen via e-mail
         int GetUserIdByEmail(string email);
         
+        string GetUserNameByEmail(string email);
+        
         // Methode om een nieuwe gebruiker te registreren
         bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays);
         
