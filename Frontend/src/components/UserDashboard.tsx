@@ -9,7 +9,7 @@ const UserDashboard: React.FC = () => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <UserDashboardSidebar userName={userName} role={role} />
+      <UserDashboardSidebar role={role} />
 
       {/* Main Content */}
       <div className="flex-1 bg-gray-100 p-8">

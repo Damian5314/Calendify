@@ -6,7 +6,7 @@ import { useUser } from "./UserContext";
 const UserDashboardSidebar: React.FC<{ role: string }> = ({
   role,
 }) => {
-  const { userId } = useUser();
+  const { userName } = useUser();
   const navigate = useNavigate(); // Initialize navigate
 
   const handleLogout = async () => {
@@ -31,7 +31,7 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({
   return (
     <div className="bg-gradient-to-br from-blue-100 via-green-50 to-white shadow-lg rounded-lg p-6 w-64 h-full">
       <h2 className="text-2xl font-bold text-gray-800 mb-2">
-        Welcome<span className="text-blue-600"> {userId}</span>!
+        Welcome<span className="text-blue-600"> {userName}</span>!
       </h2>
       <p className="text-sm text-gray-600 mb-6">
         Role: <strong>{role}</strong>
