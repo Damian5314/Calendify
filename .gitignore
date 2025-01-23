@@ -395,7 +395,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-*.sln
+*.csproj
 bin/
 obj/*
 Backend/obj/*
