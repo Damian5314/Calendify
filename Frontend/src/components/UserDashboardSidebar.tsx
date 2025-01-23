@@ -47,6 +47,19 @@ const UserDashboardSidebar: React.FC<{ userName: string; role: string }> = ({
             User Dashboard
           </a>
         </li>
+        <li className="flex items-center space-x-2">
+        </li>
+        <li className="flex items-center space-x-2">
+          <FaCalendarAlt className="text-blue-600" />
+          <a
+            href="/calendar"
+            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
+          >
+            Event Calendar
+          </a>
+        </li>
+        <li className="flex items-center space-x-2">
+        </li>
       </ul>
 
       {/* Logout Button */}
