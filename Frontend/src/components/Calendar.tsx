@@ -52,12 +52,12 @@ const CalendarPage: React.FC = () => {
     <div className="flex flex-col items-center h-screen bg-blue-100 p-4">
       <div className="flex justify-between items-center w-full max-w-4xl mb-4">
         <h1 className="text-2xl font-bold text-blue-700">Calendar</h1>
-        <button
+        {/* <button
           onClick={handleCreateEvent}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
         >
           New
-        </button>
+        </button> */}
       </div>
 
       <div className="bg-white shadow-lg rounded-lg p-4 w-full max-w-4xl">

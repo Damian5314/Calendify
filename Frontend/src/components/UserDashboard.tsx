@@ -16,7 +16,7 @@ const UserDashboard: React.FC = () => {
         {/* Welcome Text */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">
-            Welcome back, <span className="text-blue-600">{userName}</span>!
+            Welcome<span className="text-blue-600">{userName}</span>!
           </h1>
           <p className="text-gray-600 mt-2">
             Here's what's happening in your schedule:
