@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserDashboardSidebar from "./UserDashboardSidebar";
 import EventFeedback from "./EventFeedback";
+import { useUser } from "./UserContext";
 
 const EventInfo: React.FC = () => {
+  const { userId } = useUser();
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [eventData, setEventData] = useState({
@@ -70,12 +72,18 @@ const EventInfo: React.FC = () => {
   };
 
   const handleAttendEvent = async () => {
+    if (!userId) {
+      alert("User not logged in! Please log in to attend this event.");
+      return;
+    }
+  
     try {
       const response = await fetch("http://localhost:5097/api/v1/attendance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId: 13, userId: 1, }), // fix dynamic userId
+        body: JSON.stringify({ eventId, userId }),
       });
+  
       if (response.ok) {
         alert("Event attended successfully!");
       } else {
@@ -85,6 +93,7 @@ const EventInfo: React.FC = () => {
       console.error("Error attending event:", err);
     }
   };
+
 
   const fetchAverageRating = async (): Promise<number> => {
     try {
@@ -101,7 +110,7 @@ const EventInfo: React.FC = () => {
 
   return (
     <div className="flex">
-      <UserDashboardSidebar userName={"User"} role="User" />
+      <UserDashboardSidebar role="User" />
 
       <div className="flex-1 flex flex-col items-center justify-center bg-blue-100 p-6">
         <div className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-6">

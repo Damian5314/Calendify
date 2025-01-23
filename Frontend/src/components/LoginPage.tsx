@@ -1,46 +1,41 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useUser } from "../components/UserContext";
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState(""); // State for email input
-  const [password, setPassword] = useState(""); // State for password input
-  const [errorMessage, setErrorMessage] = useState(""); // State for error messages
+  const { setUserId } = useUser(); // Access setUserId from context
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async () => {
-    // Validate input
     if (!email || !password) {
       setErrorMessage("Please fill in both email and password.");
       return;
     }
-
+  
     try {
-      // Make API request to backend
-      const response = await axios.post(
-        "http://localhost:5097/api/v1/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-
-      // On successful login, store session info and redirect based on role
-      const { role } = response.data;
-
+      const response = await axios.post("http://localhost:5097/api/v1/auth/login", {
+        email,
+        password,
+      });
+  
+      const { role, userId } = response.data; // Assuming backend sends userId
+      setUserId(userId); // Save userId in context and localStorage
+  
       if (role === "Admin") {
-        // Redirect to Admin Dashboard
         window.location.href = "/admin-dashboard";
       } else if (role === "User") {
-        // Redirect to User Dashboard
         window.location.href = "/user-dashboard";
       } else {
         setErrorMessage("Unexpected role received from server.");
       }
     } catch (error) {
-      // Handle errors from backend or network issues
       console.error("Login error:", error);
       setErrorMessage("Invalid email or password. Please try again.");
     }
   };
+  
 
   const handleRegisterRedirect = () => {
     window.location.href = "/register"; // Redirect to the Register page
