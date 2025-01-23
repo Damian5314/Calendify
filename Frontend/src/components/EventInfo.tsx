@@ -17,7 +17,6 @@ const EventInfo: React.FC = () => {
   const [averageRating, setAverageRating] = useState<number | null>(null);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
 
-  // Fetch the event details and average rating
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -54,7 +53,7 @@ const EventInfo: React.FC = () => {
       const response = await fetch("http://localhost:5097/api/v1/attendance/feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, feedback, rating }),
+        body: JSON.stringify({ eventId, userId: 1, feedback, rating }), // fix dynamic userId
       });
 
       if (response.ok) {
@@ -67,6 +66,23 @@ const EventInfo: React.FC = () => {
       }
     } catch (err) {
       console.error("Error submitting feedback:", err);
+    }
+  };
+
+  const handleAttendEvent = async () => {
+    try {
+      const response = await fetch("http://localhost:5097/api/v1/attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId: 13, userId: 1, }), // fix dynamic userId
+      });
+      if (response.ok) {
+        alert("Event attended successfully!");
+      } else {
+        alert("Failed to attend event.");
+      }
+    } catch (err) {
+      console.error("Error attending event:", err);
     }
   };
 
@@ -160,13 +176,20 @@ const EventInfo: React.FC = () => {
               />
             </div>
           </div>
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-between mt-6">
             <button
               type="button"
               onClick={handleCancel}
               className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
             >
               Back
+            </button>
+            <button
+              type="button"
+              onClick={handleAttendEvent}
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
+            >
+              Attend Event
             </button>
           </div>
         </div>
