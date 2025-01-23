@@ -91,6 +91,24 @@ const EditEvent: React.FC = () => {
     navigate(-1);
   };
 
+  const attendEvent = async () => {
+    try {
+      const response = await fetch("http://localhost:5097/api/v1/attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId: 13, userId: 1, }), // Replace `userId: 1` with dynamic value
+      });
+
+      if (response.ok) {
+        alert("Event attended successfully!");
+      } else {
+        alert("Failed to attend event.");
+      }
+    } catch (err) {
+      console.error("Error attending event:", err);
+    }
+  };
+
   const handleFeedbackSubmit = async (rating: number, feedback: string) => {
     try {
       const response = await fetch("http://localhost:5097/api/v1/attendance/feedback", {
@@ -151,6 +169,7 @@ const EditEvent: React.FC = () => {
               <input
                 type="text"
                 value={eventData.title}
+                disabled
                 onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
                 className="border border-gray-300 p-2 rounded w-full"
               />
@@ -159,6 +178,7 @@ const EditEvent: React.FC = () => {
               <label className="block text-gray-700 font-medium">Description</label>
               <textarea
                 value={eventData.description}
+                disabled
                 onChange={(e) => setEventData({ ...eventData, description: e.target.value })}
                 className="border border-gray-300 p-2 rounded w-full"
               />
@@ -168,6 +188,7 @@ const EditEvent: React.FC = () => {
               <input
                 type="date"
                 value={eventData.eventDate}
+                disabled
                 onChange={(e) => setEventData({ ...eventData, eventDate: e.target.value })}
                 className="border border-gray-300 p-2 rounded w-full"
               />
@@ -178,6 +199,7 @@ const EditEvent: React.FC = () => {
                 <input
                   type="time"
                   value={eventData.startTime}
+                  disabled
                   onChange={(e) => setEventData({ ...eventData, startTime: e.target.value })}
                   className="border border-gray-300 p-2 rounded w-full"
                 />
@@ -187,6 +209,7 @@ const EditEvent: React.FC = () => {
                 <input
                   type="time"
                   value={eventData.endTime}
+                  disabled
                   onChange={(e) => setEventData({ ...eventData, endTime: e.target.value })}
                   className="border border-gray-300 p-2 rounded w-full"
                 />
@@ -197,30 +220,25 @@ const EditEvent: React.FC = () => {
               <input
                 type="text"
                 value={eventData.location}
+                disabled
                 onChange={(e) => setEventData({ ...eventData, location: e.target.value })}
                 className="border border-gray-300 p-2 rounded w-full"
               />
             </div>
             <div className="flex justify-between">
               <button
-                type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-              >
-                Save Changes
-              </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-              >
-                Delete Event
-              </button>
-              <button
                 type="button"
                 onClick={handleCancel}
                 className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
               >
                 Cancel
+              </button>
+              <button
+                type="button"
+                onClick={attendEvent}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
+              >
+                Attend Event
               </button>
             </div>
           </form>

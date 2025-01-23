@@ -22,8 +22,12 @@ const AdminDashboardSidebar: React.FC = () => {
 
   return (
     <div className="bg-gradient-to-br from-blue-100 via-green-50 to-white shadow-lg rounded-lg p-6 w-64 h-full">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">Admin Panel</h2>
-      <p className="text-sm text-gray-600 mb-6">Manage the application</p>
+      <h2 className="text-2xl font-bold text-gray-800 mb-2">
+        Welcome<span className="text-blue-600">{}</span>!
+      </h2>
+      <p className="text-sm text-gray-600 mb-6">
+        Role: User<strong>{}</strong>
+      </p>
       <hr className="mb-6 border-gray-300" />
 
       <ul className="space-y-4">

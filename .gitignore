@@ -397,14 +397,9 @@ FodyWeavers.xsd
 *.sln.iml
 *.sln
 bin/
-obj/
-Backend/obj/
-CargohubV1/api/__pycache__/
-CargohubV1/api/.pytest_cache/
-CargohubV1/api/models/__pycache__/
-CargohubV1/api/processors/__pycache__/
-CargohubV1/api/providers/__pycache__/
-CargohubV1/api/testing/__pycache__/
+obj/*
+Backend/obj/*
 .vscode/
 .venv/
 .pytest_cache/
+*/obj/
