@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "./UserContext";
 
 const LoginPage: React.FC = () => {
-  const { setUserId, setUserName, setRole } = useUser(); // Destructure setRole from context
+  const { setUserId, setUserName, setRole } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,7 +30,7 @@ const LoginPage: React.FC = () => {
 
       setUserId(userId);
       setUserName(firstName);
-      setRole(role); // Save role in context
+      setRole(role);
 
       if (role === "Admin") {
         navigate("/admin-dashboard");
@@ -45,9 +45,20 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleRegisterRedirect = () => {
+    navigate("/register");
+  };
+
+  const handleForgotPasswordRedirect = () => {
+    navigate("/forgot-password");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-blue-100">
-      {/* Login Form */}
+      <h1 className="text-3xl font-bold mb-6 text-blue-700">
+        Welcome to Calendify
+      </h1>
+
       <div className="bg-white shadow-lg rounded-lg p-8 w-96">
         <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
 
@@ -77,6 +88,21 @@ const LoginPage: React.FC = () => {
         >
           Login
         </button>
+
+        <div className="flex justify-between mt-4">
+          <button
+            onClick={handleForgotPasswordRedirect}
+            className="text-blue-500 hover:underline"
+          >
+            Forgot Password?
+          </button>
+          <button
+            onClick={handleRegisterRedirect}
+            className="text-blue-500 hover:underline"
+          >
+            Register
+          </button>
+        </div>
       </div>
     </div>
   );
