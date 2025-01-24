@@ -1,19 +1,22 @@
-// ProtectedRoute.tsx
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useUser } from "./UserContext";
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
+interface ProtectedRouteProps {
+  allowedRoles: string[];
+  children: React.ReactNode;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  allowedRoles,
   children,
 }) => {
-  const { userId } = useUser(); // Check if the user is logged in (userId is set)
+  const { role } = useUser(); // Get role from context
 
-  // If user is not logged in, redirect to the login page
-  if (!userId) {
+  if (!role || !allowedRoles.includes(role)) {
     return <Navigate to="/login" replace />;
   }
 
-  // If logged in, render the children (protected content)
   return <>{children}</>;
 };
 

@@ -52,24 +52,20 @@ namespace StarterKit.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
-            Console.WriteLine($"[Login] Login request for email: {loginRequest.Email}");
-
             if (string.IsNullOrWhiteSpace(loginRequest.Email) || string.IsNullOrWhiteSpace(loginRequest.Password))
             {
-                Console.WriteLine("[Login] Validation failed: Missing email or password.");
                 return BadRequest(new { Message = "Email and Password are required." });
             }
 
             // Check for Admin login
             var (isAdmin, role) = _loginService.AdminLogin(loginRequest.Email, loginRequest.Password);
-
             if (isAdmin)
             {
                 var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
                 var userName = _loginService.GetUserNameByEmail(loginRequest.Email);
                 HttpContext.Session.SetString("Role", role);
-                Console.WriteLine($"[Login] Admin '{loginRequest.Email}' logged in successfully.");
-                return Ok(new { Message = "Login successful.", Role = role, UserId = userId, FirstName = userName });
+
+                return Ok(new { Message = "Login successful.", Role = role, UserId = userId, UserName = userName });
             }
 
             // Check for User login
@@ -79,11 +75,10 @@ namespace StarterKit.Controllers
                 var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
                 var userName = _loginService.GetUserNameByEmail(loginRequest.Email);
                 HttpContext.Session.SetString("Role", "User");
-                Console.WriteLine($"[Login] User '{loginRequest.Email}' logged in successfully.");
-                return Ok(new { Message = "Login successful.", Role = "User", UserId = userId, FirstName = userName });
+
+                return Ok(new { Message = "Login successful.", Role = "User", UserId = userId, UserName = userName });
             }
 
-            Console.WriteLine("[Login] Login failed: Invalid email or password.");
             return Unauthorized(new { Message = "Invalid email or password." });
         }
 
