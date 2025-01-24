@@ -17,6 +17,7 @@ const EventInfo: React.FC = () => {
     location: "",
   });
   const [averageRating, setAverageRating] = useState<number | null>(null);
+  const [isAttending, setIsAttending] = useState(false);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
 
   useEffect(() => {
@@ -42,9 +43,22 @@ const EventInfo: React.FC = () => {
       }
     };
 
+    const fetchIsAttending = async () => {
+      try {
+        const respone = await fetch(
+          `http://localhost:5097/api/v1/attendance/event/${eventId}/is-attending?userId=${userId}`
+        );
+        const attendanceData = await respone.json();
+        setIsAttending(attendanceData.isAttending);
+      } catch (error) {
+        console.error("Error fetching event details:", error);
+      }
+    };
+
     fetchEvent();
     fetchAverageRating();
-  }, [eventId]);
+    fetchIsAttending();
+  }, [eventId, userId]);
 
   const handleCancel = () => {
     navigate(-1);
@@ -71,30 +85,6 @@ const EventInfo: React.FC = () => {
     }
   };
 
-  const handleAttendEvent = async () => {
-    if (!userId) {
-      alert("User not logged in! Please log in to attend this event.");
-      return;
-    }
-  
-    try {
-      const response = await fetch("http://localhost:5097/api/v1/attendance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, userId }),
-      });
-  
-      if (response.ok) {
-        alert("Event attended successfully!");
-      } else {
-        alert("Failed to attend event.");
-      }
-    } catch (err) {
-      console.error("Error attending event:", err);
-    }
-  };
-
-
   const fetchAverageRating = async (): Promise<number> => {
     try {
       const response = await fetch(
@@ -107,6 +97,24 @@ const EventInfo: React.FC = () => {
       return 0;
     }
   };
+  
+  const toggleAttendance = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5097/api/v1/attendance/event/${eventId}/toggle-attendance/${userId}`,
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setIsAttending(result.isAttending);
+        alert(`You have ${result.isAttending ? "joined" : "left"} the event.`);
+      } else {
+        alert("Failed to update attendance.");
+      }
+    } catch (err) {
+      console.error("Error toggling attendance:", err);
+    }
+  };
 
   return (
     <div className="flex">
@@ -116,17 +124,19 @@ const EventInfo: React.FC = () => {
         <div className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-blue-700">Event Details</h2>
-            <div>
-              <span className="text-gray-600">
-                Average Rating: {averageRating !== null ? averageRating.toFixed(1) : "Loading..."}
-              </span>
-              <button
-                onClick={() => setShowFeedbackForm(true)}
-                className="ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-              >
-                Rate Event
-              </button>
-            </div>
+            {isAttending && (
+              <div>
+                <span className="text-gray-600">
+                  Average Rating: {averageRating !== null ? averageRating.toFixed(1) : "Loading..."}
+                </span>
+                <button
+                  onClick={() => setShowFeedbackForm(true)}
+                  className="ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                >
+                  Rate Event
+                </button>
+              </div>
+            )}
           </div>
           <div className="space-y-6">
             <div>
@@ -195,10 +205,12 @@ const EventInfo: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={handleAttendEvent}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
+              onClick={toggleAttendance}
+              className={`px-4 py-2 rounded transition ${
+                isAttending ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
+              } text-white`}
             >
-              Attend Event
+              {isAttending ? "Leave Event" : "Attend Event"}
             </button>
           </div>
         </div>

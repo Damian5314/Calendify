@@ -235,6 +235,13 @@ const EditEvent: React.FC = () => {
               </button>
               <button
                 type="button"
+                onClick={handleDelete}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
+              >
+                Delete Event
+              </button>
+              <button
+                type="button"
                 onClick={attendEvent}
                 className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
               >
