@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface UserContextType {
   userId: string | null;
@@ -9,38 +15,31 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const UserProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [userId, setUserIdState] = useState<string | null>(null);
   const [userName, setUserNameState] = useState<string | null>(null);
 
-  // Load userId from localStorage on initial render
+  // Load userId and userName from localStorage on initial render
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
-    const storedUserNamne = localStorage.getItem("userName");
-    if (storedUserId) {
-      setUserIdState(storedUserId);
-    }
-    if (storedUserNamne) {
-      setUserNameState(storedUserNamne);
-    }
+    const storedUserName = localStorage.getItem("userName");
+    if (storedUserId) setUserIdState(storedUserId);
+    if (storedUserName) setUserNameState(storedUserName);
   }, []);
 
   // Save userId to localStorage whenever it changes
   const setUserId = (id: string | null) => {
-    if (id) {
-      localStorage.setItem("userId", id);
-    } else {
-      localStorage.removeItem("userId");
-    }
+    if (id) localStorage.setItem("userId", id);
+    else localStorage.removeItem("userId");
     setUserIdState(id);
   };
 
+  // Save userName to localStorage whenever it changes
   const setUserName = (name: string | null) => {
-    if (name) {
-      localStorage.setItem("userName", name);
-    } else {
-      localStorage.removeItem("userName");
-    }
+    if (name) localStorage.setItem("userName", name);
+    else localStorage.removeItem("userName");
     setUserNameState(name);
   };
 

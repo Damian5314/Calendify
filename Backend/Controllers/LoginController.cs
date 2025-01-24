@@ -162,7 +162,25 @@ namespace StarterKit.Controllers
             Console.WriteLine("[ForgotPassword] Password reset link sent.");
             return Ok(new { Message = "A password reset link has been sent to your email." });
         }
+        [HttpGet("user/profile")]
+        public IActionResult GetUserProfile()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var firstName = HttpContext.Session.GetString("FirstName");
 
+            if (string.IsNullOrEmpty(role) || userId == null)
+            {
+                return Unauthorized(new { Message = "You must be logged in to access this resource." });
+            }
+
+            return Ok(new
+            {
+                Role = role,
+                UserId = userId,
+                FirstName = firstName
+            });
+        }
         // Reset Password
         [HttpPost("reset-password")]
         public IActionResult ResetPassword([FromBody] ResetPasswordRequest request)

@@ -14,25 +14,92 @@ import UserData from "./components/UserData";
 import EditEvent from "./components/EditEvent";
 import CreateAdmin from "./components/CreateAdmin";
 import EventInfo from "./components/EventInfo";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<MainDashboard />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<NewPassword />} /> {/* New route */}
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/CreateEvent" element={<CreateEvent />} />
-        <Route path="/Calendar" element={<CalendarPage />} />
-        <Route path="/AdminCalendar" element={<AdminCalendarPage />} />
-        <Route path="/UserData" element={<UserData />} />
-        <Route path="/edit-event/:eventId" element={<EditEvent />} />
-        <Route path="/CreateAdmin" element={<CreateAdmin />} />
-        <Route path="/EventInfo/:eventId" element={<EventInfo />} />
+        <Route path="/reset-password" element={<NewPassword />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-dashboard"
+          element={
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/CreateEvent"
+          element={
+            <ProtectedRoute>
+              <CreateEvent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Calendar"
+          element={
+            <ProtectedRoute>
+              <CalendarPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/AdminCalendar"
+          element={
+            <ProtectedRoute>
+              <AdminCalendarPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/UserData"
+          element={
+            <ProtectedRoute>
+              <UserData />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-event/:eventId"
+          element={
+            <ProtectedRoute>
+              <EditEvent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/CreateAdmin"
+          element={
+            <ProtectedRoute>
+              <CreateAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/EventInfo/:eventId"
+          element={
+            <ProtectedRoute>
+              <EventInfo />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
