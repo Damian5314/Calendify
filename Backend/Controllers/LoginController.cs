@@ -62,10 +62,10 @@ namespace StarterKit.Controllers
             if (isAdmin)
             {
                 var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
-                var userName = _loginService.GetUserNameByEmail(loginRequest.Email);
+                var firstName = _loginService.GetFirstNameByEmail(loginRequest.Email);
                 HttpContext.Session.SetString("Role", role);
 
-                return Ok(new { Message = "Login successful.", Role = role, UserId = userId, UserName = userName });
+                return Ok(new { Message = "Login successful.", Role = role, UserId = userId, FirstName = firstName });
             }
 
             // Check for User login
@@ -73,10 +73,10 @@ namespace StarterKit.Controllers
             if (status == LoginStatus.Success)
             {
                 var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
-                var userName = _loginService.GetUserNameByEmail(loginRequest.Email);
+                var firstName = _loginService.GetFirstNameByEmail(loginRequest.Email);
                 HttpContext.Session.SetString("Role", "User");
 
-                return Ok(new { Message = "Login successful.", Role = "User", UserId = userId, UserName = userName });
+                return Ok(new { Message = "Login successful.", Role = "User", UserId = userId, FirstName = firstName });
             }
 
             return Unauthorized(new { Message = "Invalid email or password." });

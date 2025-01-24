@@ -131,7 +131,7 @@ namespace StarterKit.Services
         }
 
         // Get User Name by ID
-        public string GetUserNameByEmail(string email)
+        public string GetFirstNameByEmail(string email)
         {
             Console.WriteLine($"[GetUserIdByEmail] Fetching user name for Email: {email}");
             var user = _context.User.FirstOrDefault(u => u.Email == email);
