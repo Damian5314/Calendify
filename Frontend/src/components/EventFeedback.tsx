@@ -7,7 +7,7 @@ interface EventFeedbackProps {
   onClose: () => void;
 }
 
-const EventFeedback: React.FC<EventFeedbackProps> = ({ eventId, userId, onSubmit, onClose }) => {
+const EventFeedback: React.FC<EventFeedbackProps> = ({ onSubmit, onClose }) => {
   const [feedback, setFeedback] = useState("");
   const [rating, setRating] = useState(0);
 

@@ -37,13 +37,12 @@ const CalendarPage: React.FC = () => {
   }, []);
 
   const handleEventClick = (event: any) => {
-    // Navigate to the event info page with the selected event's ID
     navigate(`/EventInfo/${event.eventId}`);
   };
 
   return (
     <div className="flex flex-col items-center h-screen bg-blue-100 p-4">
-      <div className="flex justify-between items-center w-full max-w-4xl mb-4">
+      <div className="flex justify-between items-center w-full max-w-xl mb-4">
         <h1 className="text-2xl font-bold text-blue-700">Calendar</h1>
       </div>
 
@@ -53,7 +52,7 @@ const CalendarPage: React.FC = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 500 }}
+          style={{ height: 600 }}
           onSelectEvent={handleEventClick}
           defaultView="month"
         />
