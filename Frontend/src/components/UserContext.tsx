@@ -7,12 +7,12 @@ import React, {
 } from "react";
 
 interface UserContextType {
-  userId: string | null;
+  userId: number | null;
   userName: string | null;
-  role: string | null; // Add role to the context
-  setUserId: (id: string | null) => void;
+  role: string | null;
+  setUserId: (id: number | null) => void;
   setUserName: (name: string | null) => void;
-  setRole: (role: string | null) => void; // Add setter for role
+  setRole: (role: string | null) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -20,21 +20,21 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [userId, setUserIdState] = useState<string | null>(null);
+  const [userId, setUserIdState] = useState<number | null>(null);
   const [userName, setUserNameState] = useState<string | null>(null);
   const [role, setRoleState] = useState<string | null>(null);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     const storedUserName = localStorage.getItem("userName");
-    const storedRole = localStorage.getItem("role"); // Load role from localStorage
-    if (storedUserId) setUserIdState(storedUserId);
+    const storedRole = localStorage.getItem("role");
+    if (storedUserId) setUserIdState(parseInt(storedUserId, 10));
     if (storedUserName) setUserNameState(storedUserName);
     if (storedRole) setRoleState(storedRole);
   }, []);
 
-  const setUserId = (id: string | null) => {
-    if (id) localStorage.setItem("userId", id);
+  const setUserId = (id: number | null) => {
+    if (id !== null) localStorage.setItem("userId", id.toString());
     else localStorage.removeItem("userId");
     setUserIdState(id);
   };

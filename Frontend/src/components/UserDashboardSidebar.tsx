@@ -17,7 +17,6 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({
       });
 
       if (response.ok) {
-        alert("Logged out successfully!");
         navigate("/login"); // Redirect to login screen
       } else {
         alert("Failed to log out. Please try again.");

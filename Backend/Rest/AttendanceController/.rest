@@ -9,7 +9,7 @@ Content-Type: application/json
 ###
 
 //Get Attendees for an Event
-GET http://localhost:5097/api/v1/attendance/event/1
+GET http://localhost:5097/api/v1/attendance/event/11/toggle-attendance/6
 ###
 
 //Remove Attendance for an Event
