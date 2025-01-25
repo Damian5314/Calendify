@@ -4,7 +4,10 @@ import UserDashboardSidebar from "./UserDashboardSidebar";
 import CalendarPage from "./Calendar";
 
 const UserDashboard: React.FC = () => {
-  const { userName } = useUser(); // Get FirstName from context
+  const { userName } = useUser();
+
+  // Display the userName from UserContext or fallback to localStorage
+  const firstName = userName || localStorage.getItem("userName") || "User";
 
   return (
     <div className="flex h-screen">
@@ -13,11 +16,10 @@ const UserDashboard: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex-1 bg-gray-100 p-8">
-        {/* Welcome Text */}
+        {/* Welcome Message */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800">
-            Welcome, <span className="text-blue-600">{userName || "User"}</span>
-            !
+            Welcome, <span className="text-blue-600">{firstName}</span>!
           </h1>
           <p className="text-gray-600 mt-2">
             Here's what's happening in your schedule:

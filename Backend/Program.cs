@@ -28,6 +28,12 @@ builder.Services.AddControllersWithViews()
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     });
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(15); // Keep the session alive for 7 days
+    options.Cookie.HttpOnly = true; // Prevent client-side JavaScript access
+    options.Cookie.IsEssential = true; // Required for GDPR compliance
+});
 
 // Add CORS support
 builder.Services.AddCors(options =>

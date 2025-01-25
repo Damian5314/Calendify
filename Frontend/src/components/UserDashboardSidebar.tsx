@@ -1,13 +1,11 @@
 import React from "react";
 import { FaCalendarAlt, FaSignOutAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
 import { useUser } from "./UserContext";
 
-const UserDashboardSidebar: React.FC<{ role: string }> = ({
-  role,
-}) => {
-  const { userName } = useUser();
-  const navigate = useNavigate(); // Initialize navigate
+const UserDashboardSidebar: React.FC<{ role: string }> = ({ role }) => {
+  const { userName, logout } = useUser();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -17,7 +15,9 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({
       });
 
       if (response.ok) {
-        navigate("/login"); // Redirect to login screen
+        logout(); // Clear session data in the UserContext
+        alert("Logged out successfully!");
+        navigate("/login"); // Redirect to the login page
       } else {
         alert("Failed to log out. Please try again.");
       }
@@ -29,6 +29,7 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({
 
   return (
     <div className="bg-gradient-to-br from-blue-100 via-green-50 to-white shadow-lg rounded-lg p-6 w-64 h-full">
+      {/* Welcome Message */}
       <h2 className="text-2xl font-bold text-gray-800 mb-2">
         Welcome<span className="text-blue-600"> {userName || "User"}</span>!
       </h2>
@@ -37,6 +38,7 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({
       </p>
       <hr className="mb-6 border-gray-300" />
 
+      {/* Navigation Links */}
       <ul className="space-y-4">
         <li className="flex items-center space-x-2">
           <FaCalendarAlt className="text-blue-600" />
@@ -48,8 +50,6 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({
           </a>
         </li>
         <li className="flex items-center space-x-2">
-        </li>
-        <li className="flex items-center space-x-2">
           <FaCalendarAlt className="text-blue-600" />
           <a
             href="/calendar"
@@ -57,8 +57,6 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({
           >
             Event Calendar
           </a>
-        </li>
-        <li className="flex items-center space-x-2">
         </li>
       </ul>
 
@@ -71,6 +69,7 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({
         <span>Logout</span>
       </button>
 
+      {/* Additional Section */}
       <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <p className="text-sm text-gray-600">
           🌿 Tip: Stay organized and plan your week effectively!

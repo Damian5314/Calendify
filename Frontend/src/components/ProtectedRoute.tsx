@@ -11,10 +11,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   allowedRoles,
   children,
 }) => {
-  const { role } = useUser(); // Get role from context
+  const { role } = useUser();
 
-  if (!role || !allowedRoles.includes(role)) {
-    return <Navigate to="/login" replace />;
+  // Get the role from UserContext or localStorage
+  const storedRole = role || localStorage.getItem("role");
+
+  // If the user is not authorized, redirect to login
+  if (!storedRole || !allowedRoles.includes(storedRole)) {
+    return <Navigate to="/login" />;
   }
 
   return <>{children}</>;

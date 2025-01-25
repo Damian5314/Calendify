@@ -26,12 +26,13 @@ const LoginPage: React.FC = () => {
         }
       );
 
-      const { role, userId, firstName } = response.data;
+      const { role, userId, userName } = response.data;
 
       setUserId(userId);
-      setUserName(firstName);
+      setUserName(userName);
       setRole(role);
 
+      // Redirect based on role
       if (role === "Admin") {
         navigate("/admin-dashboard");
       } else if (role === "User") {
