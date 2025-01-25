@@ -27,7 +27,7 @@ namespace StarterKit.Models
         // Voeg deze eigenschap toe
         public int UserId { get; set; }  // Dit maakt directe toegang tot UserId mogelijk
 
-        public User? User { get; set; }
+        public User User { get; set; }
     }
 
     public class Event_Attendance

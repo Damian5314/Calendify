@@ -395,11 +395,16 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-*.csproj
+*.sln
 bin/
-obj/*
-*/Backend.csproj
+obj/
+Backend/obj/
+CargohubV1/api/__pycache__/
+CargohubV1/api/.pytest_cache/
+CargohubV1/api/models/__pycache__/
+CargohubV1/api/processors/__pycache__/
+CargohubV1/api/providers/__pycache__/
+CargohubV1/api/testing/__pycache__/
 .vscode/
 .venv/
 .pytest_cache/
-*/obj/
