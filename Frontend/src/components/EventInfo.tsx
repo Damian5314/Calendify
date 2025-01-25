@@ -19,6 +19,8 @@ const EventInfo: React.FC = () => {
   const [averageRating, setAverageRating] = useState<number | null>(null);
   const [isAttending, setIsAttending] = useState(false);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -73,12 +75,13 @@ const EventInfo: React.FC = () => {
       });
 
       if (response.ok) {
-        alert("Feedback submitted successfully!");
+        setSuccessMessage("Feedback submitted successfully!");
+        setErrorMessage("");
         setShowFeedbackForm(false);
         const updatedRating = await fetchAverageRating();
         setAverageRating(updatedRating);
       } else {
-        alert("Failed to submit feedback.");
+        setErrorMessage("Failed to submit feedback.");
       }
     } catch (err) {
       console.error("Error submitting feedback:", err);
@@ -112,10 +115,11 @@ const EventInfo: React.FC = () => {
       });
   
       if (response.ok) {
-        alert("Event attended successfully!");
+        setSuccessMessage("Event attended successfully!");
+        setErrorMessage("");
         setIsAttending(true);
       } else {
-        alert("Failed to attend event.");
+        setErrorMessage("Failed to attend event.");
       }
     } catch (err) {
       console.error("Error attending event:", err);
@@ -136,10 +140,11 @@ const EventInfo: React.FC = () => {
       });
   
       if (response.ok) {
-        alert("Left event successfully!");
+        setSuccessMessage("Left event successfully!");
+        setErrorMessage("");
         setIsAttending(false);
       } else {
-        alert("Failed to leave event.");
+        setErrorMessage("Failed to leave event.");
       }
     } catch (err) {
       console.error("Error leaving event:", err);
@@ -222,9 +227,11 @@ const EventInfo: React.FC = () => {
                 value={eventData.location}
                 disabled
                 className="border border-gray-300 p-2 rounded w-full bg-gray-100"
-              />
+                />
             </div>
           </div>
+          {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+          {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
           <div className="flex justify-between mt-6">
             <button
               type="button"
