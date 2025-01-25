@@ -1,10 +1,7 @@
 import React from "react";
-import { FaUserCog, FaUsers, FaSignOutAlt } from "react-icons/fa";
-import { useUser } from "./UserContext";
+import { FaUserCog, FaUsers, FaCalendarAlt, FaSignOutAlt } from "react-icons/fa";
 
 const AdminDashboardSidebar: React.FC = () => {
-  const { userName } = useUser();
-  const { role } = useUser();
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:5097/api/v1/auth/Logout", {
@@ -25,12 +22,8 @@ const AdminDashboardSidebar: React.FC = () => {
 
   return (
     <div className="bg-gradient-to-br from-blue-100 via-green-50 to-white shadow-lg rounded-lg p-6 w-64 h-full">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">
-        Welcome<span className="text-blue-600"> {userName}</span>!
-      </h2>
-      <p className="text-sm text-gray-600 mb-6">
-        Role: <strong>{role}</strong>
-      </p>
+      <h2 className="text-2xl font-bold text-gray-800 mb-2">Admin Panel</h2>
+      <p className="text-sm text-gray-600 mb-6">Manage the application</p>
       <hr className="mb-6 border-gray-300" />
 
       <ul className="space-y-4">
@@ -46,10 +39,19 @@ const AdminDashboardSidebar: React.FC = () => {
         <li className="flex items-center space-x-2">
           <FaUsers className="text-blue-600" />
           <a
-            href="/CreateAdmin"
+            href="/UserData"
             className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
           >
-            Create admin
+            User Management
+          </a>
+        </li>
+        <li className="flex items-center space-x-2">
+          <FaCalendarAlt className="text-blue-600" />
+          <a
+            href="/AdminCalendar"
+            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
+          >
+            Calendar
           </a>
         </li>
       </ul>

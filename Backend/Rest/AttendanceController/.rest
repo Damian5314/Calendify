@@ -3,13 +3,13 @@ POST http://localhost:5097/api/v1/attendance
 Content-Type: application/json
 
 {
-    "userId" : 1,
+    "userId" : 6,
     "eventId" : 13
 }
 ###
 
 //Get Attendees for an Event
-GET http://localhost:5097/api/v1/attendance/event/11/toggle-attendance/6
+GET http://localhost:5097/api/v1/attendance/event/1
 ###
 
 //Remove Attendance for an Event

@@ -52,36 +52,36 @@ namespace StarterKit.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
+            Console.WriteLine($"[Login] Login request for email: {loginRequest.Email}");
+
             if (string.IsNullOrWhiteSpace(loginRequest.Email) || string.IsNullOrWhiteSpace(loginRequest.Password))
             {
+                Console.WriteLine("[Login] Validation failed: Missing email or password.");
                 return BadRequest(new { Message = "Email and Password are required." });
             }
 
             // Check for Admin login
             var (isAdmin, role) = _loginService.AdminLogin(loginRequest.Email, loginRequest.Password);
+
             if (isAdmin)
             {
-                var userId = _loginService.GetAdminIdByEmail(loginRequest.Email);
-                var firstName = _loginService.GetUserNameByEmailAdmin(loginRequest.Email);
                 HttpContext.Session.SetString("Role", role);
-
-                return Ok(new { Message = "Login successful.", Role = role, UserId = userId, FirstName = firstName });
+                Console.WriteLine($"[Login] Admin '{loginRequest.Email}' logged in successfully.");
+                return Ok(new { Message = "Login successful.", Role = role });
             }
 
             // Check for User login
             var status = _loginService.CheckPassword(loginRequest.Email, loginRequest.Password);
             if (status == LoginStatus.Success)
             {
-                var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
-                var firstName = _loginService.GetFirstNameByEmail(loginRequest.Email);
                 HttpContext.Session.SetString("Role", "User");
-
-                return Ok(new { Message = "Login successful.", Role = "User", UserId = userId, FirstName = firstName });
+                Console.WriteLine($"[Login] User '{loginRequest.Email}' logged in successfully.");
+                return Ok(new { Message = "Login successful.", Role = "User" });
             }
 
+            Console.WriteLine("[Login] Login failed: Invalid email or password.");
             return Unauthorized(new { Message = "Invalid email or password." });
         }
-
 
         // Admin Registration
         [HttpPost("register-admin")]
@@ -157,27 +157,7 @@ namespace StarterKit.Controllers
             Console.WriteLine("[ForgotPassword] Password reset link sent.");
             return Ok(new { Message = "A password reset link has been sent to your email." });
         }
-        
-        [HttpGet("user/profile")]
-        public IActionResult GetUserProfile()
-        {
-            var role = HttpContext.Session.GetString("Role");
-            var userId = HttpContext.Session.GetInt32("UserId");
-            var firstName = HttpContext.Session.GetString("FirstName");
 
-            if (string.IsNullOrEmpty(role) || userId == null)
-            {
-                return Unauthorized(new { Message = "You must be logged in to access this resource." });
-            }
-
-            return Ok(new
-            {
-                Role = role,
-                UserId = userId,
-                FirstName = firstName
-            });
-        }
-       
         // Reset Password
         [HttpPost("reset-password")]
         public IActionResult ResetPassword([FromBody] ResetPasswordRequest request)
