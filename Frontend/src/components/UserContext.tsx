@@ -9,10 +9,10 @@ import React, {
 interface UserContextType {
   userId: number | null;
   userName: string | null;
-  role: string | null; // Add role to the context
+  role: string | null;
   setUserId: (id: number | null) => void;
   setUserName: (name: string | null) => void;
-  setRole: (role: string | null) => void; // Add setter for role
+  setRole: (role: string | null) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -27,7 +27,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     const storedUserName = localStorage.getItem("userName");
-    const storedRole = localStorage.getItem("role"); // Load role from localStorage
+    const storedRole = localStorage.getItem("role");
     if (storedUserId) setUserIdState(parseInt(storedUserId, 10));
     if (storedUserName) setUserNameState(storedUserName);
     if (storedRole) setRoleState(storedRole);

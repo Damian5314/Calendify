@@ -52,6 +52,25 @@ namespace StarterKit.Controllers
             return Ok("User added to Event.");
         }
 
+        // DELETE: api/v1/attendance
+        [HttpDelete]
+        public IActionResult DeleteAttendance([FromBody] AttendEventBody attendEventBody)
+        {
+            var attendance = _context.Event_Attendance
+                .FirstOrDefault(ea => ea.Event.EventId == attendEventBody.EventId && ea.User.UserId == attendEventBody.UserId);
+
+            if (attendance == null)
+            {
+                return NotFound("Attendance not found.");
+            }
+
+            _context.Event_Attendance.Remove(attendance);
+
+            _context.SaveChanges();
+
+            return Ok("Attendance deleted.");
+        }
+
         // GET: api/v1/attendance/event/{eventId}
         [HttpGet("event/{eventId}")]
         public IActionResult GetAttendees(int eventId)
@@ -71,23 +90,13 @@ namespace StarterKit.Controllers
             return Ok(attendees);
         }
 
-        // DELETE: api/v1/attendance
-        [HttpDelete]
-        public IActionResult DeleteAttendance([FromBody] AttendEventBody attendEventBody)
+        [HttpGet("event/{eventId}/is-attending")]
+        public IActionResult IsUserAttending(int eventId, [FromQuery] int userId)
         {
-            var attendance = _context.Event_Attendance
-                .FirstOrDefault(ea => ea.Event.EventId == attendEventBody.EventId && ea.User.UserId == attendEventBody.UserId);
+            var attendanceExists = _context.Event_Attendance
+                .Any(ea => ea.EventId == eventId && ea.UserId == userId);
 
-            if (attendance == null)
-            {
-                return NotFound("Attendance not found.");
-            }
-
-            _context.Event_Attendance.Remove(attendance);
-
-            _context.SaveChanges();
-
-            return Ok("Attendance deleted.");
+            return Ok(new { IsAttending = attendanceExists });
         }
 
         [HttpPost("feedback")]
@@ -124,58 +133,6 @@ namespace StarterKit.Controllers
 
             var averageRating = ratings.Average();
             return Ok(new { EventId = eventId, AverageRating = averageRating });
-        }
-
-        [HttpGet("event/{eventId}/is-attending")]
-        public IActionResult IsUserAttending(int eventId, [FromQuery] int userId)
-        {
-            var attendanceExists = _context.Event_Attendance
-                .Any(ea => ea.EventId == eventId && ea.UserId == userId);
-
-            return Ok(new { IsAttending = attendanceExists });
-        }
-
-        [HttpPost("event/{eventId}/toggle-attendance/{userId}")]
-        public IActionResult ToggleAttendance([FromBody] AttendEventBody attendEventBody)
-        {
-            var attendance = _context.Event_Attendance
-                .FirstOrDefault(ea => ea.EventId == attendEventBody.EventId && ea.UserId == attendEventBody.UserId);
-
-            if (attendance != null)
-            {
-                _context.Event_Attendance.Remove(attendance);
-                _context.SaveChanges();
-                return Ok(new { Message = "User has been removed from the event attendance." });
-            }
-            else
-            {
-                var user = _context.User.Find(attendEventBody.UserId);
-                var eventItem = _context.Event.Find(attendEventBody.EventId);
-
-                if (user == null || eventItem == null)
-                {
-                    return BadRequest("Invalid user or event.");
-                }
-
-                var now = DateTime.Now;
-                var eventStartTime = TimeOnly.FromTimeSpan(eventItem.StartTime);
-                if (eventItem.EventDate.ToDateTime(eventStartTime) <= now)
-                {
-                    return BadRequest("Event has already started or passed.");
-                }
-
-                var newAttendance = new Event_Attendance
-                {
-                    User = user,
-                    Event = eventItem,
-                    Feedback = "",
-                    Rating = 0
-                };
-
-                _context.Event_Attendance.Add(newAttendance);
-                _context.SaveChanges();
-                return Ok(new { Message = "User has been added to the event attendance." });
-            }
         }
     }
 

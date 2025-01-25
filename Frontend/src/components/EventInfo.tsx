@@ -98,21 +98,51 @@ const EventInfo: React.FC = () => {
     }
   };
   
-  const toggleAttendance = async () => {
+  const handleAttendEvent = async () => {
+    if (!userId) {
+      alert("User not logged in! Please log in to attend this event.");
+      return;
+    }
+  
     try {
-      const response = await fetch(
-        `http://localhost:5097/api/v1/attendance/event/${eventId}/toggle-attendance/${userId}`,
-      );
-
+      const response = await fetch("http://localhost:5097/api/v1/attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, userId }),
+      });
+  
       if (response.ok) {
-        const result = await response.json();
-        setIsAttending(result.isAttending);
-        alert(`You have ${result.isAttending ? "joined" : "left"} the event.`);
+        alert("Event attended successfully!");
+        setIsAttending(true);
       } else {
-        alert("Failed to update attendance.");
+        alert("Failed to attend event.");
       }
     } catch (err) {
-      console.error("Error toggling attendance:", err);
+      console.error("Error attending event:", err);
+    }
+  };
+
+  const handleLeaveEvent = async () => {
+    if (!userId) {
+      alert("User not logged in! Please log in to attend this event.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:5097/api/v1/attendance", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, userId }),
+      });
+  
+      if (response.ok) {
+        alert("Left event successfully!");
+        setIsAttending(false);
+      } else {
+        alert("Failed to leave event.");
+      }
+    } catch (err) {
+      console.error("Error leaving event:", err);
     }
   };
 
@@ -205,7 +235,7 @@ const EventInfo: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={toggleAttendance}
+              onClick={isAttending? handleLeaveEvent : handleAttendEvent}
               className={`px-4 py-2 rounded transition ${
                 isAttending ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
               } text-white`}

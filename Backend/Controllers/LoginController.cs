@@ -61,8 +61,8 @@ namespace StarterKit.Controllers
             var (isAdmin, role) = _loginService.AdminLogin(loginRequest.Email, loginRequest.Password);
             if (isAdmin)
             {
-                var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
-                var firstName = _loginService.GetFirstNameByEmail(loginRequest.Email);
+                var userId = _loginService.GetAdminIdByEmail(loginRequest.Email);
+                var firstName = _loginService.GetUserNameByEmailAdmin(loginRequest.Email);
                 HttpContext.Session.SetString("Role", role);
 
                 return Ok(new { Message = "Login successful.", Role = role, UserId = userId, FirstName = firstName });
@@ -157,6 +157,7 @@ namespace StarterKit.Controllers
             Console.WriteLine("[ForgotPassword] Password reset link sent.");
             return Ok(new { Message = "A password reset link has been sent to your email." });
         }
+        
         [HttpGet("user/profile")]
         public IActionResult GetUserProfile()
         {
@@ -176,6 +177,7 @@ namespace StarterKit.Controllers
                 FirstName = firstName
             });
         }
+       
         // Reset Password
         [HttpPost("reset-password")]
         public IActionResult ResetPassword([FromBody] ResetPasswordRequest request)

@@ -20,7 +20,6 @@ const AdminDashboard: React.FC = () => {{
 
         {/* Calendar */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Calendar</h2>
           <AdminCalendarPage /> {/* Render the calendar here */}
         </div>
       </div>
