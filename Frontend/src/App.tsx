@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import MainDashboard from "./components/MainDashboard";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
@@ -102,6 +107,8 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </UserProvider>
