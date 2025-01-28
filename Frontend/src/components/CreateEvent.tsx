@@ -42,7 +42,7 @@ const CreateEvent: React.FC = () => {
         setSuccessMessage("Event created succesfully.");
         setErrorMessage(""); // Clear any previous errors
         setTimeout(() => {
-          window.location.href = "/user-dashboard";
+          window.location.href = "/admin-dashboard";
         }, 2000);
       } else {
         const error = await response.text();
