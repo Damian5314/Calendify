@@ -37,7 +37,7 @@ const CalendarPage: React.FC = () => {
   }, []);
 
   const handleEventClick = (event: any) => {
-    navigate(`/EventInfo/${event.eventId}`);
+    navigate(`/event-info/${event.eventId}`);
   };
 
   return (

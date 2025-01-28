@@ -39,7 +39,7 @@ const AdminCalendarPage: React.FC = () => {
 
   // Handle navigation to the CreateEvent page
   const handleCreateEvent = () => {
-    window.location.href = "/CreateEvent";
+    window.location.href = "/Create-Event";
   };
 
   // Handle event click
