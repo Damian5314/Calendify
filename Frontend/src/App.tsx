@@ -20,6 +20,7 @@ import EditEvent from "./components/EditEvent";
 import CreateAdmin from "./components/CreateAdmin";
 import EventInfo from "./components/EventInfo";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AvailableEvents from "./components/AvailableEvents";
 import { UserProvider } from "./components/UserContext";
 
 const App: React.FC = () => {
@@ -104,6 +105,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={["User"]}>
                 <EventInfo />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/available-events"
+            element={
+              <ProtectedRoute allowedRoles={["User"]}>
+                <AvailableEvents />
               </ProtectedRoute>
             }
           />

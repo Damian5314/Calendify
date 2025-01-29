@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCalendarAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaSignOutAlt, FaList } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./UserContext";
 
@@ -40,6 +40,15 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({ role }) => {
           >
             Event Calendar
           </a>
+        </li>
+        <li className="flex items-center space-x-2">
+          <FaList className="text-blue-600" />
+          <button
+            onClick={() => navigate("/available-events")}
+            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
+          >
+            Available Events
+          </button>
         </li>
       </ul>
 
