@@ -63,7 +63,7 @@ const AvailableEvents: React.FC = () => {
                 <li
                   key={event.id}
                   className="p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-300 cursor-pointer"
-                  onClick={() => navigate(`/event-info/${event.id}`)} // Navigate to EventInfo page
+                  onClick={() => navigate(`/event-info/${event.eventId}`)} // Navigate to EventInfo page
                 >
                   <h2 className="text-xl font-bold text-blue-600 flex items-center">
                     <FaCalendarAlt className="mr-2" /> {event.title}
