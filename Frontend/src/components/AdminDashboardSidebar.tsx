@@ -46,7 +46,7 @@ const AdminDashboardSidebar: React.FC = () => {
         <li className="flex items-center space-x-2">
           <FaUsers className="text-blue-600" />
           <a
-            href="/CreateAdmin"
+            href="/Create-Admin"
             className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
           >
             Create admin
