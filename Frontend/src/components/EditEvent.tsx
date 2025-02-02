@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminDashboardSidebar from "./AdminDashboardSidebar";
-import EventFeedback from "./EventFeedback";
-import { useUser } from "./UserContext";
 
 const EditEvent: React.FC = () => {
-  const { userId } = useUser();
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [eventData, setEventData] = useState({
@@ -16,36 +13,67 @@ const EditEvent: React.FC = () => {
     endTime: "",
     location: "",
   });
-  const [averageRating, setAverageRating] = useState<number | null>(null);
-  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [attendees, setAttendees] = useState<{ 
+    userId: number; 
+    userName?: string;
+    firstName?: string; 
+    lastName?: string;
+  }[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch the event details and average rating
+  // Fetch event details and attendees
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const response = await fetch(`http://localhost:5097/api/v1/events/${eventId}`);
         const data = await response.json();
-        setEventData(data);
+
+        console.log("Fetched event data:", data); // Debugging
+
+        setEventData(data); // Ensure all fields (adminApproval, event_Attendances) are included
+        setAttendees(data.event_Attendances || []); // ✅ This now executes
+
       } catch (error) {
         console.error("Error fetching event:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    const fetchAverageRating = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5097/api/v1/attendance/event/${eventId}/average-rating`
-        );
-        const data = await response.json();
-        setAverageRating(data.averageRating);
-      } catch (err) {
-        console.error("Error fetching average rating:", err);
-      }
-    };
+  fetchEvent();
+}, [eventId]);
 
-    fetchEvent();
-    fetchAverageRating();
-  }, [eventId]);
+useEffect(() => {
+  const fetchUserNames = async () => {
+    const updatedAttendees = await Promise.all(
+      attendees.map(async (attendee) => {
+        try {
+          const response = await fetch(`http://localhost:5097/api/v1/users/${attendee.userId}`);
+          const userData = await response.json();
+          
+          return { 
+            ...attendee, 
+            firstName: userData.firstName, 
+            lastName: userData.lastName 
+          };
+        } catch (error) {
+          console.error("Error fetching user:", error);
+          return { 
+            ...attendee, 
+            firstName: "Unknown", 
+            lastName: "User" 
+          }; // Fallback name
+        }
+      })
+    );
+
+    setAttendees(updatedAttendees);
+  };
+
+  if (attendees.length > 0) {
+    fetchUserNames();
+  }
+  }, [attendees]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +96,7 @@ const EditEvent: React.FC = () => {
       console.error("Error updating event:", error);
     }
   };
+    
 
   const handleDelete = async () => {
     const confirmation = window.confirm("Are you sure you want to delete this event?");
@@ -93,61 +122,20 @@ const EditEvent: React.FC = () => {
     navigate(-1);
   };
 
-  const handleFeedbackSubmit = async (rating: number, feedback: string) => {
-    try {
-      const response = await fetch("http://localhost:5097/api/v1/attendance/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, userId: 1, feedback, rating }), // Replace `userId: 1` with dynamic value
-      });
-
-      if (response.ok) {
-        alert("Feedback submitted successfully!");
-        setShowFeedbackForm(false);
-        const updatedRating = await fetchAverageRating(); // Refresh average rating
-        setAverageRating(updatedRating);
-      } else {
-        alert("Failed to submit feedback.");
-      }
-    } catch (err) {
-      console.error("Error submitting feedback:", err);
-    }
-  };
-
-  const fetchAverageRating = async (): Promise<number> => {
-    try {
-      const response = await fetch(
-        `http://localhost:5097/api/v1/attendance/event/${eventId}/average-rating`
-      );
-      const data = await response.json();
-      return data.averageRating;
-    } catch (err) {
-      console.error("Error fetching average rating:", err);
-      return 0;
-    }
-  };
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div className="flex">
       <AdminDashboardSidebar />
 
-      <div className="flex-1 flex flex-col items-center justify-center bg-blue-100 p-6">
-        <div className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-3xl font-bold text-blue-700">Edit Event</h2>
-            <div>
-              <span className="text-gray-600">
-                Average Rating: {averageRating !== null ? averageRating.toFixed(1) : "Loading..."}
-              </span>
-              <button
-                onClick={() => setShowFeedbackForm(true)}
-                className="ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-              >
-                Rate Event
-              </button>
-            </div>
-          </div>
-          <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-row items-start justify-center bg-blue-100 p-6">
+        
+        {/* Left Section - Event Form */}
+        <div className="bg-white shadow-lg rounded-lg w-full max-w-2xl p-6">
+          <h2 className="text-3xl font-bold text-blue-700 mb-4">Edit Event</h2>
+
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-gray-700 font-medium">Title</label>
               <input
@@ -203,40 +191,39 @@ const EditEvent: React.FC = () => {
                 className="border border-gray-300 p-2 rounded w-full"
               />
             </div>
-            <div className="flex justify-between">
-              <button
-                type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-              >
+
+            {/* Buttons */}
+            <div className="flex justify-between mt-4">
+              <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 Save Changes
               </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-              >
+              <button type="button" onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
                 Delete Event
               </button>
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition"
-              >
+              <button type="button" onClick={handleCancel} className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
                 Cancel
               </button>
             </div>
           </form>
         </div>
-      </div>
 
-      {showFeedbackForm && (
-        <EventFeedback
-          eventId={Number(eventId)}
-          userId={1} // Replace with dynamic userId
-          onSubmit={handleFeedbackSubmit}
-          onClose={() => setShowFeedbackForm(false)}
-        />
-      )}
+        {/* Right Section - Attendee List */}
+        <div className="ml-6 bg-white shadow-lg rounded-lg p-6 w-64">
+          <h2 className="text-2xl font-bold text-blue-700">Attendees</h2>
+
+          {attendees.length > 0 ? (
+            <ul className="mt-4 space-y-2">
+              {attendees.map((attendee) => (
+                <li key={attendee.userId} className="p-2 bg-gray-100 rounded-lg">
+                  {`${attendee.firstName} ${attendee.lastName} (ID: ${attendee.userId})`}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-600 mt-2">No users are attending this event.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

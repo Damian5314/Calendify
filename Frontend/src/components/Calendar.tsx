@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "./UserContext";
 
 moment.updateLocale("en", {
   week: {
@@ -14,11 +15,12 @@ const CalendarPage: React.FC = () => {
   const localizer = momentLocalizer(moment);
   const [events, setEvents] = useState<any[]>([]);
   const navigate = useNavigate();
+  const { userId } = useUser();
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchUserEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5097/api/v1/events");
+        const response = await fetch(`http://localhost:5097/api/v1/attendance/user/${userId}`);
         const data = await response.json();
         setEvents(
           data.map((event: any) => ({
@@ -33,9 +35,9 @@ const CalendarPage: React.FC = () => {
       }
     };
 
-    fetchEvents();
+    fetchUserEvents();
   }, []);
-
+  
   const handleEventClick = (event: any) => {
     navigate(`/event-info/${event.eventId}`);
   };
