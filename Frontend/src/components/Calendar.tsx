@@ -20,13 +20,10 @@ const CalendarPage: React.FC = () => {
   useEffect(() => {
     const fetchUserEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5097/api/v1/events");
+        const response = await fetch(`http://localhost:5097/api/v1/attendance/user/${userId}`);
         const data = await response.json();
-        const attendingEvents = data.filter((event: any) => 
-          event.attendees && Array.isArray(event.attendees) && event.attendees.includes(userId)
-        );
         setEvents(
-          attendingEvents.map((event: any) => ({
+          data.map((event: any) => ({
             title: event.title,
             eventId: event.eventId,
             start: new Date(event.eventDate + "T" + event.startTime),
@@ -38,14 +35,9 @@ const CalendarPage: React.FC = () => {
       }
     };
 
-    if (userId) {
-
-      fetchUserEvents();
-
-    }
-
-  }, [userId]);
-
+    fetchUserEvents();
+  }, []);
+  
   const handleEventClick = (event: any) => {
     navigate(`/event-info/${event.eventId}`);
   };

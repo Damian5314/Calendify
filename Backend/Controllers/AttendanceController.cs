@@ -90,6 +90,33 @@ namespace StarterKit.Controllers
             return Ok(attendees);
         }
 
+        // Get all events that user with userId is attending
+        // GET: api/v1/attendance/user/{userId}
+        [HttpGet("user/{userId}")]
+        public IActionResult GetEventsByUser(int userId)
+        {
+            var user = _context.User.Find(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var events = _context.Event_Attendance
+                .Where(ea => ea.UserId == userId)               // Filter by userId
+                .Select(ea => new                               // Select relevant event details
+                {
+                    ea.Event.EventId,
+                    ea.Event.Title,
+                    ea.Event.EventDate,
+                    ea.Event.StartTime,
+                    ea.Event.EndTime
+                })
+                .ToList();
+
+            return Ok(events);
+        }
+
+
         [HttpGet("event/{eventId}/is-attending")]
         public IActionResult IsUserAttending(int eventId, [FromQuery] int userId)
         {
