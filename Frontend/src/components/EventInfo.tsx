@@ -18,9 +18,34 @@ const EventInfo: React.FC = () => {
   });
   const [averageRating, setAverageRating] = useState<number | null>(null);
   const [isAttending, setIsAttending] = useState(false);
+  const [hasRated, setHasRated] = useState(false);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  const fetchAverageRating = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5097/api/v1/attendance/event/${eventId}/average-rating`
+      );
+      const data = await response.json();
+      setAverageRating(data.averageRating);
+    } catch (err) {
+      console.error("Error fetching average rating:", err);
+    }
+  };
+
+  const fetchHasRated = async () => {
+    try {
+      const respone = await fetch(
+        `http://localhost:5097/api/v1/attendance/event/${eventId}/has-rated?userId=${userId}`
+      );
+      const ratingData = await respone.json();
+      setHasRated(ratingData.hasRated);
+    } catch (error) {
+      console.error("Error fetching event details:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -30,18 +55,6 @@ const EventInfo: React.FC = () => {
         setEventData(data);
       } catch (error) {
         console.error("Error fetching event:", error);
-      }
-    };
-
-    const fetchAverageRating = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5097/api/v1/attendance/event/${eventId}/average-rating`
-        );
-        const data = await response.json();
-        setAverageRating(data.averageRating);
-      } catch (err) {
-        console.error("Error fetching average rating:", err);
       }
     };
 
@@ -60,6 +73,7 @@ const EventInfo: React.FC = () => {
     fetchEvent();
     fetchAverageRating();
     fetchIsAttending();
+    fetchHasRated();
   }, [eventId, userId]);
 
   const handleCancel = () => {
@@ -78,7 +92,8 @@ const EventInfo: React.FC = () => {
         setSuccessMessage("Feedback submitted successfully!");
         setErrorMessage("");
         setShowFeedbackForm(false);
-        const updatedRating = await fetchAverageRating();
+        setHasRated(true);
+        const updatedRating = await handleAverageRating();
         setAverageRating(updatedRating);
       } else {
         setErrorMessage("Failed to submit feedback.");
@@ -88,7 +103,7 @@ const EventInfo: React.FC = () => {
     }
   };
 
-  const fetchAverageRating = async (): Promise<number> => {
+  const handleAverageRating = async (): Promise<number> => {
     try {
       const response = await fetch(
         `http://localhost:5097/api/v1/attendance/event/${eventId}/average-rating`
@@ -118,6 +133,8 @@ const EventInfo: React.FC = () => {
         setSuccessMessage("Event attended successfully!");
         setErrorMessage("");
         setIsAttending(true);
+        await fetchAverageRating();
+        await fetchHasRated();
       } else {
         setErrorMessage("Failed to attend event.");
       }
@@ -143,6 +160,8 @@ const EventInfo: React.FC = () => {
         setSuccessMessage("Left event successfully!");
         setErrorMessage("");
         setIsAttending(false);
+        setHasRated(false);
+        await fetchAverageRating();
       } else {
         setErrorMessage("Failed to leave event.");
       }
@@ -168,7 +187,7 @@ const EventInfo: React.FC = () => {
                   onClick={() => setShowFeedbackForm(true)}
                   className="ml-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
                 >
-                  Rate Event
+                  {hasRated ? "Edit Rating" : "Rate Event"}
                 </button>
               </div>
             )}

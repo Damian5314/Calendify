@@ -116,7 +116,6 @@ namespace StarterKit.Controllers
             return Ok(events);
         }
 
-
         [HttpGet("event/{eventId}/is-attending")]
         public IActionResult IsUserAttending(int eventId, [FromQuery] int userId)
         {
@@ -160,6 +159,15 @@ namespace StarterKit.Controllers
 
             var averageRating = ratings.Average();
             return Ok(new { EventId = eventId, AverageRating = averageRating });
+        }
+
+        [HttpGet("event/{eventId}/has-rated")]
+        public IActionResult HassUserRated(int eventId, [FromQuery] int userId)
+        {
+            var ratingExists = _context.Event_Attendance
+                .Any(ea => ea.EventId == eventId && ea.UserId == userId && ea.Rating != 0);
+
+            return Ok(new { HasRated = ratingExists });
         }
     }
 

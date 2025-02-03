@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { FaCalendarAlt, FaClock, FaMapMarkerAlt } from "react-icons/fa";
 import UserDashboardSidebar from "./UserDashboardSidebar";
+import { useUser } from "./UserContext";
+
+interface Event_Attendance {
+  userId: number;
+  eventId: number;
+}
 
 interface Event {
   id: number;
@@ -11,11 +17,13 @@ interface Event {
   startTime: string;
   endTime: string;
   location: string;
+  event_Attendances: Event_Attendance[];
 }
 
 const AvailableEvents: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState("");
+  const { userId } = useUser();
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
@@ -27,11 +35,17 @@ const AvailableEvents: React.FC = () => {
         }
         const data = await response.json();
 
-        // Get today's date
         const today = new Date().toISOString().split("T")[0];
 
-        // Filter to show only upcoming events
-        const upcomingEvents = data.filter((event: Event) => event.eventDate >= today);
+        // Filter for upcoming events the user is NOT attending
+        const upcomingEvents = data.filter((event: Event) => {
+          const isUpcoming = event.eventDate >= today;
+          const isUserAttending = event.event_Attendances.some(
+            (attendance) => attendance.userId === userId
+          );
+
+          return isUpcoming && !isUserAttending; // Show only if user is NOT attending
+        });
 
         setEvents(upcomingEvents);
       } catch (error) {
@@ -41,7 +55,7 @@ const AvailableEvents: React.FC = () => {
     };
 
     fetchEvents();
-  }, []);
+  }, [userId]);
 
   return (
     <div className="flex">
