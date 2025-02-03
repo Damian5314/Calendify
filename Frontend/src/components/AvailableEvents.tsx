@@ -49,7 +49,7 @@ const AvailableEvents: React.FC = () => {
       <UserDashboardSidebar role="User" />
 
       {/* Main Content */}
-      <div className="ml-64 p-8 bg-gray-100 min-h-screen w-full">
+      <div className="flex-1 flex flex-col ml-64 p-8 bg-gray-100 min-h-screen w-full">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Available Events</h1>
 
         {error && <p className="text-red-600">{error}</p>}

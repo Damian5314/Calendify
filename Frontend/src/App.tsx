@@ -21,6 +21,7 @@ import CreateAdmin from "./components/CreateAdmin";
 import EventInfo from "./components/EventInfo";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AvailableEvents from "./components/AvailableEvents";
+import AccountSettings from "./components/AccountSettings";
 import { UserProvider } from "./components/UserContext";
 
 const App: React.FC = () => {
@@ -113,6 +114,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute allowedRoles={["User"]}>
                 <AvailableEvents />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/accounts-settings"
+            element={
+              <ProtectedRoute allowedRoles={["User"]}>
+                <AccountSettings />
               </ProtectedRoute>
             }
           />

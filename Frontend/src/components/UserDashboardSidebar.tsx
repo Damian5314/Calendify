@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCalendarAlt, FaSignOutAlt, FaList } from "react-icons/fa";
+import { FaUserCog, FaCalendarAlt, FaSignOutAlt, FaList } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./UserContext";
 
@@ -33,15 +33,6 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({ role }) => {
           </a>
         </li>
         <li className="flex items-center space-x-2">
-          <FaCalendarAlt className="text-blue-600" />
-          <a
-            href="/calendar"
-            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
-          >
-            Event Calendar
-          </a>
-        </li>
-        <li className="flex items-center space-x-2">
           <FaList className="text-blue-600" />
           <button
             onClick={() => navigate("/available-events")}
@@ -49,6 +40,15 @@ const UserDashboardSidebar: React.FC<{ role: string }> = ({ role }) => {
           >
             Available Events
           </button>
+        </li>
+        <li className="flex items-center space-x-2">
+          <FaUserCog className="text-blue-600" />
+          <a
+            href="/accounts-settings"
+            className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
+          >
+            Account Settings
+          </a>
         </li>
       </ul>
 
