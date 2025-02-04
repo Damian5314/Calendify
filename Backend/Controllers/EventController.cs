@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Authorization; // Importeert autorisatiefunctionaliteit om toegang te beperken
-using Microsoft.AspNetCore.Mvc; // Importeert de functionaliteit voor het maken van API-controllers
-using StarterKit.Services; // Importeert services, waaronder IEventStorage, om met evenementen te werken
-using StarterKit.Models; // Importeert modellen, waaronder Event, die de structuur van gegevens beschrijven
+using Microsoft.AspNetCore.Mvc;
+using StarterKit.Services;
+using StarterKit.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace StarterKit.Controllers
 {
@@ -10,62 +10,78 @@ namespace StarterKit.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventStorage _eventStorage;
+        private readonly DatabaseContext _context;
 
-        public EventController(IEventStorage eventStorage)
+        public EventController(IEventStorage eventStorage, DatabaseContext context)
         {
             _eventStorage = eventStorage;
+            _context = context;
         }
 
-        [HttpGet] // Dit is een GET-verzoek, wat betekent dat de methode gegevens zal ophalen
+        [HttpGet]
         public async Task<IActionResult> GetEvents()
         {
-            return Ok(await _eventStorage.ReadEvents()); // Geeft de lijst van evenementen terug met een 200 OK-status
+            return Ok(await _eventStorage.ReadEvents());
         }
 
-        [HttpGet("{eventId:int}")] // Dit is een GET-verzoek dat een specifieke ID accepteert in de URL
+        [HttpGet("{eventId:int}")]
         public async Task<IActionResult> GetEventById(int eventId)
         {
             var eventDetails = await _eventStorage.GetEventById(eventId);
-
             if (eventDetails == null)
             {
                 return NotFound(new { message = "Event not found" });
             }
-
             return Ok(eventDetails);
         }
 
-        [HttpPost] // Dit is een POST-verzoek, wat betekent dat de methode gegevens zal verzenden (om een evenement aan te maken)
+        [HttpPost]
         public async Task<IActionResult> CreateEvent([FromBody] Event e)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Retourneert 400 Bad Request als de JSON onvolledig is
+                return BadRequest(ModelState);
             }
 
             await _eventStorage.CreateEvent(e);
-
-            return Ok("Event has been created"); // Retourneert 200 OK met een bevestigingsbericht
+            return Ok("Event has been created");
         }
 
-        [HttpDelete("{eventId:int}")] // Dit is een DELETE-verzoek en verwacht een eventId in de URL als integer
-        public async Task<IActionResult> DeleteEvent([FromRoute] int eventId)
+        [HttpDelete("{eventId:int}")]
+        public async Task<IActionResult> DeleteEvent(int eventId)
         {
             bool isDeleted = await _eventStorage.DeleteEvent(eventId);
-
-            return isDeleted 
-                ? Ok($"Event with id {eventId} deleted") // Retourneert 200 OK met een bericht dat het evenement is verwijderd
-                : NotFound("Event with that Id doesn't exist."); // Retourneert 404 Not Found als het evenement niet bestaat
+            return isDeleted ? Ok($"Event with id {eventId} deleted") : NotFound("Event not found.");
         }
 
-        [HttpPut("{eventId:int}")] // Dit is een PUT-verzoek en verwacht een eventId in de URL als integer
-        public async Task<IActionResult> UpdateEvent([FromRoute] int eventId, [FromBody] Event e)
+        [HttpPut("{eventId:int}")]
+        public async Task<IActionResult> UpdateEvent(int eventId, [FromBody] Event e)
         {
             bool isUpdated = await _eventStorage.Put(eventId, e);
+            return isUpdated ? Ok($"Event with id {eventId} updated") : NotFound("Event not found.");
+        }
 
-            return isUpdated 
-                ? Ok($"Event with id {eventId} updated") // Retourneert 200 OK met een bericht dat het evenement is bijgewerkt
-                : NotFound("Event with that Id doesn't exist."); // Retourneert 404 Not Found als het evenement niet bestaat
+        // 🔹 Filter evenementen op basis van recuringDays van de gebruiker
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetUserEvents(int userId)
+        {
+            var user = await _context.User.FindAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var recuringDays = user.RecuringDays.Split(',')
+                .Select(d => d.Trim().ToLower()) // 🔹 Zorg ervoor dat alles lowercase is
+                .ToList();
+
+            var events = await _eventStorage.ReadEvents();
+
+            var userEvents = events
+                .Where(e => recuringDays.Contains(e.EventDate.ToDateTime(TimeOnly.MinValue).DayOfWeek.ToString().ToLower()))
+                .ToList();
+
+            return Ok(userEvents);
         }
     }
 }

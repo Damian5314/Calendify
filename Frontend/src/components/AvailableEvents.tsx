@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import { FaCalendarAlt, FaClock, FaMapMarkerAlt } from "react-icons/fa";
 import UserDashboardSidebar from "./UserDashboardSidebar";
 import { useUser } from "./UserContext";
+import moment from "moment";
 
 interface Event_Attendance {
   userId: number;
@@ -10,6 +11,7 @@ interface Event_Attendance {
 }
 
 interface Event {
+  eventId: number;
   id: number;
   title: string;
   description: string;
@@ -23,8 +25,8 @@ interface Event {
 const AvailableEvents: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState("");
-  const { userId } = useUser();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const { userId, recuringDays } = useUser();
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -35,16 +37,11 @@ const AvailableEvents: React.FC = () => {
         }
         const data = await response.json();
 
-        const today = new Date().toISOString().split("T")[0];
+        const today = moment().format("YYYY-MM-DD");
 
-        // Filter for upcoming events the user is NOT attending
+        // 🔹 Alleen toekomstige events tonen
         const upcomingEvents = data.filter((event: Event) => {
-          const isUpcoming = event.eventDate >= today;
-          const isUserAttending = event.event_Attendances.some(
-            (attendance) => attendance.userId === userId
-          );
-
-          return isUpcoming && !isUserAttending; // Show only if user is NOT attending
+          return event.eventDate >= today;
         });
 
         setEvents(upcomingEvents);
@@ -55,7 +52,28 @@ const AvailableEvents: React.FC = () => {
     };
 
     fetchEvents();
-  }, [userId]);
+  }, [userId, recuringDays]);
+
+  // 🔹 Debugging log om te controleren welke dagen worden vergeleken
+  console.log("User's recurring days:", recuringDays);
+
+  // 🔹 Filter de events die de gebruiker kan bijwonen
+  const eventsUserCanAttend = events.filter((event) => {
+    const eventDay = moment(event.eventDate, "YYYY-MM-DD").format("dddd").toLowerCase();
+    
+    console.log(`Event: ${event.title} - Event Day: ${eventDay}`);
+
+    return recuringDays.includes(eventDay);
+  });
+
+  const handleEventClick = (event: Event) => {
+    const eventDay = moment(event.eventDate, "YYYY-MM-DD").format("dddd").toLowerCase();
+    if (recuringDays.includes(eventDay)) {
+      navigate(`/event-info/${event.eventId}`);
+    } else {
+      alert("You can't attend this event. It is not on your recurring days.");
+    }
+  };
 
   return (
     <div className="flex">
@@ -69,6 +87,8 @@ const AvailableEvents: React.FC = () => {
         {error && <p className="text-red-600">{error}</p>}
 
         <div className="bg-white shadow-lg rounded-lg p-6">
+          {/* 🔹 Alle komende evenementen */}
+          <h2 className="text-xl font-bold text-gray-700 mb-4">All Upcoming Events</h2>
           {events.length === 0 ? (
             <p className="text-gray-600">No upcoming events available.</p>
           ) : (
@@ -77,9 +97,39 @@ const AvailableEvents: React.FC = () => {
                 <li
                   key={event.id}
                   className="p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-300 cursor-pointer"
-                  onClick={() => navigate(`/event-info/${event.eventId}`)} // Navigate to EventInfo page
+                  onClick={() => handleEventClick(event)}
                 >
                   <h2 className="text-xl font-bold text-blue-600 flex items-center">
+                    <FaCalendarAlt className="mr-2" /> {event.title}
+                  </h2>
+                  <p className="text-gray-700">{event.description}</p>
+                  <p className="text-gray-500 flex items-center mt-2">
+                    <FaClock className="mr-2" />
+                    {event.eventDate} | {event.startTime} - {event.endTime}
+                  </p>
+                  <p className="text-gray-500 flex items-center">
+                    <FaMapMarkerAlt className="mr-2" /> {event.location}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* 🔹 Events die de gebruiker KAN bijwonen */}
+        <div className="bg-white shadow-lg rounded-lg p-6 mt-8 border-t-4 border-green-500">
+          <h2 className="text-xl font-bold text-green-700 mb-4">Events You Can Attend</h2>
+          {eventsUserCanAttend.length === 0 ? (
+            <p className="text-gray-600">No events available based on your recurring days.</p>
+          ) : (
+            <ul className="space-y-4">
+              {eventsUserCanAttend.map((event) => (
+                <li
+                  key={event.id}
+                  className="p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-300 cursor-pointer"
+                  onClick={() => navigate(`/event-info/${event.eventId}`)}
+                >
+                  <h2 className="text-xl font-bold text-green-600 flex items-center">
                     <FaCalendarAlt className="mr-2" /> {event.title}
                   </h2>
                   <p className="text-gray-700">{event.description}</p>

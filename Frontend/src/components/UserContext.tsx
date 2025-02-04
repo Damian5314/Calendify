@@ -10,33 +10,47 @@ interface UserContextType {
   userId: number | null;
   userName: string | null;
   role: string | null;
+  recuringDays: string[];
   setUserId: (id: number | null) => void;
   setUserName: (name: string | null) => void;
   setRole: (role: string | null) => void;
-  logout: () => void; // New logout function
+  setRecuringDays: (days: string[]) => void;
+  logout: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [userId, setUserIdState] = useState<number | null>(null);
   const [userName, setUserNameState] = useState<string | null>(null);
   const [role, setRoleState] = useState<string | null>(null);
+  const [recuringDays, setRecuringDaysState] = useState<string[]>([]);
 
-  // Load user session from localStorage on app startup
+  // 🔹 Load user session from localStorage on app startup
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     const storedUserName = localStorage.getItem("userName");
     const storedRole = localStorage.getItem("role");
+    const storedDays = localStorage.getItem("recuringDays");
 
     if (storedUserId) setUserIdState(parseInt(storedUserId, 10));
     if (storedUserName) setUserNameState(storedUserName);
     if (storedRole) setRoleState(storedRole);
+    if (storedDays) {
+      try {
+        // 🔹 Zorg ervoor dat alles correct wordt verwerkt (trim + lowercase)
+        const parsedDays = JSON.parse(storedDays);
+        if (Array.isArray(parsedDays)) {
+          setRecuringDaysState(parsedDays.map((day: string) => day.trim().toLowerCase()));
+        }
+      } catch (error) {
+        console.error("Error parsing recurring days from localStorage:", error);
+        setRecuringDaysState([]); // Fallback als er een fout is
+      }
+    }
   }, []);
 
-  // Store session in localStorage on changes
+  // 🔹 Store session in localStorage on changes
   const setUserId = (id: number | null) => {
     if (id !== null) localStorage.setItem("userId", id.toString());
     else localStorage.removeItem("userId");
@@ -55,14 +69,22 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     setRoleState(role);
   };
 
-  // Logout function: Clear localStorage and reset state
+  const setRecuringDays = (days: string[]) => {
+    try {
+      const formattedDays = days.map((day) => day.trim().toLowerCase());
+      localStorage.setItem("recuringDays", JSON.stringify(formattedDays));
+      setRecuringDaysState(formattedDays);
+    } catch (error) {
+      console.error("Error saving recurring days to localStorage:", error);
+    }
+  };
+
   const logout = () => {
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("role");
+    localStorage.clear();
     setUserIdState(null);
     setUserNameState(null);
     setRoleState(null);
+    setRecuringDaysState([]);
   };
 
   return (
@@ -71,9 +93,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
         userId,
         userName,
         role,
+        recuringDays,
         setUserId,
         setUserName,
         setRole,
+        setRecuringDays,
         logout,
       }}
     >
