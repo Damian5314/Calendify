@@ -84,7 +84,7 @@ namespace StarterKit.Controllers
 
             var attendees = _context.Event_Attendance
                 .Where(ea => ea.Event.EventId == eventId)
-                .Select(ea => new { ea.User.FirstName, ea.User.LastName })
+                .Select(ea => new { ea.User.FirstName, ea.User.LastName, ea.User.UserId })
                 .ToList();
 
             return Ok(attendees);
