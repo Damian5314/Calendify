@@ -5,6 +5,7 @@ import AdminDashboardSidebar from "./AdminDashboardSidebar";
 const EditEvent: React.FC = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
+  
   const [eventData, setEventData] = useState({
     title: "",
     description: "",
@@ -13,76 +14,51 @@ const EditEvent: React.FC = () => {
     endTime: "",
     location: "",
   });
+
   const [attendees, setAttendees] = useState<{ 
     userId: number; 
-    userName?: string;
     firstName?: string; 
     lastName?: string;
   }[]>([]);
+
   const [loading, setLoading] = useState(true);
 
-  // Fetch event details and attendees
   useEffect(() => {
-    const fetchEvent = async () => {
+    const fetchEventAndAttendees = async () => {
       try {
-        const response = await fetch(`http://localhost:5097/api/v1/events/${eventId}`);
-        const data = await response.json();
+        const eventResponse = await fetch(`http://localhost:5097/api/v1/events/${eventId}`);
+        const eventData = await eventResponse.json();
+        setEventData(eventData);
 
-        console.log("Fetched event data:", data); // Debugging
+        const attendeesResponse = await fetch(`http://localhost:5097/api/v1/attendance/event/${eventId}`);
+        const attendeesData = await attendeesResponse.json();
 
-        setEventData(data); // Ensure all fields (adminApproval, event_Attendances) are included
-        setAttendees(data.event_Attendances || []); // ✅ This now executes
+        setAttendees(attendeesData.map((att: { 
+          userId: number; 
+          firstName: string; 
+          lastName: string;
+        }) => ({
+          userId: att.userId,
+          firstName: att.firstName || "Unknown",
+          lastName: att.lastName || "User",
+        })));
 
       } catch (error) {
-        console.error("Error fetching event:", error);
+        console.error("Error fetching event or attendees:", error);
       } finally {
         setLoading(false);
       }
     };
 
-  fetchEvent();
-}, [eventId]);
-
-useEffect(() => {
-  const fetchUserNames = async () => {
-    const updatedAttendees = await Promise.all(
-      attendees.map(async (attendee) => {
-        try {
-          const response = await fetch(`http://localhost:5097/api/v1/users/${attendee.userId}`);
-          const userData = await response.json();
-          
-          return { 
-            ...attendee, 
-            firstName: userData.firstName, 
-            lastName: userData.lastName 
-          };
-        } catch (error) {
-          console.error("Error fetching user:", error);
-          return { 
-            ...attendee, 
-            firstName: "Unknown", 
-            lastName: "User" 
-          }; // Fallback name
-        }
-      })
-    );
-
-    setAttendees(updatedAttendees);
-  };
-
-  if (attendees.length > 0) {
-    fetchUserNames();
-  }
-  }, [attendees]);
+    fetchEventAndAttendees();
+  }, [eventId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch(`http://localhost:5097/api/v1/events/${eventId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(eventData),
       });
 
@@ -96,16 +72,14 @@ useEffect(() => {
       console.error("Error updating event:", error);
     }
   };
-    
+
 
   const handleDelete = async () => {
     const confirmation = window.confirm("Are you sure you want to delete this event?");
     if (!confirmation) return;
 
     try {
-      const response = await fetch(`http://localhost:5097/api/v1/events/${eventId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(`http://localhost:5097/api/v1/events/${eventId}`, { method: "DELETE" });
 
       if (response.ok) {
         alert("Event deleted successfully!");
