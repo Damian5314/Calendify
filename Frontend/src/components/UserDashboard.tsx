@@ -1,44 +1,10 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { useUser } from "./UserContext";
 import UserDashboardSidebar from "./UserDashboardSidebar";
 import CalendarPage from "./Calendar";
-import { useUser } from "./UserContext";
 
 const UserDashboard: React.FC = () => {
-  const { userName, setUserId, setUserName, setRole } = useUser();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleBackButton = () => {
-      console.log("User pressed back - Logging out");
-
-      // ✅ Clear session and logout
-      fetch("http://localhost:5097/api/v1/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      })
-        .then(() => {
-          // ✅ Clear local storage & user context
-          localStorage.removeItem("userId");
-          localStorage.removeItem("userName");
-          localStorage.removeItem("role");
-
-          setUserId(null);
-          setUserName(null);
-          setRole(null);
-
-          // ✅ Redirect to login page
-          navigate("/login", { replace: true });
-        })
-        .catch((err) => console.error("Error during logout:", err));
-    };
-
-    window.addEventListener("popstate", handleBackButton); // 🔹 Detect back button
-
-    return () => {
-      window.removeEventListener("popstate", handleBackButton);
-    };
-  }, [navigate, setUserId, setUserName, setRole]);
+  const { userName } = useUser();
 
   return (
     <div className="flex h-screen">
