@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCalendarAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaUsers, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./UserContext";
 
@@ -57,12 +57,12 @@ const AdminDashboardSidebar: React.FC = () => {
           </a>
         </li>
         <li className="flex items-center space-x-2">
-          <FaCalendarAlt className="text-blue-600" />
+          <FaUsers className="text-blue-600" />
           <a
-            href="/AdminCalendar"
+            href="/Create-Admin"
             className="text-blue-800 hover:text-green-600 font-medium transition duration-200"
           >
-            Event Management
+            Create admin
           </a>
         </li>
       </ul>
