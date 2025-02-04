@@ -13,7 +13,7 @@ interface UserContextType {
   setUserId: (id: number | null) => void;
   setUserName: (name: string | null) => void;
   setRole: (role: string | null) => void;
-  logout: () => void;
+  logout: () => void; // New logout function
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -25,7 +25,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   const [userName, setUserNameState] = useState<string | null>(null);
   const [role, setRoleState] = useState<string | null>(null);
 
-  // Load user data from localStorage
+  // Load user session from localStorage on app startup
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     const storedUserName = localStorage.getItem("userName");
@@ -34,24 +34,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUserId) setUserIdState(parseInt(storedUserId, 10));
     if (storedUserName) setUserNameState(storedUserName);
     if (storedRole) setRoleState(storedRole);
-
-    // Listen for changes in localStorage to synchronize logout across tabs
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === "logout" && event.newValue === "true") {
-        setUserIdState(null);
-        setUserNameState(null);
-        setRoleState(null);
-        localStorage.clear(); // Clear all localStorage data
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
   }, []);
 
+  // Store session in localStorage on changes
   const setUserId = (id: number | null) => {
     if (id !== null) localStorage.setItem("userId", id.toString());
     else localStorage.removeItem("userId");
@@ -70,13 +55,14 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     setRoleState(role);
   };
 
+  // Logout function: Clear localStorage and reset state
   const logout = () => {
-    setUserId(null);
-    setUserName(null);
-    setRole(null);
-    localStorage.clear();
-    localStorage.setItem("logout", "true"); // Trigger storage event
-    setTimeout(() => localStorage.removeItem("logout"), 0); // Cleanup
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("role");
+    setUserIdState(null);
+    setUserNameState(null);
+    setRoleState(null);
   };
 
   return (
