@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StarterKit.Models;
 using StarterKit.Services;
-using System.Security.Cryptography;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace StarterKit.Controllers
 {
@@ -13,16 +9,13 @@ namespace StarterKit.Controllers
     public class LoginController : ControllerBase
     {
         private readonly ILoginService _loginService;
-        private readonly IConfiguration _configuration;
-        private readonly DatabaseContext _context;
 
-        public LoginController(ILoginService loginService, IConfiguration configuration, DatabaseContext context)
+        public LoginController(ILoginService loginService)
         {
             _loginService = loginService;
-            _configuration = configuration;
-            _context = context;
         }
 
+        // User Registration
         [HttpPost("register")]
         public IActionResult RegisterUser([FromBody] User user)
         {
@@ -55,6 +48,7 @@ namespace StarterKit.Controllers
             return Ok(new { Message = "User registered successfully." });
         }
 
+        // User & Admin Login
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
@@ -63,50 +57,33 @@ namespace StarterKit.Controllers
                 return BadRequest(new { Message = "Email and Password are required." });
             }
 
+            // Check for Admin login
             var (isAdmin, role) = _loginService.AdminLogin(loginRequest.Email, loginRequest.Password);
-            var (userStatus, userRole) = _loginService.CheckPassword(loginRequest.Email, loginRequest.Password);
-
-            if (isAdmin || userStatus == LoginStatus.Success)
+            if (isAdmin)
             {
-                var (userId, firstName) = isAdmin 
-                    ? (_loginService.GetAdminIdByEmail(loginRequest.Email), _loginService.GetUserNameByEmailAdmin(loginRequest.Email))
-                    : (_loginService.GetUserIdByEmail(loginRequest.Email), _loginService.GetFirstNameByEmail(loginRequest.Email));
+                var userId = _loginService.GetAdminIdByEmail(loginRequest.Email);
+                var firstName = _loginService.GetUserNameByEmailAdmin(loginRequest.Email);
+                HttpContext.Session.SetString("Role", role);
 
-                // Find the correct user type
-                object userObject = isAdmin 
-                    ? _context.Admin.FirstOrDefault(a => a.Email == loginRequest.Email) 
-                    : _context.User.FirstOrDefault(u => u.Email == loginRequest.Email);
+                return Ok(new { Message = "Login successful.", Role = role, UserId = userId, FirstName = firstName });
+            }
 
-                if (userObject == null)
-                    return NotFound(new { Message = "User not found." });
+            // Check for User login
+            var status = _loginService.CheckPassword(loginRequest.Email, loginRequest.Password);
+            if (status == LoginStatus.Success)
+            {
+                var userId = _loginService.GetUserIdByEmail(loginRequest.Email);
+                var firstName = _loginService.GetFirstNameByEmail(loginRequest.Email);
+                HttpContext.Session.SetString("Role", "User");
 
-                string refreshToken = GenerateRefreshToken();
-                
-                // Update the refresh token based on user type
-                if (isAdmin)
-                {
-                    Admin admin = (Admin)userObject;
-                    admin.RefreshToken = refreshToken;
-                    admin.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-                }
-                else
-                {
-                    User user = (User)userObject;
-                    user.RefreshToken = refreshToken;
-                    user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-                }
-                _context.SaveChanges();
-
-                SetRefreshTokenCookie(refreshToken);
-
-                HttpContext.Session.SetString("Role", isAdmin ? role : userRole);
-
-                return Ok(new { Message = "Login successful.", Role = isAdmin ? role : userRole, UserId = userId, FirstName = firstName });
+                return Ok(new { Message = "Login successful.", Role = "User", UserId = userId, FirstName = firstName });
             }
 
             return Unauthorized(new { Message = "Invalid email or password." });
         }
 
+
+        // Admin Registration
         [HttpPost("register-admin")]
         public IActionResult RegisterAdmin([FromBody] Admin admin)
         {
@@ -133,6 +110,7 @@ namespace StarterKit.Controllers
             }
         }
 
+        // Check if Logged In
         [HttpGet("is-logged-in")]
         public IActionResult IsLoggedIn()
         {
@@ -148,16 +126,16 @@ namespace StarterKit.Controllers
             return Ok(new { Message = $"Logged in as {role}", Role = role });
         }
 
+        // Logout
         [HttpPost("logout")]
         public IActionResult Logout()
         {
             Console.WriteLine("[Logout] Logging out user.");
             HttpContext.Session.Clear();
-            Response.Cookies.Delete("refreshToken");
-
             return Ok(new { Message = "Logged out successfully." });
         }
 
+        // Forgot Password: Generate Reset Token
         [HttpPost("forgot-password")]
         public IActionResult ForgotPassword([FromBody] string email)
         {
@@ -200,6 +178,7 @@ namespace StarterKit.Controllers
             });
         }
        
+        // Reset Password
         [HttpPost("reset-password")]
         public IActionResult ResetPassword([FromBody] ResetPasswordRequest request)
         {
@@ -228,59 +207,6 @@ namespace StarterKit.Controllers
                 Console.WriteLine($"[ResetPassword] Error: {ex.Message}");
                 return BadRequest(new { Message = ex.Message });
             }
-        }
-
-        [HttpPost("refresh-token")]
-        public IActionResult RefreshToken()
-        {
-            if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
-                return Unauthorized(new { Message = "No refresh token provided." });
-
-            var user = _context.User.FirstOrDefault(u => u.RefreshToken == refreshToken);
-            if (user == null)
-            {
-                // If user is not found in User table, check in Admin table
-                var admin = _context.Admin.FirstOrDefault(a => a.RefreshToken == refreshToken);
-                if (admin == null || admin.RefreshTokenExpiry < DateTime.UtcNow)
-                    return Unauthorized(new { Message = "Invalid or expired refresh token." });
-
-                HttpContext.Session.SetInt32("UserId", admin.AdminId);
-                HttpContext.Session.SetString("FirstName", admin.UserName);
-                HttpContext.Session.SetString("Role", "Admin");
-
-                return Ok(new { Message = "Session restored.", UserId = admin.AdminId, FirstName = admin.UserName, Role = "Admin" });
-            }
-            else if (user.RefreshTokenExpiry < DateTime.UtcNow)
-            {
-                return Unauthorized(new { Message = "Invalid or expired refresh token." });
-            }
-
-            HttpContext.Session.SetInt32("UserId", user.UserId);
-            HttpContext.Session.SetString("FirstName", user.FirstName);
-            HttpContext.Session.SetString("Role", user.Role);
-
-            return Ok(new { Message = "Session restored.", UserId = user.UserId, FirstName = user.FirstName, Role = user.Role });
-        }
-
-        private string GenerateRefreshToken()
-        {
-            var randomBytes = new byte[64];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomBytes);
-                return Convert.ToBase64String(randomBytes);
-            }
-        }
-
-        private void SetRefreshTokenCookie(string token)
-        {
-            Response.Cookies.Append("refreshToken", token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(7)
-            });
         }
     }
 }

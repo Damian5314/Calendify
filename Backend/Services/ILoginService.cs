@@ -4,10 +4,10 @@ namespace StarterKit.Services
 {
     public interface ILoginService
     {
-        // Method to perform password check
-        (LoginStatus status, string role) CheckPassword(string email, string password);
+        // Methode om wachtwoordcontrole uit te voeren
+        LoginStatus CheckPassword(string email, string password);
         
-        // Method to get user ID by email
+        // Methode om de gebruikers-ID op te halen via e-mail
         int GetUserIdByEmail(string email);
 
         int GetAdminIdByEmail(string email);
@@ -16,18 +16,15 @@ namespace StarterKit.Services
 
         string GetUserNameByEmailAdmin(string email);
         
-        // Method to register a new user
+        // Methode om een nieuwe gebruiker te registreren
         bool RegisterUser(string firstName, string lastName, string email, string password, string recuringDays);
         
-        // Admin methods
+        // Methodes voor admins
         bool RegisterAdmin(string userName, string email, string password);
         (bool isValid, string role) AdminLogin(string email, string password);
 
-        // Password reset functionality
-        bool GeneratePasswordResetToken(string email); // Generates a token and sends it via email
-        bool ResetPassword(string token, string newPassword); // Validates the token and resets the password
-        
-        // Remove or correct this method as it's not implemented in LoginService
-        // object ValidateUser(string email, string password);
+        // Wachtwoord vergeten-functionaliteit
+        bool GeneratePasswordResetToken(string email); // Genereert een token en verstuurt het via e-mail
+        bool ResetPassword(string token, string newPassword); // Valideert de token en reset het wachtwoord
     }
 }

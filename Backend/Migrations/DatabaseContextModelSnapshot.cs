@@ -15,7 +15,7 @@ namespace StarterKit.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
             modelBuilder.Entity("StarterKit.Models.Admin", b =>
                 {
@@ -29,12 +29,6 @@ namespace StarterKit.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("RefreshTokenExpiry")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserName")
@@ -196,12 +190,6 @@ namespace StarterKit.Migrations
 
                     b.Property<string>("RecuringDays")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("RefreshTokenExpiry")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Role")

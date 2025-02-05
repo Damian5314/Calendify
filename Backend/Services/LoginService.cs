@@ -1,7 +1,5 @@
 using StarterKit.Models;
 using System;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace StarterKit.Services
 {
@@ -15,28 +13,24 @@ namespace StarterKit.Services
         }
 
         // Check Password for both User and Admin
-        public (LoginStatus status, string role) CheckPassword(string email, string password)
+        public LoginStatus CheckPassword(string email, string password)
         {
             Console.WriteLine($"[CheckPassword] Validating user with email: {email}");
 
             var admin = _context.Admin.FirstOrDefault(a => a.Email == email);
             if (admin != null)
             {
-                // Here you would typically use a secure comparison method for hashed passwords
-                // For simplicity, we're using plain text comparison
-                return (admin.Password == password ? LoginStatus.Success : LoginStatus.IncorrectPassword, "Admin");
+                return admin.Password == password ? LoginStatus.Success : LoginStatus.IncorrectPassword;
             }
 
             var user = _context.User.FirstOrDefault(u => u.Email == email);
             if (user != null)
             {
-                // Here you would typically use a secure comparison method for hashed passwords
-                // For simplicity, we're using plain text comparison
-                return (user.Password == password ? LoginStatus.Success : LoginStatus.IncorrectPassword, user.Role ?? "User");
+                return user.Password == password ? LoginStatus.Success : LoginStatus.IncorrectPassword;
             }
 
             Console.WriteLine($"[CheckPassword] Email '{email}' not found.");
-            return (LoginStatus.IncorrectEmail, string.Empty);
+            return LoginStatus.IncorrectEmail;
         }
 
         // Register User
@@ -57,8 +51,7 @@ namespace StarterKit.Services
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
-                    // In a real application, hash the password before storing
-                    Password = HashPassword(password), 
+                    Password = password, // Store plain-text password
                     Role = "User",
                     RecuringDays = recuringDays
                 };
@@ -97,8 +90,7 @@ namespace StarterKit.Services
                 {
                     UserName = userName,
                     Email = email,
-                    // In a real application, hash the password before storing
-                    Password = HashPassword(password)
+                    Password = password // Store plain-text password
                 };
 
                 _context.Admin.Add(newAdmin);
@@ -137,27 +129,26 @@ namespace StarterKit.Services
             var user = _context.User.FirstOrDefault(u => u.Email == email);
             return user?.UserId ?? 0;
         }
-
         public int GetAdminIdByEmail(string email)
         {
-            Console.WriteLine($"[GetAdminIdByEmail] Fetching admin ID for email: {email}");
-            var admin = _context.Admin.FirstOrDefault(a => a.Email == email);
-            return admin?.AdminId ?? 0;
+            Console.WriteLine($"[GetUserIdByEmail] Fetching user ID for email: {email}");
+            var user = _context.Admin.FirstOrDefault(u => u.Email == email);
+            return user?.AdminId ?? 0;
         }
 
-        // Get User Name by Email
+        // Get User Name by ID
         public string GetFirstNameByEmail(string email)
         {
-            Console.WriteLine($"[GetFirstNameByEmail] Fetching first name for email: {email}");
+            Console.WriteLine($"[GetUserIdByEmail] Fetching user name for Email: {email}");
             var user = _context.User.FirstOrDefault(u => u.Email == email);
             return user?.FirstName ?? "null";
         }
 
         public string GetUserNameByEmailAdmin(string email)
         {
-            Console.WriteLine($"[GetUserNameByEmailAdmin] Fetching user name for email: {email}");
-            var admin = _context.Admin.FirstOrDefault(a => a.Email == email);
-            return admin?.UserName ?? "null";
+            Console.WriteLine($"[GetUserIdByEmail] Fetching user name for Email: {email}");
+            var user = _context.Admin.FirstOrDefault(u => u.Email == email);
+            return user?.UserName ?? "null";
         }
 
         // Generate Password Reset Token
@@ -202,8 +193,7 @@ namespace StarterKit.Services
                     return false;
                 }
 
-                // In a real application, hash the new password before storing
-                user.Password = HashPassword(newPassword);
+                user.Password = newPassword; // Store plain-text password
                 user.PasswordResetToken = null;
                 user.TokenExpiry = null;
 
@@ -223,17 +213,6 @@ namespace StarterKit.Services
         {
             Console.WriteLine($"[ValidateResetToken] Validating token: {token}");
             return _context.User.Any(u => u.PasswordResetToken == token && u.TokenExpiry > DateTime.UtcNow);
-        }
-
-        // Helper method to hash passwords
-        private string HashPassword(string password)
-        {
-            // For demonstration, we're using SHA256 here. In production, use a more secure algorithm like bcrypt or PBKDF2.
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-            }
         }
     }
 }
