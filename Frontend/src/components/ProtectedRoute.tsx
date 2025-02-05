@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useUser } from "./UserContext";
 
@@ -11,18 +11,31 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   allowedRoles,
   children,
 }) => {
-  const { role } = useUser();
-  const storedRole = localStorage.getItem("role");
+  const { role, userId, setUserId, setRole, setUserName } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Check if role exists either in state or localStorage
-  if (!role && !storedRole) {
-    return <Navigate to="/login" replace />;
+  useEffect(() => {
+    // Check localStorage for user details
+    const storedUserId = localStorage.getItem("userId");
+    const storedRole = localStorage.getItem("role");
+    const storedUserName = localStorage.getItem("userName");
+
+    if (storedUserId && storedRole && storedUserName) {
+      setUserId(parseInt(storedUserId, 10));
+      setRole(storedRole);
+      setUserName(storedUserName);
+    }
+
+    setIsLoading(false); // Ensure ProtectedRoute only evaluates after checking localStorage
+  }, [setUserId, setRole, setUserName]);
+
+  // While checking session details, show a loading state
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
-  // Use storedRole if role is null (ensures protection after refresh)
-  const userRole = role || storedRole;
-
-  if (!allowedRoles.includes(userRole!)) {
+  // Redirect to login if no valid session or role mismatch
+  if (!role || !userId || !allowedRoles.includes(role)) {
     return <Navigate to="/login" replace />;
   }
 
