@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useUser } from "./UserContext";
-
+import React, { useState, useEffect } from "react"; // Importeer React en zijn hooks
+import axios from "axios"; // Importeer axios voor API-aanroepen
+import { useNavigate } from "react-router-dom"; // Importeer useNavigate hook voor navigatie
+import { useUser } from "./UserContext"; // Importeer useUser hook voor gebruikersgegevens
 
 const LoginPage: React.FC = () => {
-  const { setUserId, setUserName, setRole } = useUser();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const { setUserId, setUserName, setRole } = useUser(); // Gebruik useUser hook om gebruikersgegevens te krijgen
+  const [email, setEmail] = useState(""); // Stel email state in op leeg
+  const [password, setPassword] = useState(""); // Stel password state in op leeg
+  const [errorMessage, setErrorMessage] = useState(""); // Stel error message state in op leeg
+  const [rememberMe, setRememberMe] = useState(false); // Stel remember me state in op false
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Gebruik useNavigate hook voor navigatie
 
   useEffect(() => {
-    // Check if there's an active session using the refresh token
+    // Controleer of er een actieve sessie is met behulp van de refresh token
     axios
       .post(
         "http://localhost:5097/api/v1/auth/refresh-token",
@@ -22,21 +21,22 @@ const LoginPage: React.FC = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        setUserId(res.data.UserId);
-        setUserName(res.data.FirstName);
-        setRole(res.data.Role);
+        setUserId(res.data.UserId); // Stel user ID in
+        setUserName(res.data.FirstName); // Stel user naam in
+        setRole(res.data.Role); // Stel user rol in
         if (res.data.Role === "Admin") {
-          navigate("/admin-dashboard");
+          navigate("/admin-dashboard"); // Navigeer naar admin dashboard
         } else if (res.data.Role === "User") {
-          navigate("/user-dashboard");
+          navigate("/user-dashboard"); // Navigeer naar user dashboard
         }
       })
-      .catch(() => console.log("No active session."));
+      .catch(() => console.log("Geen actieve sessie.")); // Log geen actieve sessie
   }, []);
 
   const handleLogin = async () => {
+    // Controleer of email en password zijn ingevuld
     if (!email || !password) {
-      setErrorMessage("Please fill in both email and password.");
+      setErrorMessage("Vul beide email en password in."); // Stel error message in
       return;
     }
 
@@ -46,37 +46,37 @@ const LoginPage: React.FC = () => {
         {
           email,
           password,
-          rememberMe, // Send rememberMe to the backend
+          rememberMe,
         },
         { withCredentials: true }
       );
 
       const { role, userId, firstName } = response.data;
 
-      setUserId(userId);
-      setUserName(firstName);
-      setRole(role);
+      setUserId(userId); // Stel user ID in
+      setUserName(firstName); // Stel user naam in
+      setRole(role); // Stel user rol in
 
       if (role === "Admin") {
-        navigate("/admin-dashboard");
+        navigate("/admin-dashboard"); // Navigeer naar admin dashboard
       } else if (role === "User") {
-        navigate("/user-dashboard");
+        navigate("/user-dashboard"); // Navigeer naar user dashboard
       } else {
-        setErrorMessage("Unexpected role received from server.");
+        setErrorMessage("Onverwachte rol ontvangen van server."); // Stel error message in
         return;
       }
     } catch (error) {
-      console.error("Login error:", error);
-      setErrorMessage("Invalid email or password. Please try again.");
+      console.error("Login fout:", error); // Log login fout
+      setErrorMessage("Ongeldig email of password. Probeer opnieuw."); 
     }
   };
 
   const handleRegisterRedirect = () => {
-    navigate("/register");
+    navigate("/register"); // Navigeer naar registratie pagina
   };
 
   const handleForgotPasswordRedirect = () => {
-    navigate("/forgot-password");
+    navigate("/forgot-password"); // Navigeer naar wachtwoord vergeten pagina
   };
 
   return (

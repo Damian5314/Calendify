@@ -18,6 +18,7 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
+
 export const UserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -25,7 +26,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   const [userName, setUserNameState] = useState<string | null>(null);
   const [role, setRoleState] = useState<string | null>(null);
 
-  // Load user session from localStorage on app startup
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     const storedUserName = localStorage.getItem("userName");
@@ -36,7 +36,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     if (storedRole) setRoleState(storedRole);
   }, []);
 
-  // Store session in localStorage on changes
   const setUserId = (id: number | null) => {
     if (id !== null) localStorage.setItem("userId", id.toString());
     else localStorage.removeItem("userId");
@@ -55,7 +54,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     setRoleState(role);
   };
 
-  // Logout function: Clear localStorage and reset state
   const logout = () => {
     localStorage.removeItem("userId");
     localStorage.removeItem("userName");

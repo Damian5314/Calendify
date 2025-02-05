@@ -147,15 +147,13 @@ namespace StarterKit.Controllers
             return Ok(new { Message = $"Logged in as {role}", Role = role });
         }
 
-        [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Console.WriteLine("[Logout] Logging out user.");
             HttpContext.Session.Clear();
             Response.Cookies.Delete("refreshToken");
-
             return Ok(new { Message = "Logged out successfully." });
         }
+
 
         [HttpPost("forgot-password")]
         public IActionResult ForgotPassword([FromBody] string email)
@@ -282,16 +280,17 @@ namespace StarterKit.Controllers
 
             if (rememberMe)
             {
-                // If "Remember Me" is checked, set the cookie to expire in 7 days
+                // Persistent cookie for 7 days
                 cookieOptions.Expires = DateTime.UtcNow.AddDays(7);
             }
             else
             {
-                // If "Remember Me" is not checked, make it a session cookie
-                cookieOptions.Expires = null; // This makes it a session cookie which will be removed when the browser is closed
+                // Session cookie (expires when the browser is closed)
+                cookieOptions.Expires = null;
             }
 
             Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
+
     }
 }

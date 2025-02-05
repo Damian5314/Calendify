@@ -1,45 +1,49 @@
-import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { useUser } from "./UserContext";
+import React, { useEffect, useState } from "react"; // Importeer React en zijn hooks
+import { Navigate } from "react-router-dom"; // Importeer Navigate component van react-router-dom
+import { useUser } from "./UserContext"; // Importeer useUser hook uit UserContext
 
 interface ProtectedRouteProps {
-  allowedRoles: string[];
-  children: React.ReactNode;
+  // Definieer interface voor ProtectedRoute component
+  allowedRoles: string[]; // Array van toegestane rollen
+  children: React.ReactNode; // Kinderen van de component
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  allowedRoles,
-  children,
+  // Definieer ProtectedRoute component
+  allowedRoles, // Toegestane rollen
+  children, // Kinderen van de component
 }) => {
-  const { role, userId, setUserId, setRole, setUserName } = useUser();
-  const [isLoading, setIsLoading] = useState(true);
+  const { role, userId, setUserId, setRole, setUserName } = useUser(); // Gebruik useUser hook om user data te krijgen
+  const [isLoading, setIsLoading] = useState(true); // Stel isLoading state in op true
 
   useEffect(() => {
-    // Check localStorage for user details
-    const storedUserId = localStorage.getItem("userId");
-    const storedRole = localStorage.getItem("role");
-    const storedUserName = localStorage.getItem("userName");
+    // Gebruik useEffect hook om localStorage te controleren
+    // Controleer localStorage voor gebruikersgegevens
+    const storedUserId = localStorage.getItem("userId"); // Haal userId op uit localStorage
+    const storedRole = localStorage.getItem("role"); // Haal role op uit localStorage
+    const storedUserName = localStorage.getItem("userName"); // Haal userName op uit localStorage
 
     if (storedUserId && storedRole && storedUserName) {
-      setUserId(parseInt(storedUserId, 10));
-      setRole(storedRole);
-      setUserName(storedUserName);
+      // Als alle gegevens aanwezig zijn
+      setUserId(parseInt(storedUserId, 10)); // Stel userId in
+      setRole(storedRole); // Stel role in
+      setUserName(storedUserName); // Stel userName in
     }
 
-    setIsLoading(false); // Ensure ProtectedRoute only evaluates after checking localStorage
-  }, [setUserId, setRole, setUserName]);
+    setIsLoading(false); // Stel isLoading state in op false
+  }, [setUserId, setRole, setUserName]); // Doe dit alleen als setUserId, setRole of setUserName verandert
 
-  // While checking session details, show a loading state
+  // Toon een laadstatus terwijl de sessiegegevens worden gecontroleerd
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Laden...</div>; // Toon laadstatus
   }
 
-  // Redirect to login if no valid session or role mismatch
+  // Redirect naar login als er geen geldige sessie is of de rol niet overeenkomt
   if (!role || !userId || !allowedRoles.includes(role)) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace />; // Redirect naar login pagina
   }
 
-  return <>{children}</>;
+  return <>{children}</>; // Toon kinderen van de component
 };
 
-export default ProtectedRoute;
+export default ProtectedRoute; // Exporteer ProtectedRoute component
