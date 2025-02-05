@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminDashboardSidebar from "./AdminDashboardSidebar";
 
 
 const CreateEvent: React.FC = () => {
@@ -59,111 +60,124 @@ const CreateEvent: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-blue-100">
-      <h1 className="text-3xl font-bold mb-6 text-blue-700">Create Event</h1>
+    <div className="flex h-screen w-full">
+      {/* Sidebar */}
+      <div className="w-[250px] flex-shrink-0">
+        <AdminDashboardSidebar />
+      </div>
 
-      <div className="bg-white shadow-lg rounded-lg p-8 w-96">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-              Title *
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              Description *
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700">
-              Date *
-            </label>
-            <input
-              type="date"
-              id="eventDate"
-              value={eventDate}
-              onChange={(e) => setEventDate(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">
-              Start Time *
-            </label>
-            <input
-              type="time"
-              id="startTime"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">
-              End Time *
-            </label>
-            <input
-              type="time"
-              id="endTime"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-              Location *
-            </label>
-            <input
-              type="text"
-              id="location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            />
-          </div>
+      {/* Main Content */}
+      <div className="flex-grow flex items-center justify-center bg-blue-100">
 
-          {errorMessage && (
-          <p className="text-red-500 text-center mb-4">{errorMessage}</p>
-          )}
+        <div className="bg-white shadow-lg rounded-lg p-8 w-96">
+          <h1 className="text-3xl font-bold mb-6 text-blue-700">Create Event</h1>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                Title *
+              </label>
+              <input
+                type="text"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              />
+            </div>
 
-          {successMessage && (
-            <p className="text-green-500 text-center mb-4">{successMessage}</p>
-          )}
+            <div className="mb-4">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                Description *
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              />
+            </div>
 
-          <button
-            type="submit"
-            className="bg-blue-500 text-white w-full py-2 rounded font-semibold hover:bg-blue-600 transition duration-200"
-          >
-            Create Event
-          </button>
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 w-full mt-2"
-          >
-            Cancel
-          </button>
-        </form>
+            <div className="mb-4">
+              <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700">
+                Date *
+              </label>
+              <input
+                type="date"
+                id="eventDate"
+                value={eventDate}
+                onChange={(e) => setEventDate(e.target.value)}
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">
+                Start Time *
+              </label>
+              <input
+                type="time"
+                id="startTime"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">
+                End Time *
+              </label>
+              <input
+                type="time"
+                id="endTime"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                Location *
+              </label>
+              <input
+                type="text"
+                id="location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
+              />
+            </div>
+
+            {errorMessage && (
+              <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+            )}
+
+            {successMessage && (
+              <p className="text-green-500 text-center mb-4">{successMessage}</p>
+            )}
+
+            <button
+              type="submit"
+              className="bg-blue-500 text-white w-full py-2 rounded font-semibold hover:bg-blue-600 transition duration-200"
+            >
+              Create Event
+            </button>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 w-full mt-2"
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
