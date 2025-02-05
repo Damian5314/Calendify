@@ -72,7 +72,6 @@ namespace StarterKit.Controllers
                     ? (_loginService.GetAdminIdByEmail(loginRequest.Email), _loginService.GetUserNameByEmailAdmin(loginRequest.Email))
                     : (_loginService.GetUserIdByEmail(loginRequest.Email), _loginService.GetFirstNameByEmail(loginRequest.Email));
 
-                // Find the correct user type
                 object userObject = isAdmin 
                     ? _context.Admin.FirstOrDefault(a => a.Email == loginRequest.Email) 
                     : _context.User.FirstOrDefault(u => u.Email == loginRequest.Email);
@@ -82,7 +81,6 @@ namespace StarterKit.Controllers
 
                 string refreshToken = GenerateRefreshToken();
                 
-                // Update the refresh token based on user type
                 if (isAdmin)
                 {
                     Admin admin = (Admin)userObject;
@@ -97,7 +95,8 @@ namespace StarterKit.Controllers
                 }
                 _context.SaveChanges();
 
-                SetRefreshTokenCookie(refreshToken);
+                // Set the refresh token cookie
+                SetRefreshTokenCookie(refreshToken, loginRequest.RememberMe);
 
                 HttpContext.Session.SetString("Role", isAdmin ? role : userRole);
 
@@ -272,15 +271,27 @@ namespace StarterKit.Controllers
             }
         }
 
-        private void SetRefreshTokenCookie(string token)
+        private void SetRefreshTokenCookie(string token, bool rememberMe)
         {
-            Response.Cookies.Append("refreshToken", token, new CookieOptions
+            var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(7)
-            });
+            };
+
+            if (rememberMe)
+            {
+                // If "Remember Me" is checked, set the cookie to expire in 7 days
+                cookieOptions.Expires = DateTime.UtcNow.AddDays(7);
+            }
+            else
+            {
+                // If "Remember Me" is not checked, make it a session cookie
+                cookieOptions.Expires = null; // This makes it a session cookie which will be removed when the browser is closed
+            }
+
+            Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
     }
 }

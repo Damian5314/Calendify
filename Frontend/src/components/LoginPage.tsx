@@ -46,6 +46,7 @@ const LoginPage: React.FC = () => {
         {
           email,
           password,
+          rememberMe, // Send rememberMe to the backend
         },
         { withCredentials: true }
       );
@@ -61,7 +62,6 @@ const LoginPage: React.FC = () => {
       } else if (role === "User") {
         navigate("/user-dashboard");
       } else {
-        // This is where the error was thrown
         setErrorMessage("Unexpected role received from server.");
         return;
       }
