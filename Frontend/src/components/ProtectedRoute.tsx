@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useUser } from "./UserContext";
 
 interface ProtectedRouteProps {
@@ -13,6 +13,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const { role, userId, setUserId, setRole, setUserName } = useUser();
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     // Check localStorage for user details
@@ -26,12 +27,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       setUserName(storedUserName);
     }
 
-    setIsLoading(false); // Ensure ProtectedRoute only evaluates after checking localStorage
+    setIsLoading(false);
   }, [setUserId, setRole, setUserName]);
 
-  // While checking session details, show a loading state
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  // Allow direct access to reset-password page
+  if (location.pathname === "/reset-password") {
+    return <>{children}</>;
   }
 
   // Redirect to login if no valid session or role mismatch

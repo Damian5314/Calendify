@@ -29,14 +29,15 @@ const App: React.FC = () => {
     <UserProvider>
       <Router>
         <Routes>
-          {/* Public Routes */}
+          {/* 🔹 Public Routes (Anyone can access) */}
           <Route path="/" element={<MainDashboard />} />
+          <Route path="/reset-password" element={<NewPassword />} /> {/* ✅ Always accessible */}
+
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<NewPassword />} />
 
-          {/* Protected Routes */}
+          {/* 🔹 Protected Routes (Only accessible when logged in) */}
           <Route
             path="/admin-dashboard"
             element={
@@ -118,7 +119,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/accounts-settings"
+            path="/account-settings"
             element={
               <ProtectedRoute allowedRoles={["User"]}>
                 <AccountSettings />
@@ -126,6 +127,7 @@ const App: React.FC = () => {
             }
           />
 
+          {/* 🔹 Catch-All Route (Redirect unknown routes to Home) */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
