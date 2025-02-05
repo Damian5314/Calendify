@@ -37,6 +37,11 @@ namespace StarterKit.Models
             modelBuilder.Entity<User>()
                 .Property(u => u.TokenExpiry);
 
+            // 🔹 Nieuwe configuratie: Opslaan van Recurring Days als JSON-string
+            modelBuilder.Entity<User>()
+                .Property(u => u.RecuringDaysJson)
+                .HasColumnType("TEXT");
+
             // Seed Admin data
             modelBuilder.Entity<Admin>().HasData(
                 new Admin { AdminId = 1, Email = "admin1@example.com", UserName = "admin1", Password = EncryptionHelper.EncryptPassword("password") },

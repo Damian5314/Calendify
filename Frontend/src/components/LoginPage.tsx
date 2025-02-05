@@ -23,6 +23,9 @@ const LoginPage: React.FC = () => {
         {
           email,
           password,
+        },
+        {
+          withCredentials: true, // 👈 NODIG om cookies te gebruiken
         }
       );
 

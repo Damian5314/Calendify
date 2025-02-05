@@ -1,26 +1,45 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using StarterKit.Models;
 using StarterKit.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Voeg session storage toe
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromMinutes(15); // Sessietijd instellen
+    options.Cookie.HttpOnly = true; // Voorkomt JavaScript-toegang
+    options.Cookie.IsEssential = true; // Vereist voor GDPR
 });
 
-builder.Services.AddControllersWithViews();
+// Voeg Cookie Authentication toe
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/api/v1/auth/login"; // Correcte login route
+        options.LogoutPath = "/api/v1/auth/logout";
+        options.AccessDeniedPath = "/api/v1/auth/access-denied"; 
+        options.Cookie.HttpOnly = true; // Beveiliging tegen JavaScript-aanvallen
+        options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+            ? CookieSecurePolicy.None  // HTTP toegestaan tijdens ontwikkeling
+            : CookieSecurePolicy.Always; // Alleen HTTPS in productie
+    });
 
+// Voeg autorisatie toe
+builder.Services.AddAuthorization();
+
+// Voeg controllers en database toe
+builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
 
-// Add custom services
+// Voeg aangepaste services toe
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEventStorage, DbEventStorage>();
 
+// JSON-opties instellen
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
@@ -28,28 +47,21 @@ builder.Services.AddControllersWithViews()
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     });
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(15); // Keep the session alive for 7 days
-    options.Cookie.HttpOnly = true; // Prevent client-side JavaScript access
-    options.Cookie.IsEssential = true; // Required for GDPR compliance
-});
-
-// Add CORS support
+// Voeg CORS ondersteuning toe
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // Frontend port
+        policy.WithOrigins("http://localhost:5173") // Frontend URL
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials(); // Enables cookie sharing
+              .AllowCredentials(); // Belangrijk voor cookies!
     });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configureer de HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -59,18 +71,21 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Enable CORS middleware
+// CORS inschakelen
 app.UseCors("AllowFrontend");
 
 app.UseRouting();
 
+// **Zet UseSession vóór UseAuthentication**
+app.UseSession();
+
+// Voeg authenticatie en autorisatie middleware toe
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseSession();
-
-// Map controllers
+// Voeg routes toe
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.Run();

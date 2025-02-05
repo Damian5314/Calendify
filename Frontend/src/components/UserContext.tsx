@@ -38,10 +38,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (storedRole) setRoleState(storedRole);
     if (storedDays) {
       try {
-        // 🔹 Zorg ervoor dat alles correct wordt verwerkt (trim + lowercase)
+        // 🔹 Zorg ervoor dat alles correct wordt verwerkt
         const parsedDays = JSON.parse(storedDays);
         if (Array.isArray(parsedDays)) {
-          setRecuringDaysState(parsedDays.map((day: string) => day.trim().toLowerCase()));
+          setRecuringDaysState(parsedDays.map((day: string) => day.trim()));
         }
       } catch (error) {
         console.error("Error parsing recurring days from localStorage:", error);
@@ -71,7 +71,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const setRecuringDays = (days: string[]) => {
     try {
-      const formattedDays = days.map((day) => day.trim().toLowerCase());
+      const formattedDays = days.map((day) => day.trim());
       localStorage.setItem("recuringDays", JSON.stringify(formattedDays));
       setRecuringDaysState(formattedDays);
     } catch (error) {
@@ -80,7 +80,10 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("role");
+    localStorage.removeItem("recuringDays");
     setUserIdState(null);
     setUserNameState(null);
     setRoleState(null);

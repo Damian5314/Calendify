@@ -3,83 +3,82 @@ import UserDashboardSidebar from "./UserDashboardSidebar";
 import { useUser } from "./UserContext";
 
 const AccountSettings: React.FC = () => {
-  const { userName } = useUser();
-  const { lastName } = useUser();
-  const { Email } = useUser();
-  const { recurringDays } = useUser();
+  const { userId, userName, role, setRecuringDays } = useUser();
   const [newEmail, setNewEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Fetch user data on page load
+  // 🔹 Haal user data op
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:5097/api/v1/user/profile", {
-          method: "GET",
-          credentials: "include",
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log("User Data:", data);
-        } else {
-          console.error("Failed to fetch user data");
-        }
+        const response = await fetch(
+          `http://localhost:5097/api/v1/user/recurring-days/${userId}`
+        );
+        if (!response.ok) console.error("Failed to fetch recurring days");
       } catch (err) {
-        console.error("Error:", err);
+        console.error("Error fetching user data:", err);
       }
     };
 
-    fetchUserData();
-  }, []);
+    if (userId) fetchUserData();
+  }, [userId]);
 
-  // Handle email update
+  // 🔹 Update email
   const handleEmailUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:5097/api/v1/users/update-email",
+        `http://localhost:5097/api/v1/user/update-email`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ email: newEmail }),
+          body: JSON.stringify({ userId, newEmail: newEmail.trim() }),
         }
       );
 
       if (response.ok) {
-        alert("Email updated successfully!");
+        setSuccessMessage("Email updated successfully!");
         setNewEmail("");
+        setTimeout(() => setSuccessMessage(""), 3000);
       } else {
-        alert("Failed to update email.");
+        setErrorMessage("Email updated successfully!");
       }
     } catch (err) {
+      setErrorMessage("Email updated successfully!");
       console.error("Error updating email:", err);
     }
   };
 
-  // Handle password update
+  // 🔹 Update wachtwoord
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:5097/api/v1/users/update-password",
+        `http://localhost:5097/api/v1/user/update-password`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ currentPassword, newPassword }),
+          body: JSON.stringify({
+            userId,
+            currentPassword: currentPassword.trim(),
+            newPassword: newPassword.trim(),
+          }),
         }
       );
 
       if (response.ok) {
-        alert("Password updated successfully!");
+        setSuccessMessage("Password updated successfully!");
         setCurrentPassword("");
         setNewPassword("");
+        setTimeout(() => setSuccessMessage(""), 3000);
       } else {
-        alert("Failed to update password.");
+        setErrorMessage("Password updated successfully!");
       }
     } catch (err) {
+      setErrorMessage("Password updated successfully!");
       console.error("Error updating password:", err);
     }
   };
@@ -87,7 +86,7 @@ const AccountSettings: React.FC = () => {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <UserDashboardSidebar role="User" />
+      <UserDashboardSidebar role={role || "User"} />
 
       {/* Main Content */}
       <div className="flex-1 p-6">
@@ -96,7 +95,15 @@ const AccountSettings: React.FC = () => {
             Account Settings
           </h1>
 
-          {/* Display User Information */}
+          {/* Succes en foutmeldingen */}
+          {successMessage && (
+            <p className="text-green-500 text-center mb-4">{successMessage}</p>
+          )}
+          {errorMessage && (
+            <p className="text-green-500 text-center mb-4">{errorMessage}</p>
+          )}
+
+          {/* Gebruikersgegevens */}
           <div className="grid grid-cols-2 gap-6 mb-8">
             <div>
               <label className="block text-gray-600 text-sm font-medium">
@@ -106,33 +113,9 @@ const AccountSettings: React.FC = () => {
                 {userName || "N/A"}
               </div>
             </div>
-            <div>
-              <label className="block text-gray-600 text-sm font-medium">
-                Last Name
-              </label>
-              <div className="border border-gray-300 p-2 rounded-md bg-gray-100">
-                {lastName || "N/A"}
-              </div>
-            </div>
-            <div>
-              <label className="block text-gray-600 text-sm font-medium">
-                Email
-              </label>
-              <div className="border border-gray-300 p-2 rounded-md bg-gray-100">
-                {Email || "N/A"}
-              </div>
-            </div>
-            <div>
-              <label className="block text-gray-600 text-sm font-medium">
-                Recurring Days
-              </label>
-              <div className="border border-gray-300 p-2 rounded-md bg-gray-100">
-                {recurringDays || "N/A"}
-              </div>
-            </div>
           </div>
 
-          {/* Update Email Form */}
+          {/* Email updaten */}
           <form onSubmit={handleEmailUpdate} className="mb-8">
             <h2 className="text-lg font-semibold mb-4">Update Email</h2>
             <div className="flex items-center gap-4">
@@ -153,7 +136,7 @@ const AccountSettings: React.FC = () => {
             </div>
           </form>
 
-          {/* Update Password Form */}
+          {/* Wachtwoord wijzigen */}
           <form onSubmit={handlePasswordUpdate}>
             <h2 className="text-lg font-semibold mb-4">Change Password</h2>
             <div className="grid grid-cols-2 gap-4">

@@ -40,12 +40,10 @@ const AvailableEvents: React.FC = () => {
         const today = moment().format("YYYY-MM-DD");
 
         // 🔹 Alleen toekomstige events tonen
-        const upcomingEvents = data.filter((event: Event) => {
-          return event.eventDate >= today;
-        });
+        const upcomingEvents = data.filter((event: Event) => event.eventDate >= today);
 
         setEvents(upcomingEvents);
-      } catch (error) {
+      } catch (error) {  
         setError("Failed to load events. Please try again later.");
         console.error(error);
       }
@@ -57,18 +55,18 @@ const AvailableEvents: React.FC = () => {
   // 🔹 Debugging log om te controleren welke dagen worden vergeleken
   console.log("User's recurring days:", recuringDays);
 
+  // 🔹 Zorg ervoor dat beide dagen (gebruiker en event) lowercase en getrimd zijn
+  const normalizeDay = (day: string) => day.trim().toLowerCase();
+
   // 🔹 Filter de events die de gebruiker kan bijwonen
   const eventsUserCanAttend = events.filter((event) => {
-    const eventDay = moment(event.eventDate, "YYYY-MM-DD").format("dddd").toLowerCase();
-    
-    console.log(`Event: ${event.title} - Event Day: ${eventDay}`);
-
-    return recuringDays.includes(eventDay);
+    const eventDay = normalizeDay(moment(event.eventDate, "YYYY-MM-DD").format("dddd"));
+    return recuringDays.map(normalizeDay).includes(eventDay);
   });
 
   const handleEventClick = (event: Event) => {
-    const eventDay = moment(event.eventDate, "YYYY-MM-DD").format("dddd").toLowerCase();
-    if (recuringDays.includes(eventDay)) {
+    const eventDay = normalizeDay(moment(event.eventDate, "YYYY-MM-DD").format("dddd"));
+    if (recuringDays.map(normalizeDay).includes(eventDay)) {
       navigate(`/event-info/${event.eventId}`);
     } else {
       alert("You can't attend this event. It is not on your recurring days.");
@@ -95,7 +93,7 @@ const AvailableEvents: React.FC = () => {
             <ul className="space-y-4">
               {events.map((event) => (
                 <li
-                  key={event.id}
+                  key={event.eventId}
                   className="p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-300 cursor-pointer"
                   onClick={() => handleEventClick(event)}
                 >
@@ -125,7 +123,7 @@ const AvailableEvents: React.FC = () => {
             <ul className="space-y-4">
               {eventsUserCanAttend.map((event) => (
                 <li
-                  key={event.id}
+                  key={event.eventId}
                   className="p-4 border border-gray-300 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-300 cursor-pointer"
                   onClick={() => navigate(`/event-info/${event.eventId}`)}
                 >

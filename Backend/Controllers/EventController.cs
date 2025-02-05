@@ -71,8 +71,9 @@ namespace StarterKit.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            var recuringDays = user.RecuringDays.Split(',')
-                .Select(d => d.Trim().ToLower()) // 🔹 Zorg ervoor dat alles lowercase is
+            // 🔹 `RecuringDays` is al een `List<string>`, dus geen `.Split(',')` nodig
+            var recuringDays = user.RecuringDays
+                .Select(d => d.Trim().ToLower()) // Zet alles om naar lowercase
                 .ToList();
 
             var events = await _eventStorage.ReadEvents();

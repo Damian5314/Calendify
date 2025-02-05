@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
+
 namespace StarterKit.Models
 {
     public class User
@@ -8,13 +11,25 @@ namespace StarterKit.Models
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Role { get; set; } = "User";
-        public string RecuringDays { get; set; } = string.Empty;
 
-        // Nieuwe eigenschappen voor wachtwoordherstel
-        public string? PasswordResetToken { get; set; } // Token voor wachtwoord reset
-        public DateTime? TokenExpiry { get; set; }      // Vervaldatum van de token
+        // 🔹 Opslaan van terugkerende dagen als JSON
+        [Column(TypeName = "TEXT")]
+        public string RecuringDaysJson { get; set; } = "[]";
 
-        // Default these to empty lists to avoid null references
+        [NotMapped]
+        public List<string> RecuringDays
+        {
+            get => string.IsNullOrWhiteSpace(RecuringDaysJson) 
+                ? new List<string>() 
+                : JsonSerializer.Deserialize<List<string>>(RecuringDaysJson) ?? new List<string>();
+            set => RecuringDaysJson = JsonSerializer.Serialize(value);
+        }
+
+        // 🔹 Wachtwoordherstel-functionaliteit
+        public string? PasswordResetToken { get; set; }
+        public DateTime? TokenExpiry { get; set; }
+
+        // 🔹 Relaties met andere tabellen
         public List<Attendance> Attendances { get; set; } = new();
         public List<Event_Attendance> Event_Attendances { get; set; } = new();
     }
@@ -24,9 +39,8 @@ namespace StarterKit.Models
         public int AttendanceId { get; set; }
         public DateTime AttendanceDate { get; set; }
 
-        // Voeg deze eigenschap toe
-        public int UserId { get; set; }  // Dit maakt directe toegang tot UserId mogelijk
-
+        // Foreign key voor User
+        public int UserId { get; set; }
         public User? User { get; set; }
     }
 
@@ -35,14 +49,13 @@ namespace StarterKit.Models
         public int Event_AttendanceId { get; set; }
 
         public int Rating { get; set; }
-
         public required string Feedback { get; set; }
 
-        // Foreign key for User
+        // Foreign key voor User
         public int UserId { get; set; }
         public required User User { get; set; }
 
-        // Foreign key for Event
+        // Foreign key voor Event
         public int EventId { get; set; }
         public required Event Event { get; set; }
     }
@@ -52,17 +65,13 @@ namespace StarterKit.Models
         public int EventId { get; set; }
 
         public required string Title { get; set; }
-
         public required string Description { get; set; }
 
         public DateOnly EventDate { get; set; }
-
         public TimeSpan StartTime { get; set; }
-
         public TimeSpan EndTime { get; set; }
 
         public required string Location { get; set; }
-
         public bool AdminApproval { get; set; }
 
         public required List<Event_Attendance> Event_Attendances { get; set; }
